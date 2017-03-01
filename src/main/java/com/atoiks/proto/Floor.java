@@ -22,18 +22,39 @@
  * SOFTWARE.
  */
 
-public interface GStateListener {
+package com.atoiks.proto;
 
-    /**
-     * Called when this scene is being chosen to render.
-     * This includes when the scene changes.
-     */
-    public void onEnter ();
+import java.awt.Image;
+import java.awt.Point;
+import java.awt.Graphics;
 
-    /**
-     * Called when this scene is being closed. This
-     * includes right before the game is closing and
-     * when the rendering scene changes.
-     */
-    public void onLeave ();
+/**
+ * Essentially the background
+ */
+public class Floor implements GComponent {
+
+    protected Image image;
+
+    public Floor (Image img) {
+	this.image = img;
+    }
+
+    @Override
+    public void render (Graphics g) {
+	g.drawImage (image, 0, 0, null);
+    }
+
+    @Override
+    public boolean containsPoint (Point p) {
+	// It is the background so guaranteed contains the point
+	return true;
+    }
+
+    @Override
+    public void update (long millisec) {
+    }
+
+    @Override
+    public void testCollision (GComponent comp) {
+    }
 }

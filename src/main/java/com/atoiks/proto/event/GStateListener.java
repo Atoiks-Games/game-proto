@@ -22,19 +22,20 @@
  * SOFTWARE.
  */
 
-import java.awt.Point;
-import java.awt.Graphics;
+package com.atoiks.proto.event;
 
-/**
- * Graphics component
- */
-public interface GComponent {
+public interface GStateListener {
 
-    public void render (Graphics g);
+    /**
+     * Called when this scene is being chosen to render.
+     * This includes when the scene changes.
+     */
+    public void onEnter ();
 
-    public void update (long millisec);
-
-    public boolean containsPoint (Point p);
-
-    public void testCollision (GComponent comp);
+    /**
+     * Called when this scene is being closed. This
+     * includes right before the game is closing and
+     * when the rendering scene changes.
+     */
+    public void onLeave ();
 }

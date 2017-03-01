@@ -22,5 +22,15 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto.event;
+
 public abstract class GStateAdapter implements GStateListener {
+
+    @Override
+    public void onEnter () {
+    }
+
+    @Override
+    public void onLeave () {
+    }
 }

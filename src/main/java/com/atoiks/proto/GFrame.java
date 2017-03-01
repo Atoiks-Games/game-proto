@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 

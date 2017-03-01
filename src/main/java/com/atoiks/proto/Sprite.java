@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto;
+
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Graphics;

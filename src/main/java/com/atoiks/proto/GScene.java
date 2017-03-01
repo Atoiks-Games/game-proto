@@ -22,6 +22,10 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto;
+
+import com.atoiks.proto.event.GStateListener;
+
 import java.awt.Graphics;
 
 import java.util.List;

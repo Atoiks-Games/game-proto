@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import com.atoiks.proto.*;
+
 import javax.imageio.ImageIO;
 
 import java.awt.Point;
