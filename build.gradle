@@ -8,4 +8,13 @@ repositories {
 }
 
 dependencies {
+    testCompile 'junit:junit:4.12'
+}
+
+applicationDistribution.from('CONTRIBUTORS.txt') {
+    into ''
+}
+
+applicationDistribution.from('README.md') {
+    into ''
 }
