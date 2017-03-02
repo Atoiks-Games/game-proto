@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto;
+
 import javax.swing.JPanel;
 import javax.swing.JFrame;
 
@@ -41,55 +43,53 @@ public class GFrame extends JFrame {
 
     private ExecutorService threads;
 
-    private ArrayList<GComponent> renderStack;
+    private GScene[] scenes;
 
-    private Floor floor;
+    private int sceneIdx;
 
     private boolean first;
 
-    public GFrame (String title) {
+    public GFrame (String title, GScene... scenes) {
 	super (title);
 	setSize (WIDTH, HEIGHT);
 	setResizable (false);
 	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-
-	renderStack = new ArrayList<GComponent>();
 	
         panel = new JPanel ()
 	    {
 	        protected void paintComponent (Graphics g) {
-		    // Draw the floor before everything
-		    if (floor != null) floor.render (g);
-		    for (GComponent el : renderStack) {
-			if (el != null) el.render (g);
-		    }
+		    scenes[sceneIdx].renderStep (g);
 		}
 	    };
 	this.add (panel);
-	first = true;
+	this.first = true;
+	this.scenes = scenes;
+	scenes[this.sceneIdx = 0].onEnterTrigger ();
+    }
+
+    public void jumpToScene (int idx) {
+	if (idx >= scenes.length) throw new IllegalArgumentException ("Index specified is greater than the amount of scenes");
+	if (first) {
+	    scenes[sceneIdx].onLeaveTrigger ();
+	    scenes[sceneIdx = idx].onEnterTrigger ();
+	}
     }
 
     @Override
     public void setVisible (boolean f) {
-	super.setVisible(f);
+	super.setVisible (f);
+
 	if (first && f) {
 	    first = false;
-	    threads = Executors.newFixedThreadPool(1);
+	    threads = Executors.newFixedThreadPool (1);
 	    // Rendering thread
 	    threads.execute(() -> {
 		    long lastTime = System.currentTimeMillis ();
 		    while (!threads.isShutdown ()) {
-			for (GComponent sp1 : renderStack) {
-			    for (GComponent sp2 : renderStack) {
-				sp1.testCollision (sp2);
-			    }
-			}
+		        scenes[sceneIdx].collisionStep ();
 
 			final long current = System.currentTimeMillis ();
-			final long elapsed = current - lastTime;
-			for (GComponent el : renderStack) {
-			    if (el != null) el.update (elapsed);
-			}
+		        scenes[sceneIdx].updateStep (current - lastTime);
 			repaint ();
 			lastTime = current;
 			try {
@@ -106,45 +106,5 @@ public class GFrame extends JFrame {
 	    first = true;
 	    threads.shutdownNow();
 	}
-    }
-
-    public void setFloor (Floor floor) {
-	this.floor = floor;
-    }
-
-    public Floor getFloor () {
-	return floor;
-    }
-
-    public void pushBackGComp (GComponent comp) {
-	renderStack.add (comp);
-    }
-
-    public GComponent popBackGComp () {
-	return renderStack.remove (renderStack.size() - 1);
-    }
-
-    public void pushFrontGComp (GComponent comp) {
-	renderStack.add (0, comp);
-    }
-
-    public GComponent popFrontGComp (GComponent comp) {
-	return renderStack.remove (0);
-    }
-
-    public GComponent getGComp (int idx) {
-	return renderStack.get (idx);
-    }
-
-    public GComponent setGComp (int idx, GComponent el) {
-	return renderStack.set (idx, el);
-    }
-
-    public GComponent removeGComp (int idx) {
-	return renderStack.remove (idx);
-    }
-
-    public boolean removeGComp (GComponent comp) {
-	return renderStack.remove (comp);
     }
 }

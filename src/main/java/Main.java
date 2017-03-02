@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import com.atoiks.proto.*;
+
 import javax.imageio.ImageIO;
 
 import java.awt.Point;
@@ -122,9 +124,12 @@ public class Main {
 	    System.err.println("Failed to load red box");
 	    return;
 	}
+
+	System.err.println("Initializing scene");
+	final GScene scene = new GScene (floor, blackBox, redBox);
 	
 	System.err.println("Launching in GUI mode");
-	final GFrame app = new GFrame("Prototype");
+	final GFrame app = new GFrame("Prototype", scene);
 	app.addKeyListener (new KeyListener()
 	    {
 		@Override
@@ -175,9 +180,6 @@ public class Main {
 		    ignoreKeys.set (false);
 		}
 	    });
-	app.pushBackGComp (blackBox);
-	app.pushBackGComp (redBox);
-	app.setFloor (floor);
 	app.setVisible (true);
     }
 }

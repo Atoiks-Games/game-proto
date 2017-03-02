@@ -22,19 +22,39 @@
  * SOFTWARE.
  */
 
+package com.atoiks.proto;
+
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Graphics;
 
 /**
- * Graphics component
+ * Essentially the background
  */
-public interface GComponent {
+public class Floor implements GComponent {
 
-    public void render (Graphics g);
+    protected Image image;
 
-    public void update (long millisec);
+    public Floor (Image img) {
+	this.image = img;
+    }
 
-    public boolean containsPoint (Point p);
+    @Override
+    public void render (Graphics g) {
+	g.drawImage (image, 0, 0, null);
+    }
 
-    public void testCollision (GComponent comp);
+    @Override
+    public boolean containsPoint (Point p) {
+	// It is the background so guaranteed contains the point
+	return true;
+    }
+
+    @Override
+    public void update (long millisec) {
+    }
+
+    @Override
+    public void testCollision (GComponent comp) {
+    }
 }
