@@ -125,7 +125,7 @@ public class Main {
 	    return;
 	}
 
-        System.err.ptintln("Loading squash ball");
+        System.err.println("Loading squash ball");
         final Sprite squashBall;
         try {
             squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
@@ -135,7 +135,7 @@ public class Main {
             return;
         }
 
-        System.err.ptintln("Loading green box");
+        System.err.println("Loading green box");
         final Sprite greenBox;
         try {
             greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
@@ -145,10 +145,10 @@ public class Main {
             return;
         }
 
-        System.err.ptintln("Loading blue box");
-        final Sprite squashBall;
+        System.err.println("Loading blue box");
+        final Sprite blueBox;
         try {
-            squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
+            blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
                                     new Point(342, 217));
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load red box");
