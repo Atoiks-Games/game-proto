@@ -23,12 +23,12 @@
  */
 
 import com.atoiks.proto.*;
+import com.atoiks.proto.event.GKeyAdapter;
 
 import javax.imageio.ImageIO;
 
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
 import java.io.File;
 import java.io.IOException;
@@ -192,16 +192,10 @@ public class Main {
 	final GScene scene_1 = new GScene (floor, blackBox, redBox);
         final GScene scene_2 = new GScene (floor, greenBox, blueBox, squashBall);
 
-	System.err.println("Launching in GUI mode");
-	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
-	app.addKeyListener (new KeyListener()
+	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
 		@Override
-		public void keyTyped (KeyEvent e) {
-		}
-
-		@Override
-		public void keyPressed (KeyEvent e) {
+		public void keyPressed (KeyEvent e, GFrame f) {
 		    if (!ignoreKeys.get()) {
 			switch (e.getKeyCode())
 			    {
@@ -224,12 +218,21 @@ public class Main {
 			    case KeyEvent.VK_Q:
 				javax.swing.JOptionPane.showMessageDialog(null, "Move around!");
 				break;
+			    case KeyEvent.VK_N: {
+				ignoreKeys.set (true);
+				f.setVisible (false);
+				final AsmMiniGame game = new AsmMiniGame (new int[]
+				    { 0, 1, 2, 3, 4 }, new int[]
+				    { 0, 1, 2, 3, 4 });
+				game.setVisible (true);
+				while (!game.passFlag) {
+				    // Do nothing
+				}
+			        ignoreKeys.set (false);
+				break;
+			    }
 			    }
 		    }
-		}
-
-		@Override
-		public void keyReleased (KeyEvent e) {
 		}
 
 	        private void redTileConditions () {
@@ -244,6 +247,9 @@ public class Main {
 		    ignoreKeys.set (false);
 		}
 	    });
+
+	System.err.println("Launching in GUI mode");
+	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
 	app.setVisible (true);
     }
 }

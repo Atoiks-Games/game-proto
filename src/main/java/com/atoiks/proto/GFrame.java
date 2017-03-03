@@ -118,12 +118,12 @@ public class GFrame extends JFrame {
 			} catch (java.lang.InterruptedException ex) {
 			}
 		    }
+		    threads = null;
 		});
 	}
 	if (!f) {
 	    first = true;
 	    threads.shutdownNow();
-	    threads = null;
 	}
     }
 }

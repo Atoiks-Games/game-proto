@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+import java.awt.Point;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -82,12 +84,12 @@ public class AsmExec {
 		break outer;
 	    case OP_LDR: {	// (Load register value)
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] = regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] = regs[op & 0xf];
 		break;
 	    }
 	    case OP_LDN: {	// (Load 4 bit)
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] = op & 0xf;
+		regs[(op & 0xf0) >> 4] = op & 0xf;
 		break;
 	    }
 	    case OP_LDB: {	// (Load 8 bit)
@@ -118,78 +120,78 @@ public class AsmExec {
 	    }
 	    case OP_ADD: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] += regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] += regs[op & 0xf];
 		break;
 	    }
 	    case OP_SUB: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] -= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] -= regs[op & 0xf];
 		break;
 	    }
 	    case OP_MUL: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] *= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] *= regs[op & 0xf];
 		break;
 	    }
 	    case OP_DIV: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] /= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] /= regs[op & 0xf];
 		break;
 	    }
 	    case OP_MOD: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] %= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] %= regs[op & 0xf];
 		break;
 	    }
 	    case OP_AND: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] &= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] &= regs[op & 0xf];
 		break;
 	    }
 	    case OP_OR: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] |= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] |= regs[op & 0xf];
 		break;
 	    }
 	    case OP_XOR: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] ^= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] ^= regs[op & 0xf];
 		break;
 	    }
 	    case OP_NOT_NEG: {
 		final int op = mem[++regs[15]];
 		if ((op & 0xf) == 0) // not
-		    regs[(op & 0xf0) >> 8] = ~regs[(op & 0xf0) >> 8];
+		    regs[(op & 0xf0) >> 4] = ~regs[(op & 0xf0) >> 4];
 		else		// negate
-		    regs[(op & 0xf0) >> 8] = -regs[(op & 0xf0) >> 8];
+		    regs[(op & 0xf0) >> 4] = -regs[(op & 0xf0) >> 4];
 		break;
 	    }
 	    case OP_SHR: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] <<= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] <<= regs[op & 0xf];
 		break;
 	    }
 	    case OP_SHL: {
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] >>= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] >>= regs[op & 0xf];
 		break;
 	    }
 	    case OP_SHS: {	// (signed right shift; see add)
 		final int op = mem[++regs[15]];
-		regs[(op & 0xf0) >> 8] >>>= regs[op & 0xf];
+		regs[(op & 0xf0) >> 4] >>>= regs[op & 0xf];
 		break;
 	    }
 	    case OP_IN_OUT: {	// (Read/Write from input[])
 		final int op = mem[++regs[15]];
 		if ((op & 0xf) == 0) // out
-		    output.add(regs[(op & 0xf0) >> 8]);
+		    output.add(regs[(op & 0xf0) >> 4]);
 		else		// in
-		    regs[(op & 0xf0) >> 8] = input[regs[14]++];
+		    regs[(op & 0xf0) >> 4] = input[regs[14]++];
 		break;
 	    }
 	    case OP_CMP: {	// (Compare)
 		final int op = mem[++regs[15]];
-		final int lhs = (op & 0xf0) >> 8;
+		final int lhs = (op & 0xf0) >> 4;
 		final int rhs = op & 0xf;
 		if (lhs == rhs)
 		    regs[13] |= 1;
@@ -255,9 +257,9 @@ public class AsmExec {
 	    case OP_INC_DEC: {	// (++/--)
 		final int op = mem[++regs[15]];
 		if ((op & 0xf) == 0) // dec
-		    --regs[(op & 0xf0) >> 8];
+		    --regs[(op & 0xf0) >> 4];
 		else		// inc
-		    ++regs[(op & 0xf0) >> 8];
+		    ++regs[(op & 0xf0) >> 4];
 		break;
 	    }
 	    default:
