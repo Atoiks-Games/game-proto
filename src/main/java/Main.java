@@ -78,6 +78,10 @@ public class Main {
 	return null;
     }
 
+    // FIXME:Reduce visibility. I dislike these global variables.
+    static double squash_ball_direction = 180;
+    static double squash_ball_speed = 5;
+
     public static void main(String[] args) {
 	// Global-ish variables
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
@@ -112,7 +116,7 @@ public class Main {
 		    public void onCollision (Sprite other) {
 			if (other == blackBox) {
 			    ignoreKeys.set(true);
-			    javax.swing.JOptionPane.showMessageDialog(null, "GODDAMN!!!");
+			//     app.jum
 			    blackBox.move (0, 0);
 			    disable ();
 			    ignoreKeys.set(false);
@@ -125,41 +129,71 @@ public class Main {
 	    return;
 	}
 
-        System.err.ptintln("Loading squash ball");
+        System.err.println("Loading squash ball");
         final Sprite squashBall;
         try {
-            squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
-                                    new Point(342, 217));
+            final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("squash_ball_green.png"));
+            final Image squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
+            final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("squash_ball.png"));
+
+
+
+            squashBall = new Sprite(squash_ball, new Point(342, 217))
+                {
+
+                    @Override
+                    public void onCollision (Sprite other) {
+                        squash_ball_direction += 180;
+                        squash_ball_speed += 0.5;
+                        if (other == green_box){
+                                setImage (squash_ball_green);
+                        }
+                        if (other == blue_box){
+                                setImage (squash_ball_blue);
+                        }
+                    }
+
+                    public void update (long milliseconds){
+                        double radian_direction = Math.toRadians(direction);
+                        double verticle_value = Math.sin(radian_direction);
+                        double horizontal_value = Math.cos(radian_direction);
+                        squashBall.translate((int) (horizontal_value*squash_ball_speed), (int) (verticle_value*squash_ball_speed));
+                    }
+                };
+                squashBall.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load squash ball");
             return;
         }
 
-        System.err.ptintln("Loading green box");
+        System.err.println("Loading green box");
         final Sprite greenBox;
         try {
             greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-                                    new Point(342, 217));
+                                    new Point(342, 117));
+            greenBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load green box");
             return;
         }
 
-        System.err.ptintln("Loading blue box");
-        final Sprite squashBall;
+        System.err.println("Loading blue box");
+        final Sprite blueBox;
         try {
-            squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
-                                    new Point(342, 217));
+            blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
+                                    new Point(342, 317));
+            blueBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load red box");
+            System.err.println("Failed to load blue box");
             return;
         }
 
-	System.err.println("Initializing scene");
-	final GScene scene = new GScene (floor, blackBox, redBox);
+	System.err.println("Initializing scenes");
+	final GScene scene_1 = new GScene (floor, blackBox, redBox);
+        final GScene scene_2 = new GScene (floor, greenBox, blueBox, squashBall);
 
 	System.err.println("Launching in GUI mode");
-	final GFrame app = new GFrame("Prototype", scene);
+	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
 	app.addKeyListener (new KeyListener()
 	    {
 		@Override
