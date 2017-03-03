@@ -22,24 +22,29 @@ public class AsmMiniGame extends JFrame {
 
     private DefaultListModel<Integer> outputs;
 
+    private Object notify;
+
     public boolean passFlag = false;
 
-    public AsmMiniGame (int[] inputs, int[] expects) {
+    public AsmMiniGame (int[] inputs, int[] expects, Object notify) {
 	this.inputs = inputs;
 	this.expects = expects;
 	this.outputs = new DefaultListModel<Integer> ();
+	this.notify = notify;
+
 	setSize (500, 450);
 	setResizable (false);
+	setDefaultCloseOperation (JFrame.DO_NOTHING_ON_CLOSE);
 
 	final JPanel leftBar = new JPanel (new BorderLayout ());
-	leftBar.add (new JList (Arrays.stream (inputs)
+	leftBar.add (new JList<Object> (Arrays.stream (inputs)
 				      .boxed().toArray()),
 		     BorderLayout.WEST);
-	leftBar.add (new JList (Arrays.stream (expects)
+	leftBar.add (new JList<Object> (Arrays.stream (expects)
 				      .boxed().toArray()),
 		     BorderLayout.EAST);
 	add (leftBar, BorderLayout.WEST);
-	add (new JList (outputs), BorderLayout.EAST);
+	add (new JList<Integer> (outputs), BorderLayout.EAST);
 
 	final JButton execBtn = new JButton ("Run");
 	add (execBtn, BorderLayout.SOUTH);
@@ -51,6 +56,7 @@ public class AsmMiniGame extends JFrame {
 	    {
 		@Override
 		public void actionPerformed (ActionEvent e) {
+		    hexEditor.setEditable (false);
 		    final char[] raw = hexEditor.getText ().toCharArray ();
 		    final ByteBuffer buf = ByteBuffer.allocate (raw.length / 2 + raw.length % 2);
 		    for (int i = 0; i < raw.length; ++i) {
@@ -69,11 +75,17 @@ public class AsmMiniGame extends JFrame {
 			    if (rst[i] == expects[i]) {
 				outputs.addElement (rst[i]);
 				passFlag = true;
+				dispose ();
+				synchronized (notify) {
+				    notify.notify ();
+				}
 			    } else {
+				System.err.println ("Expected " + java.util.Arrays.toString (expects) + ". Got " + java.util.Arrays.toString (rst));
 				break;
 			    }
 			}
 		    }
+		    hexEditor.setEditable (true);
 		}
 	    });
     }
