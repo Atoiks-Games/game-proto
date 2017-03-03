@@ -24,15 +24,19 @@
 
 package com.atoiks.proto;
 
+import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
 public class GScene {
+
+    protected List<GKeyListener> keyEvts;
 
     protected List<GStateListener> listeners;
 
@@ -42,8 +46,9 @@ public class GScene {
 
     public GScene (Floor floor, GComponent... insts) {
 	this.floor = floor;
-	this.instances = Arrays.asList (insts);
+	this.instances = new ArrayList<GComponent>(Arrays.asList (insts));
 	this.listeners = new ArrayList<GStateListener>();
+	this.keyEvts = new ArrayList<GKeyListener>();
     }
 
     public void setFloor (Floor floor) {
@@ -116,15 +121,41 @@ public class GScene {
 	this.listeners.remove (lis);
     }
 
-    public void onEnterTrigger () {
+    public void addGKeyListener (GKeyListener lis) {
+	this.keyEvts.add (lis);
+    }
+
+    public void removeGKeyListener (GKeyListener lis) {
+	this.keyEvts.remove (lis);
+    }
+
+    public final void onEnterTrigger () {
 	for (GStateListener lis : listeners) {
 	    lis.onEnter ();
 	}
     }
 
-    public void onLeaveTrigger () {
+    public final void onLeaveTrigger () {
 	for (GStateListener lis : listeners) {
 	    lis.onLeave ();
+	}
+    }
+
+    public final void onKeyTypedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyTyped (e, f);
+	}
+    }
+
+    public final void onKeyPressedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyPressed (e, f);
+	}
+    }
+
+    public final void onKeyReleasedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyReleased (e, f);
 	}
     }
 }

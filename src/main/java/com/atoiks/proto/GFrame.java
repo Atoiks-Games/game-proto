@@ -28,6 +28,7 @@ import javax.swing.JPanel;
 import javax.swing.JFrame;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import java.util.ArrayList;
@@ -64,15 +65,29 @@ public class GFrame extends JFrame {
 	this.add (panel);
 	this.first = true;
 	this.scenes = scenes;
+	this.addKeyListener (new KeyListener()
+	    {
+		@Override
+		public void keyTyped (KeyEvent e) {
+		    scenes[sceneIdx].onKeyTypedTrigger (e, GFrame.this);
+		}
+		
+		@Override
+		public void keyPressed (KeyEvent e) {
+		    scenes[sceneIdx].onKeyPressedTrigger (e, GFrame.this);
+		}
+		
+		@Override
+		public void keyReleased (KeyEvent e) {
+		    scenes[sceneIdx].onKeyReleasedTrigger (e, GFrame.this);
+		}
+	    });
 	scenes[this.sceneIdx = 0].onEnterTrigger ();
     }
 
     public void jumpToScene (int idx) {
-	if (idx >= scenes.length) throw new IllegalArgumentException ("Index specified is greater than the amount of scenes");
-	if (first) {
-	    scenes[sceneIdx].onLeaveTrigger ();
-	    scenes[sceneIdx = idx].onEnterTrigger ();
-	}
+	scenes[sceneIdx].onLeaveTrigger ();
+	scenes[sceneIdx = idx].onEnterTrigger ();
     }
 
     @Override
@@ -81,11 +96,14 @@ public class GFrame extends JFrame {
 
 	if (first && f) {
 	    first = false;
+	    if (threads != null) {
+		threads.shutdownNow();
+	    }
 	    threads = Executors.newFixedThreadPool (1);
 	    // Rendering thread
 	    threads.execute(() -> {
 		    long lastTime = System.currentTimeMillis ();
-		    while (!threads.isShutdown ()) {
+		    while (threads != null && !threads.isShutdown ()) {
 		        scenes[sceneIdx].collisionStep ();
 
 			final long current = System.currentTimeMillis ();
@@ -105,6 +123,7 @@ public class GFrame extends JFrame {
 	if (!f) {
 	    first = true;
 	    threads.shutdownNow();
+	    threads = null;
 	}
     }
 }
