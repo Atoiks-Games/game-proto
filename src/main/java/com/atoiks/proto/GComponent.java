@@ -38,5 +38,5 @@ public interface GComponent {
 
     public boolean containsPoint (Point p);
 
-    public void testCollision (GComponent comp);
+    public void testCollision (GComponent comp, GFrame f);
 }

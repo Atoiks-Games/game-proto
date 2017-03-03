@@ -111,7 +111,7 @@ public class Sprite implements GComponent {
     }
 
     @Override
-    public void testCollision (GComponent comp) {
+    public void testCollision (GComponent comp, GFrame f) {
 	if (!collidable) return;
 	// Floor is always the base layer (not above the obj)
 	if (comp instanceof Floor) return;
@@ -121,10 +121,10 @@ public class Sprite implements GComponent {
 	    && (origin.x + image.getWidth(null) > sp2.origin.x)
 	    && (origin.y < sp2.origin.y + sp2.image.getHeight(null))
 	    && (origin.y + image.getHeight(null) > sp2.origin.y)) {
-	    onCollision (sp2);
+	    onCollision (sp2, f);
 	}
     }
 
-    public void onCollision (Sprite other) {
+    public void onCollision (Sprite other, GFrame f) {
     }
 }

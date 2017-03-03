@@ -27,6 +27,7 @@ import com.atoiks.proto.event.GKeyAdapter;
 
 import javax.imageio.ImageIO;
 
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
@@ -113,13 +114,9 @@ public class Main {
 				new Point(50, 75))
 		{
 		    @Override
-		    public void onCollision (Sprite other) {
+		    public void onCollision (Sprite other, GFrame f) {
 			if (other == blackBox) {
-			    ignoreKeys.set(true);
-			//     app.jum
-			    blackBox.move (0, 0);
-			    disable ();
-			    ignoreKeys.set(false);
+			    f.jumpToScene (1);
 			}
 		    }
 		};
@@ -129,6 +126,28 @@ public class Main {
 	    return;
 	}
 
+        System.err.println("Loading green box");
+        final Sprite greenBox;
+        try {
+                greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
+                new Point(342, 117));
+                greenBox.setCollidable(true);
+        } catch (IOException | IllegalArgumentException ex) {
+                System.err.println("Failed to load green box");
+                return;
+        }
+
+        System.err.println("Loading blue box");
+        final Sprite blueBox;
+        try {
+                blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
+                new Point(342, 317));
+                blueBox.setCollidable(true);
+        } catch (IOException | IllegalArgumentException ex) {
+                System.err.println("Failed to load blue box");
+                return;
+        }
+
         System.err.println("Loading squash ball");
         final Sprite squashBall;
         try {
@@ -136,55 +155,32 @@ public class Main {
             final Image squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
             final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("squash_ball.png"));
 
-
-
             squashBall = new Sprite(squash_ball, new Point(342, 217))
                 {
 
                     @Override
-                    public void onCollision (Sprite other) {
+                    public void onCollision (Sprite other, GFrame f) {
                         squash_ball_direction += 180;
                         squash_ball_speed += 0.5;
-                        if (other == green_box){
+                        if (other == greenBox){
                                 setImage (squash_ball_green);
                         }
-                        if (other == blue_box){
+                        if (other == blueBox){
                                 setImage (squash_ball_blue);
                         }
                     }
 
                     public void update (long milliseconds){
-                        double radian_direction = Math.toRadians(direction);
+                        double radian_direction = Math.toRadians(squash_ball_direction);
                         double verticle_value = Math.sin(radian_direction);
                         double horizontal_value = Math.cos(radian_direction);
+                        //FIXME: This line produces error...
                         squashBall.translate((int) (horizontal_value*squash_ball_speed), (int) (verticle_value*squash_ball_speed));
                     }
                 };
                 squashBall.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load squash ball");
-            return;
-        }
-
-        System.err.println("Loading green box");
-        final Sprite greenBox;
-        try {
-            greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-                                    new Point(342, 117));
-            greenBox.setCollidable(true);
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load green box");
-            return;
-        }
-
-        System.err.println("Loading blue box");
-        final Sprite blueBox;
-        try {
-            blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
-                                    new Point(342, 317));
-            blueBox.setCollidable(true);
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load blue box");
             return;
         }
 

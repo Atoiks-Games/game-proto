@@ -85,7 +85,6 @@ public class Text implements GComponent {
     }
 
     @Override
-    public void testCollision (GComponent comp) {
+    public void testCollision (GComponent comp, GFrame f) {
     }
 }
-

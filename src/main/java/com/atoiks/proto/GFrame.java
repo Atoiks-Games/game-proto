@@ -55,7 +55,7 @@ public class GFrame extends JFrame {
 	setSize (WIDTH, HEIGHT);
 	setResizable (false);
 	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-	
+
         panel = new JPanel ()
 	    {
 	        protected void paintComponent (Graphics g) {
@@ -71,12 +71,12 @@ public class GFrame extends JFrame {
 		public void keyTyped (KeyEvent e) {
 		    scenes[sceneIdx].onKeyTypedTrigger (e, GFrame.this);
 		}
-		
+
 		@Override
 		public void keyPressed (KeyEvent e) {
 		    scenes[sceneIdx].onKeyPressedTrigger (e, GFrame.this);
 		}
-		
+
 		@Override
 		public void keyReleased (KeyEvent e) {
 		    scenes[sceneIdx].onKeyReleasedTrigger (e, GFrame.this);
@@ -104,7 +104,7 @@ public class GFrame extends JFrame {
 	    threads.execute(() -> {
 		    long lastTime = System.currentTimeMillis ();
 		    while (threads != null && !threads.isShutdown ()) {
-		        scenes[sceneIdx].collisionStep ();
+		        scenes[sceneIdx].collisionStep (this);
 
 			final long current = System.currentTimeMillis ();
 		        scenes[sceneIdx].updateStep (current - lastTime);
