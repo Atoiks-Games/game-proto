@@ -261,14 +261,27 @@ public class Main {
 			    case KeyEvent.VK_N: {
 				ignoreKeys.set (true);
 				f.setVisible (false);
+				final Object dummy = new Object ();
 				final AsmMiniGame game = new AsmMiniGame (new int[]
 				    { 0, 1, 2, 3, 4 }, new int[]
-				    { 0, 1, 2, 3, 4 });
+				    { 0, 1, 2, 3, 4 }, dummy);
 				game.setVisible (true);
-				while (!game.passFlag) {
-				    // Do nothing
-				}
-			        ignoreKeys.set (false);
+				new Thread (new Runnable ()
+				    {
+					@Override
+					public void run () {
+					    synchronized (dummy) {
+						while (!game.passFlag) {
+						    try {
+							dummy.wait ();
+						    } catch (InterruptedException ex) {
+						    }
+						}
+					    }
+					    f.setVisible (true);
+					    ignoreKeys.set (false);
+					}
+				    }).start ();
 				break;
 			    }
 			    }
