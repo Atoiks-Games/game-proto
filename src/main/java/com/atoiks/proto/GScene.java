@@ -102,7 +102,7 @@ public class GScene {
     public void collisionStep (GFrame f) {
 	for (GComponent sp1 : instances) {
 	    for (GComponent sp2 : instances) {
-		sp1.testCollision (sp2, f);
+                if (sp1 != sp2) sp1.testCollision (sp2, f);
 	    }
 	}
     }

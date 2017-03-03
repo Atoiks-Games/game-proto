@@ -83,6 +83,9 @@ public class Main {
     static double squash_ball_direction = 180;
     static double squash_ball_speed = 5;
 
+    static int py_score;
+    static int player_score;
+
     public static void main(String[] args) {
 	// Global-ish variables
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
@@ -160,12 +163,12 @@ public class Main {
 
                     @Override
                     public void onCollision (Sprite other, GFrame f) {
-                        squash_ball_direction += 180;
-                        squash_ball_speed += 0.5;
-                        if (other == greenBox){
+                        squash_ball_direction += 90 + 180*Math.random();
+                        squash_ball_speed += 0.1;
+                        if (other == greenBox) {
                                 setImage (squash_ball_green);
                         }
-                        if (other == blueBox){
+                        if (other == blueBox) {
                                 setImage (squash_ball_blue);
                         }
                     }
@@ -174,8 +177,39 @@ public class Main {
                         double radian_direction = Math.toRadians(squash_ball_direction);
                         double verticle_value = Math.sin(radian_direction);
                         double horizontal_value = Math.cos(radian_direction);
-                        //FIXME: This line produces error...
-                        squashBall.translate((int) (horizontal_value*squash_ball_speed), (int) (verticle_value*squash_ball_speed));
+                        translate((int) (horizontal_value*squash_ball_speed), (int) (verticle_value*squash_ball_speed));
+
+                        if (origin.x <= 0){
+                            squash_ball_direction += 90 + 180*Math.random();
+                            squash_ball_speed += 0.1;
+                            origin.x = 1;
+                        }
+
+                        if (origin.y <= 0){
+                            squash_ball_direction += 90 + 180*Math.random();
+                            squash_ball_speed += 0.1;
+                            origin.y = 1;
+                        }
+
+                        if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
+                            if (image == squash_ball_blue) {
+                                ++ py_score;
+                            }
+                            if (image == squash_ball_green) {
+                                ++ player_score;
+                            }
+                            image = squash_ball;
+                            origin.x = 342;
+                            origin.y = 217;
+                            squash_ball_direction = 180;
+                            squash_ball_speed = 5;
+                        }
+
+                        if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30){
+                                squash_ball_direction += 90 + 180*Math.random();
+                                squash_ball_speed += 0.1;
+                                origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
+                        }
                     }
                 };
                 squashBall.setCollidable(true);
@@ -184,9 +218,19 @@ public class Main {
             return;
         }
 
+        System.err.println("Making the squash score board");
+        final Text squash_py_score;
+        try {
+                squash_py_score = new Text("PY: " + py_score + "\n Player: " + player_score, new Point(10, 10));
+        } catch (IllegalArgumentException ex) {
+                System.err.println("Failed to load score board");
+                return;
+        }
+
+
 	System.err.println("Initializing scenes");
 	final GScene scene_1 = new GScene (floor, blackBox, redBox);
-        final GScene scene_2 = new GScene (floor, greenBox, blueBox, squashBall);
+        final GScene scene_2 = new GScene (floor, blueBox, greenBox, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
@@ -243,6 +287,35 @@ public class Main {
 		    ignoreKeys.set (false);
 		}
 	    });
+
+            scene_2.addGKeyListener (new GKeyAdapter()
+                {
+                    @Override
+                    public void keyPressed (KeyEvent e, GFrame f) {
+                        if (!ignoreKeys.get()) {
+                            switch (e.getKeyCode())
+                                {
+                                case KeyEvent.VK_A:
+                                    greenBox.translate (-5, 0);
+                                    break;
+                                case KeyEvent.VK_D:
+                                    greenBox.translate (5, 0);
+                                    break;
+                                case KeyEvent.VK_W:
+                                    greenBox.translate (0, -5);
+                                    break;
+                                case KeyEvent.VK_S:
+                                    greenBox.translate (0, 5);
+                                    break;
+                                case KeyEvent.VK_Q:
+                                    javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
+                                    break;
+
+                                }
+                            }
+                        }
+                });
+
 
 	System.err.println("Launching in GUI mode");
 	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
