@@ -4,14 +4,17 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -125,7 +128,16 @@ public class AsmMiniGame extends JFrame {
 	final JTable tbl = new JTable (hexPad);
 	tbl.setDefaultEditor (Integer.class, new HexCellEditor ());
 	tbl.getTableHeader ().setReorderingAllowed (false);
-	add (new JScrollPane (tbl), BorderLayout.CENTER);
+
+	final JTabbedPane center = new JTabbedPane ();
+        center.addTab ("Code", null, new JScrollPane (tbl), "Your code");
+	final JTextArea tmp = new JTextArea(
+					    "There are a total of 16 registers. They are 0 to F.\n  - Register C is always going to be zero\n  - Register D is the flag register\n  - Register E is related to the input buffer\n  - Register F is the instruction pointer\n\nHalt execution                      0\n  00                             => Halt\nLoad register                       1\n  01 15                          => Load r5 to r1\nLoad 4-bit number                   2\n  02 3B                          => Load 0x0B to r3\nLoad 8-bit number                   3\n  03 04 25                       => Load 0x25 to r4\nLoad 16-bit number                  4\n  04 02 AB F0                    => Load 0xABF0 to r2\nLoad memory                         5\n  05 00 01 02                    => Load data at 0x0102 to r0\nStore memory                        6\n  06 00 01 02                    => Store data at r0 to 0x0102\nAdd                                 7\n  07 15                          => Store r1 + r5 into r1\nMinus                               8\n  08 15                          => Store r1 - r5 into r1\nMultiply                            9\n  09 15                          => Store r1 * r5 into r1\nDivide                              A\n  0A 15                          => Store r1 / r5 into r1\nRemainder                           B\n  0B 15                          => Store remainder of r1 / r5 into r1\nBitwise and                         C\n  0C 15                          => Store r1 AND r5 into r1\nBitwise or                          D\n  0D 15                          => Store r1 OR r5 into r1\nBitwise xor                         E\n  0E 15                          => Store r1 XOR r5 into r1\nNot / Negate                        F\n  0F 9F                          => Store the bitwise compliment of r9 in r9\n  0F 60                          => Store the negative of r6 in r6\nShift right                         10\n  10 36                          => Shift r3 by r6\nShift left                          11\n  11 36                          => Shift r3 by r6\nShift signed right                  12\n  12 36                          => Shift r3 by r6\nRead / Write                        13\n  13 9F                          => Read and store to r9\n  13 60                          => Write the value of r6\nCompare                             14\n  14 9E                          => Compare r9 and r14\nJump / Goto                         15\n  15 01 02 03 04                 => Jump to address 0x01020304\nJump if equals                      16\n  16 01 02 03 04                 => Jump to address 0x01020304\nJump if not equals                  17\n  17 01 02 03 04                 => Jump to address 0x01020304\nJump if less than                   18\n  18 01 02 03 04                 => Jump to address 0x01020304\nJump if more than                   19\n  19 01 02 03 04                 => Jump to address 0x01020304\nJump if less or equal               1A\n  1A 01 02 03 04                 => Jump to address 0x01020304\nJump if more or equal               1B\n  1B 01 02 03 04                 => Jump to address 0x01020304\nJump if there is nothing to read    1C\n  1C 01 02 03 04                 => Jump to address 0x01020304\nAdd 1 / Minus 1                     1D\n  1D 9F                          => Add 1 to r9\n  1D 60                          => Subtract 1 from r6\n");
+	tmp.setEditable (false);
+	tmp.setFont (new Font (Font.MONOSPACED, Font.PLAIN, 12));
+	center.addTab ("Reference", null, new JScrollPane (tmp),
+		       "Like a help file");
+	add (center, BorderLayout.CENTER);
 
 	addRowBtn.addActionListener (new ActionListener ()
 	    {
