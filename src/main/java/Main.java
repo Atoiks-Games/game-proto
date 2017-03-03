@@ -132,23 +132,23 @@ public class Main {
         System.err.println("Loading green box");
         final Sprite greenBox;
         try {
-                greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-                new Point(342, 117));
-                greenBox.setCollidable(true);
+	    greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
+				  new Point(342, 117));
+	    greenBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
-                System.err.println("Failed to load green box");
-                return;
+	    System.err.println("Failed to load green box");
+	    return;
         }
 
         System.err.println("Loading blue box");
         final Sprite blueBox;
         try {
-                blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
-                new Point(342, 317));
-                blueBox.setCollidable(true);
+	    blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
+				 new Point(342, 317));
+	    blueBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
-                System.err.println("Failed to load blue box");
-                return;
+	    System.err.println("Failed to load blue box");
+	    return;
         }
 
         System.err.println("Loading squash ball");
@@ -163,13 +163,13 @@ public class Main {
 
                     @Override
                     public void onCollision (Sprite other, GFrame f) {
-                        squash_ball_direction += 90 + 180*Math.random();
+                        squash_ball_direction += 90 + 180 * Math.random();
                         squash_ball_speed += 0.1;
                         if (other == greenBox) {
-                                setImage (squash_ball_green);
+			    setImage (squash_ball_green);
                         }
                         if (other == blueBox) {
-                                setImage (squash_ball_blue);
+			    setImage (squash_ball_blue);
                         }
                     }
 
@@ -177,16 +177,17 @@ public class Main {
                         double radian_direction = Math.toRadians(squash_ball_direction);
                         double verticle_value = Math.sin(radian_direction);
                         double horizontal_value = Math.cos(radian_direction);
-                        translate((int) (horizontal_value*squash_ball_speed), (int) (verticle_value*squash_ball_speed));
+                        translate((int) (horizontal_value * squash_ball_speed),
+				  (int) (verticle_value * squash_ball_speed));
 
                         if (origin.x <= 0){
-                            squash_ball_direction += 90 + 180*Math.random();
+                            squash_ball_direction += 90 + 180 * Math.random();
                             squash_ball_speed += 0.1;
                             origin.x = 1;
                         }
 
                         if (origin.y <= 0){
-                            squash_ball_direction += 90 + 180*Math.random();
+                            squash_ball_direction += 90 + 180 * Math.random();
                             squash_ball_speed += 0.1;
                             origin.y = 1;
                         }
@@ -206,13 +207,13 @@ public class Main {
                         }
 
                         if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30){
-                                squash_ball_direction += 90 + 180*Math.random();
-                                squash_ball_speed += 0.1;
-                                origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
+			    squash_ball_direction += 90 + 180 * Math.random();
+			    squash_ball_speed += 0.1;
+			    origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
                         }
                     }
                 };
-                squashBall.setCollidable(true);
+	    squashBall.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load squash ball");
             return;
@@ -221,10 +222,10 @@ public class Main {
         System.err.println("Making the squash score board");
         final Text squash_py_score;
         try {
-                squash_py_score = new Text("PY: " + py_score + "\n Player: " + player_score, new Point(10, 10));
+	    squash_py_score = new Text("PY: " + py_score + "\n Player: " + player_score, new Point(10, 10));
         } catch (IllegalArgumentException ex) {
-                System.err.println("Failed to load score board");
-                return;
+	    System.err.println("Failed to load score board");
+	    return;
         }
 
 
@@ -301,33 +302,33 @@ public class Main {
 		}
 	    });
 
-            scene_2.addGKeyListener (new GKeyAdapter()
-                {
-                    @Override
-                    public void keyPressed (KeyEvent e, GFrame f) {
-                        if (!ignoreKeys.get()) {
-                            switch (e.getKeyCode())
-                                {
-                                case KeyEvent.VK_A:
-                                    greenBox.translate (-5, 0);
-                                    break;
-                                case KeyEvent.VK_D:
-                                    greenBox.translate (5, 0);
-                                    break;
-                                case KeyEvent.VK_W:
-                                    greenBox.translate (0, -5);
-                                    break;
-                                case KeyEvent.VK_S:
-                                    greenBox.translate (0, 5);
-                                    break;
-                                case KeyEvent.VK_Q:
-                                    javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
-                                    break;
+	scene_2.addGKeyListener (new GKeyAdapter()
+	    {
+		@Override
+		public void keyPressed (KeyEvent e, GFrame f) {
+		    if (!ignoreKeys.get()) {
+			switch (e.getKeyCode())
+			    {
+			    case KeyEvent.VK_A:
+				greenBox.translate (-5, 0);
+				break;
+			    case KeyEvent.VK_D:
+				greenBox.translate (5, 0);
+				break;
+			    case KeyEvent.VK_W:
+				greenBox.translate (0, -5);
+				break;
+			    case KeyEvent.VK_S:
+				greenBox.translate (0, 5);
+				break;
+			    case KeyEvent.VK_Q:
+				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
+				break;
 
-                                }
-                            }
-                        }
-                });
+			    }
+		    }
+		}
+	    });
 
 
 	System.err.println("Launching in GUI mode");
