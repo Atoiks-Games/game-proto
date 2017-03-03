@@ -90,7 +90,7 @@ public class Main {
 	    System.err.println("Failed to load default floor");
 	    return;
 	}
-	
+
 	System.err.println("Loading black box");
 	final Sprite blackBox;
 	try {
@@ -101,7 +101,7 @@ public class Main {
 	    System.err.println("Failed to load black box");
 	    return;
 	}
-	
+
 	System.err.println("Loading red box");
 	final Sprite redBox;
 	try {
@@ -124,6 +124,36 @@ public class Main {
 	    System.err.println("Failed to load red box");
 	    return;
 	}
+
+        System.err.ptintln("Loading squash ball");
+        final Sprite squashBall;
+        try {
+            squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
+                                    new Point(342, 217));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println("Failed to load squash ball");
+            return;
+        }
+
+        System.err.ptintln("Loading green box");
+        final Sprite greenBox;
+        try {
+            greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
+                                    new Point(342, 217));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println("Failed to load green box");
+            return;
+        }
+
+        System.err.ptintln("Loading blue box");
+        final Sprite squashBall;
+        try {
+            squashBall = new Sprite(ImageIO.read(Main.class.getResourceAsStream("squash_ball.png")),
+                                    new Point(342, 217));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println("Failed to load red box");
+            return;
+        }
 
 	System.err.println("Initializing scene");
 	final GScene scene = new GScene (floor, blackBox, redBox);
