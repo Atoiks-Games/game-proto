@@ -34,7 +34,9 @@ public class Sprite2D extends Sprite {
 
     protected int frameIdx;
 
-    protected double millisecPerFrame;
+    private int fps;
+
+    private double millisecPerFrame;
 
     private long elapsed;
 
@@ -42,8 +44,26 @@ public class Sprite2D extends Sprite {
 	super (frames[currentFrame], origin);
 	this.frames = frames;
 	this.frameIdx = currentFrame;
+	this.fps = fps;
 	this.millisecPerFrame = 1000.0 / fps;
 	this.elapsed = 0;
+    }
+
+    public int getFps () {
+	return fps;
+    }
+
+    public void setFps (int fps) {
+	this.fps = fps;
+	this.millisecPerFrame = 1000.0 / fps;
+    }
+
+    public Image[] getFrames () {
+	return frames;
+    }
+
+    public void setFrames (Image... frames) {
+	this.frames = frames;
     }
 
     public void jumpToFrame (int frameIdx) {
