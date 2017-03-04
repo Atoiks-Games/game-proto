@@ -24,6 +24,7 @@
 
 package com.atoiks.proto;
 
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Graphics;
 
@@ -43,8 +44,14 @@ public class Text implements GComponent {
 
     @Override
     public void render (Graphics g) {
-	if (visible)
-	    g.drawString (text, origin.x, origin.y);
+	if (visible) {
+		final Font f = g.getFont ();
+		final int pt = f.getSize ();
+		final String[] segs = text.split ("\n");
+		for (int i = 0; i < segs.length; ++i) {
+			g.drawString (segs[i], origin.x, origin.y + pt * i);
+		}
+	}
     }
 
     @Override
@@ -88,3 +95,4 @@ public class Text implements GComponent {
     public void testCollision (GComponent comp, GFrame f) {
     }
 }
+

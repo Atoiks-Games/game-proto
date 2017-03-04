@@ -222,11 +222,11 @@ public class Main {
         System.err.println("Making the squash score board");
         final Text squash_py_score;
         try {
-	    squash_py_score = new Text("PY: 0 Player: 0", new Point(10, 10))
+	    squash_py_score = new Text("PY: 0\nPlayer: 0", new Point(10, 10))
                 {
                      @Override
                      public void update (long milliseconds, GFrame f){
-                         setText("PY: " + py_score + " Player: " + player_score);
+                         setText("PY: " + py_score + "\nPlayer: " + player_score);
                      }
                 };
         } catch (IllegalArgumentException ex) {
