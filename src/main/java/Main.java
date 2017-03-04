@@ -128,7 +128,9 @@ public class Main {
 		    @Override
 		    public void onCollision (Sprite other, GFrame f) {
 			if (other == blackBox) {
-			    f.jumpToScene (1);
+			    if (player_score == 0 && py_score == 0) {
+				f.jumpToScene (1);
+			    }
 			}
 		    }
 		};
@@ -235,19 +237,28 @@ public class Main {
         }
 
         System.err.println("Making the squash score board");
-        final Text squash_py_score;
+        final Text squash_py_score = new Text("PY: 0\nPlayer: 0",
+					      new Point(10, 10))
+	    {
+		@Override
+		public void update (long milliseconds, GFrame f){
+		    setText("PY: " + py_score + "\nPlayer: " + player_score);
+		}
+	    };
+
+        System.err.println("Loading main_char spr_1..3");
+        final Sprite mainChar;
         try {
-	    squash_py_score = new Text("PY: 0\nPlayer: 0", new Point(10, 10))
-                {
-		    @Override
-		    public void update (long milliseconds, GFrame f){
-			setText("PY: " + py_score + "\nPlayer: " + player_score);
-		    }
-                };
-        } catch (IllegalArgumentException ex) {
-	    System.err.println("Failed to load score board");
+	    final Image spr1 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png"));
+            final Image spr2 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png"));
+            final Image spr3 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png"));
+	    
+	    mainChar = new Sprite2D(1, new Point(10, 10), 3, spr1, spr2, spr3);
+	    mainChar.setVisible (true);
+	} catch (IOException | IllegalArgumentException ex) {
+	    System.err.println("Failed to load main_char spr_1..3");
 	    return;
-        }
+	}
 
 	final Sprite dummy = new Sprite (null, new Point (0, 0))
 	    {
@@ -262,9 +273,8 @@ public class Main {
 		}
 	    };
 
-
 	System.err.println("Initializing scenes");
-	final GScene scene_1 = new GScene (floor, blackBox, redBox);
+	final GScene scene_1 = new GScene (floor, blackBox, redBox, mainChar);
 	final GScene scene_2 = new GScene (floor, dummy, blueBox, greenBox, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
