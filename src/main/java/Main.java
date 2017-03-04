@@ -86,6 +86,9 @@ public class Main {
     static int py_score;
     static int player_score;
 
+    static int player_speed_x = 0;
+    static int player_speed_y = 0;
+
     public static void main(String[] args) {
 	// Global-ish variables
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
@@ -103,7 +106,13 @@ public class Main {
 	final Sprite blackBox;
 	try {
 	    blackBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("black_box.bmp")),
-				  new Point(0, 0));
+				  new Point(0, 0))
+                {
+                    @Override
+                    public void update (long mills, GFrame f) {
+                        translate (player_speed_x, player_speed_y);
+                    }
+                };
 	    blackBox.setCollidable (true);
 	} catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load black box");
@@ -133,7 +142,13 @@ public class Main {
         final Sprite greenBox;
         try {
 	    greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-				  new Point(342, 117));
+				  new Point(342, 117))
+                                  {
+                                      @Override
+                                      public void update (long mills, GFrame f) {
+                                      translate (player_speed_x, player_speed_y);
+                                      };
+                                  };
 	    greenBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load green box");
@@ -233,7 +248,7 @@ public class Main {
 	    System.err.println("Failed to load score board");
 	    return;
         }
-		
+
 		final Sprite dummy = new Sprite (null, new Point (0, 0))
 			{
 				@Override
@@ -255,26 +270,35 @@ public class Main {
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
 		@Override
+                public void keyReleased (KeyEvent e, GFrame f){
+                        player_speed_x = 0;
+                        player_speed_y = 0;
+                }
+                @Override
 		public void keyPressed (KeyEvent e, GFrame f) {
 		    if (!ignoreKeys.get()) {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-				blackBox.translate (-5, 0);
+                                player_speed_x = -5;
+				//blackBox.translate (-5, 0);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_D:
-				blackBox.translate (5, 0);
+                                player_speed_x = 5;
+                                //blackBox.translate (5, 0);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_W:
-				blackBox.translate (0, -5);
+                                player_speed_y = -5;
+                                //blackBox.translate (0, -5);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_S:
-				blackBox.translate (0, 5);
+                                player_speed_y = 5;
+                                //blackBox.translate (0, 5);
 				redTileConditions ();
-				break;
+			 	break;
 			    case KeyEvent.VK_Q:
 				javax.swing.JOptionPane.showMessageDialog(null, "Move around!");
 				break;
@@ -323,22 +347,32 @@ public class Main {
 
 	scene_2.addGKeyListener (new GKeyAdapter()
 	    {
-		@Override
+                @Override
+                public void keyReleased (KeyEvent e, GFrame f){
+                    player_speed_x = 0;
+                    player_speed_y = 0;
+                }
+
+                @Override
 		public void keyPressed (KeyEvent e, GFrame f) {
 		    if (!ignoreKeys.get()) {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-				greenBox.translate (-5, 0);
+                                player_speed_x = -5;
+				//greenBox.translate (-5, 0);
 				break;
 			    case KeyEvent.VK_D:
-				greenBox.translate (5, 0);
+                                player_speed_x = 5;
+				//greenBox.translate (5, 0);
 				break;
 			    case KeyEvent.VK_W:
-				greenBox.translate (0, -5);
+                                player_speed_y = -5;
+                                //greenBox.translate (0, -5);
 				break;
 			    case KeyEvent.VK_S:
-				greenBox.translate (0, 5);
+                                player_speed_y = 5;
+                                //greenBox.translate (0, 5);
 				break;
 			    case KeyEvent.VK_Q:
 				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
