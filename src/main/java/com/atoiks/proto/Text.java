@@ -24,6 +24,9 @@
 
 package com.atoiks.proto;
 
+import javax.swing.UIManager;
+
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Graphics;
 
@@ -31,20 +34,29 @@ public class Text implements GComponent {
 
     protected String text;
 
+	protected Font font;
+
     protected Point origin;
 
     protected boolean visible;
 
     public Text (String text, Point origin) {
+	this (text, UIManager.getDefaults ().getFont ("TextPane.font"), origin);
+    }
+
+    public Text (String text, Font font, Point origin) {
 	this.text = text;
+	this.font = font;
 	this.origin = origin;
 	this.visible = true;
     }
 
     @Override
     public void render (Graphics g) {
-	if (visible)
+	if (visible) {
+		g.setFont (font);
 	    g.drawString (text, origin.x, origin.y);
+	}
     }
 
     @Override
@@ -59,6 +71,14 @@ public class Text implements GComponent {
     public String getText () {
 	return this.text;
     }
+	
+	public void setFont (Font f) {
+		this.font = f;
+	}
+	
+	public Font getFont () {
+		return this.font;
+	}
 
     public void setVisible (boolean flag) {
 	this.visible = flag;
