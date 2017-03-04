@@ -222,7 +222,13 @@ public class Main {
         System.err.println("Making the squash score board");
         final Text squash_py_score;
         try {
-	    squash_py_score = new Text("PY: " + py_score + "\n Player: " + player_score, new Point(10, 10));
+	    squash_py_score = new Text("PY: 0 Player: 0", new Point(10, 10))
+                {
+                     @Override
+                     public void update (long milliseconds){
+                         setText("PY: " + py_score + " Player: " + player_score);
+                     }
+                };
         } catch (IllegalArgumentException ex) {
 	    System.err.println("Failed to load score board");
 	    return;
@@ -328,6 +334,16 @@ public class Main {
 			    }
 		    }
 		}
+
+                public void update (long milliseconds){
+                    if(py_score == 11){
+                            javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
+                    }
+                    if(player_score == 11){
+                            //FIXME: Says cannot find this var (f)
+                            f.jumpToScene (0);
+                    }
+                }
 	    });
 
 
