@@ -107,7 +107,7 @@ public class Sprite implements GComponent {
     }
 
     @Override
-    public void update (long millisec) {
+    public void update (long millisec, GFrame f) {
     }
 
     @Override
@@ -117,6 +117,7 @@ public class Sprite implements GComponent {
 	if (!(comp instanceof Sprite)) return;
 
 	final Sprite sp2 = (Sprite) comp;
+	if (!sp2.collidable) return;
 	if ((origin.x < sp2.origin.x + sp2.image.getWidth(null))
 	    && (origin.x + image.getWidth(null) > sp2.origin.x)
 	    && (origin.y < sp2.origin.y + sp2.image.getHeight(null))

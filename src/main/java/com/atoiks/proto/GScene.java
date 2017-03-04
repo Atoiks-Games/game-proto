@@ -107,9 +107,9 @@ public class GScene {
 	}
     }
 
-    public void updateStep (long elapsed) {
+    public void updateStep (long elapsed, GFrame f) {
 	for (GComponent el : instances) {
-	    if (el != null) el.update (elapsed);
+	    if (el != null) el.update (elapsed, f);
 	}
     }
 

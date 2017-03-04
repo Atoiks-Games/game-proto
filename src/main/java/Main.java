@@ -173,7 +173,7 @@ public class Main {
                         }
                     }
 
-                    public void update (long milliseconds){
+                    public void update (long milliseconds, GFrame f){
                         double radian_direction = Math.toRadians(squash_ball_direction);
                         double verticle_value = Math.sin(radian_direction);
                         double horizontal_value = Math.cos(radian_direction);
@@ -225,7 +225,7 @@ public class Main {
 	    squash_py_score = new Text("PY: 0 Player: 0", new Point(10, 10))
                 {
                      @Override
-                     public void update (long milliseconds){
+                     public void update (long milliseconds, GFrame f){
                          setText("PY: " + py_score + " Player: " + player_score);
                      }
                 };
@@ -233,11 +233,24 @@ public class Main {
 	    System.err.println("Failed to load score board");
 	    return;
         }
+		
+		final Sprite dummy = new Sprite (null, new Point (0, 0))
+			{
+				@Override
+				public void update (long milliseconds, GFrame f){
+				if (py_score >= 11){
+					javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
+				}
+				if(player_score >= 11){
+					f.jumpToScene (0);
+					}
+				}
+			};
 
 
 	System.err.println("Initializing scenes");
 	final GScene scene_1 = new GScene (floor, blackBox, redBox);
-        final GScene scene_2 = new GScene (floor, blueBox, greenBox, squashBall, squash_py_score);
+	final GScene scene_2 = new GScene (floor, dummy, blueBox, greenBox, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
@@ -334,16 +347,6 @@ public class Main {
 			    }
 		    }
 		}
-
-                public void update (long milliseconds){
-                    if(py_score == 11){
-                            javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
-                    }
-                    if(player_score == 11){
-                            //FIXME: Says cannot find this var (f)
-                            f.jumpToScene (0);
-                    }
-                }
 	    });
 
 

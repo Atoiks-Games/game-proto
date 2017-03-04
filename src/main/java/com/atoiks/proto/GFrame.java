@@ -107,7 +107,7 @@ public class GFrame extends JFrame {
 		        scenes[sceneIdx].collisionStep (this);
 
 			final long current = System.currentTimeMillis ();
-		        scenes[sceneIdx].updateStep (current - lastTime);
+		        scenes[sceneIdx].updateStep (current - lastTime, this);
 			repaint ();
 			lastTime = current;
 			try {

@@ -51,7 +51,7 @@ public class Floor implements GComponent {
     }
 
     @Override
-    public void update (long millisec) {
+    public void update (long millisec, GFrame f) {
     }
 
     @Override
