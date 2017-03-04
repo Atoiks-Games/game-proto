@@ -24,12 +24,9 @@
 
 package com.atoiks.proto;
 
-<<<<<<< HEAD
-    =======
-    import javax.swing.UIManager;
+import javax.swing.UIManager;
 
->>>>>>> development
-    import java.awt.Font;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Graphics;
 

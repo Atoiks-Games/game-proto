@@ -143,12 +143,12 @@ public class Main {
         try {
 	    greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
 				  new Point(342, 117))
-                                  {
-                                      @Override
-                                      public void update (long mills, GFrame f) {
-                                      translate (player_speed_x, player_speed_y);
-                                      };
-                                  };
+		{
+		    @Override
+		    public void update (long mills, GFrame f) {
+			translate (player_speed_x, player_speed_y);
+		    };
+		};
 	    greenBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load green box");
@@ -239,28 +239,28 @@ public class Main {
         try {
 	    squash_py_score = new Text("PY: 0\nPlayer: 0", new Point(10, 10))
                 {
-                     @Override
-                     public void update (long milliseconds, GFrame f){
-                         setText("PY: " + py_score + "\nPlayer: " + player_score);
-                     }
+		    @Override
+		    public void update (long milliseconds, GFrame f){
+			setText("PY: " + py_score + "\nPlayer: " + player_score);
+		    }
                 };
         } catch (IllegalArgumentException ex) {
 	    System.err.println("Failed to load score board");
 	    return;
         }
 
-		final Sprite dummy = new Sprite (null, new Point (0, 0))
-			{
-				@Override
-				public void update (long milliseconds, GFrame f){
-				if (py_score >= 11){
-					javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
-				}
-				if(player_score >= 11){
-					f.jumpToScene (0);
-					}
-				}
-			};
+	final Sprite dummy = new Sprite (null, new Point (0, 0))
+	    {
+		@Override
+		public void update (long milliseconds, GFrame f){
+		    if (py_score >= 11){
+			javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
+		    }
+		    if(player_score >= 11){
+			f.jumpToScene (0);
+		    }
+		}
+	    };
 
 
 	System.err.println("Initializing scenes");
@@ -271,8 +271,8 @@ public class Main {
 	    {
 		@Override
                 public void keyReleased (KeyEvent e, GFrame f){
-                        player_speed_x = 0;
-                        player_speed_y = 0;
+		    player_speed_x = 0;
+		    player_speed_y = 0;
                 }
                 @Override
 		public void keyPressed (KeyEvent e, GFrame f) {
