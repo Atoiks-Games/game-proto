@@ -252,8 +252,21 @@ public class Main {
 	    final Image spr1 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png"));
             final Image spr2 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png"));
             final Image spr3 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png"));
-	    
-	    mainChar = new Sprite2D(1, new Point(10, 10), 3, spr1, spr2, spr3);
+
+	    mainChar = new Sprite2D(0, new Point(10, 10), 3, spr2)
+		{
+		    final Image[] walkingSheet = { spr1, spr3 };
+		    boolean swappedFrame = false;
+
+		    @Override
+		    public void jumpToFrame (int frameIdx) {
+			super.jumpToFrame (frameIdx);
+			if (!swappedFrame) {
+			    swappedFrame = true;
+			    setFrames (walkingSheet);
+			}
+		    }
+		};
 	    mainChar.setVisible (true);
 	} catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load main_char spr_1..3");

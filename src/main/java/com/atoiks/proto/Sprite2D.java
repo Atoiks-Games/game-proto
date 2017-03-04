@@ -34,6 +34,8 @@ public class Sprite2D extends Sprite {
 
     protected int frameIdx;
 
+    protected boolean playing;
+
     private int fps;
 
     private double millisecPerFrame;
@@ -44,6 +46,7 @@ public class Sprite2D extends Sprite {
 	super (frames[currentFrame], origin);
 	this.frames = frames;
 	this.frameIdx = currentFrame;
+	this.playing = true;
 	this.fps = fps;
 	this.millisecPerFrame = 1000.0 / fps;
 	this.elapsed = 0;
@@ -66,6 +69,14 @@ public class Sprite2D extends Sprite {
 	this.frames = frames;
     }
 
+    public boolean isPlaying () {
+	return playing;
+    }
+
+    public void setPlaying (boolean flag) {
+	playing = flag;
+    }
+
     public void jumpToFrame (int frameIdx) {
 	this.frameIdx = frameIdx % this.frames.length;
 	this.image = this.frames[this.frameIdx];
@@ -73,6 +84,7 @@ public class Sprite2D extends Sprite {
 
     @Override
     public void update (long millisec, GFrame f) {
+	if (!this.playing) return;
 	if (this.millisecPerFrame < 0) return;
         elapsed += millisec;
 	final double deltaFrames = elapsed / this.millisecPerFrame;
