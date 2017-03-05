@@ -154,23 +154,23 @@ public class Main {
         try {
 	    blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
 				 new Point(342, 317))
-                                 {
-                                     @Override
-                                     public void update(long milliseconds, GFrame f){
+		{
+		    @Override
+		    public void update(long milliseconds, GFrame f){
 
-                                             double x_distance_to_target = squashBall.getLocation().x - origin.x;
-                                             double y_distance_to_target = squashBall.getLocation().y - origin.y;
-                                             if(x_distance_to_target == 0){
-                                                     return;
-                                             }
-                                             double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
-                                             double speed = 4;
-                                             if (player_score == 10){
-                                                      speed = 10;
-                                              }
-                                             translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
-                                     }
-                             };
+			double x_distance_to_target = squashBall.getLocation().x - origin.x;
+			double y_distance_to_target = squashBall.getLocation().y - origin.y;
+			if(x_distance_to_target == 0){
+			    return;
+			}
+			double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
+			double speed = 4;
+			if (player_score == 10){
+			    speed = 10;
+			}
+			translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
+		    }
+		};
 	    blueBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load blue box");
