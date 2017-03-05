@@ -24,6 +24,7 @@
 
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyAdapter;
+import com.atoiks.proto.event.GStateAdapter;
 
 import entity.*;
 
@@ -142,22 +143,22 @@ public class Main {
 	    return;
 	}
 
-        System.err.println("Loading green box");
-        final Sprite greenBox;
-        try {
-	    greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-				  new Point(342, 117))
-		{
-		    @Override
-		    public void update (long mills, GFrame f) {
-			translate (player_speed_x.get(), player_speed_y.get());
-		    };
-		};
-	    greenBox.setCollidable(true);
-        } catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load green box");
-	    return;
-        }
+        // System.err.println("Loading green box");
+        // final Sprite greenBox;
+        // try {
+	//     greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
+	// 			  new Point(342, 117))
+	// 	{
+	// 	    @Override
+	// 	    public void update (long mills, GFrame f) {
+	// 		translate (player_speed_x.get(), player_speed_y.get());
+	// 	    };
+	// 	};
+	//     greenBox.setCollidable(true);
+        // } catch (IOException | IllegalArgumentException ex) {
+	//     System.err.println("Failed to load green box");
+	//     return;
+        // }
 
         System.err.println("Loading blue box");
         final Sprite blueBox;
@@ -200,7 +201,7 @@ public class Main {
                     public void onCollision (Sprite other, GFrame f) {
                         squash_ball_direction += 90 + 180 * Math.random();
                         squash_ball_speed += 0.3;
-                        if (other == greenBox) {
+                        if (other == mainChar) {
 			    setImage (squash_ball_green);
                         }
                         if (other == blueBox) {
@@ -268,10 +269,12 @@ public class Main {
 	    {
 		@Override
 		public void update (long milliseconds, GFrame f){
-		    if (py_score >= 11){
+		    if (py_score >= 11) {
+			// Destroy window
+			f.dispose ();
 			javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
 		    }
-		    if(player_score >= 11){
+		    if(player_score >= 11) {
 			f.jumpToScene (0);
 		    }
 		}
@@ -279,7 +282,7 @@ public class Main {
 
 	System.err.println("Initializing scenes");
 	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox);
-	final GScene scene_2 = new GScene (floor, dummy, blueBox, greenBox, squashBall, squash_py_score);
+	final GScene scene_2 = new GScene (floor, dummy, blueBox, mainChar, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
@@ -388,11 +391,27 @@ public class Main {
 		    ignoreKeys.set (false);
 		}
 	    });
+	scene_1.addGStateListener (new GStateAdapter()
+	    {
+		Point mainCharLastLoc;
+
+		@Override
+		public void onEnter () {
+		    if (mainCharLastLoc == null) return;
+		    mainChar.setLocation (mainCharLastLoc);
+		}
+
+		@Override
+		public void onLeave () {
+		    mainCharLastLoc = mainChar.getLocation ();
+		}
+	    });
 
 	scene_2.addGKeyListener (new GKeyAdapter()
 	    {
                 @Override
-                public void keyReleased (KeyEvent e, GFrame f){
+                public void keyReleased (KeyEvent e, GFrame f) {
+		    mainChar.setIdleFrame ();
                     player_speed_x.set(0);
                     player_speed_y.set(0);
                 }
@@ -404,26 +423,36 @@ public class Main {
 			    {
 			    case KeyEvent.VK_A:
 				player_speed_x.set(-5);
-				//greenBox.translate (-5, 0);
+				mainChar.directionLeft ();
+				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_D:
 				player_speed_x.set(5);
-				//greenBox.translate (5, 0);
+				mainChar.directionRight ();
+				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_W:
 				player_speed_y.set(-5);
-                                //greenBox.translate (0, -5);
+				mainChar.directionUp ();
+				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_S:
 				player_speed_y.set(5);
-                                //greenBox.translate (0, 5);
+				mainChar.directionDown ();
+				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_Q:
 				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
 				break;
-
 			    }
 		    }
+		}
+	    });
+	scene_2.addGStateListener (new GStateAdapter()
+	    {
+		@Override
+		public void onEnter () {
+		    mainChar.move (342, 117);
 		}
 	    });
 
