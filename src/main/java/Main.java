@@ -349,6 +349,28 @@ public class Main {
 				break;
 			    }
 			    }
+
+			if (scene_1.getFloor () == squashCourt) {
+			    Point loc = mainChar.getLocation ();
+			    if (loc.y < 0) {
+				mainChar.move (loc.x, 0);
+			    }
+			    if (loc.y > 380) {
+				mainChar.move (loc.x, 380);
+			    }
+			    if (loc.x < 155) {
+				mainChar.move (155, loc.y);
+			    }
+			    if (loc.x > 480) {
+				mainChar.move (480, loc.y);
+			    }
+
+			    loc = mainChar.getLocation ();
+			    if (loc.x > 300 && loc.x < 333 && loc.y > 370) {
+				System.err.println ("Leaving squash court");
+				return;
+			    }
+			}
 		    }
 		}
 
