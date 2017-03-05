@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
@@ -102,20 +103,39 @@ public class Main {
 	    return;
 	}
 
-	System.err.println("Loading black box");
-	final Sprite blackBox;
-	try {
-	    blackBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("black_box.bmp")),
-				  new Point(0, 0))
-                {
-                    @Override
-                    public void update (long mills, GFrame f) {
-                        translate (player_speed_x, player_speed_y);
-                    }
-                };
-	    blackBox.setCollidable (true);
+	
+        System.err.println("Loading main_char spr_1..3");
+	final AtomicInteger mainCharSprIdx = new AtomicInteger (1);
+	final Image[][][] directionSheet = new Image[4][2][];
+        final Sprite2D mainChar;
+        try {
+	    // 0 = up, 1 = down, 2 = left, 3 = right
+	    // 0 = idle, 1 = move
+	    directionSheet[0][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_11.png")) };
+	    directionSheet[0][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_10.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_12.png")) };
+
+	    directionSheet[1][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png")) };
+	    directionSheet[1][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png")) };
+
+	    directionSheet[2][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_8.png")) };
+	    directionSheet[2][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_7.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_9.png")) };
+
+	    directionSheet[3][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_5.png")) };
+	    directionSheet[3][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_4.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_6.png")) };
+
+	    mainChar = new Sprite2D(0, new Point(10, 10), 8,
+				    directionSheet[mainCharSprIdx.get()][0])
+		{
+		    @Override
+		    public void update (long mills, GFrame f) {
+			// Call this to redraw sprite image
+			super.update (mills, f);
+			translate (player_speed_x, player_speed_y);
+		    }
+		};
+	    mainChar.enable ();
 	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load black box");
+	    System.err.println("Failed to load main_char spr_1..3");
 	    return;
 	}
 
@@ -127,7 +147,7 @@ public class Main {
 		{
 		    @Override
 		    public void onCollision (Sprite other, GFrame f) {
-			if (other == blackBox) {
+			if (other == mainChar) {
 			    if (player_score == 0 && py_score == 0) {
 				f.jumpToScene (1);
 			    }
@@ -246,33 +266,6 @@ public class Main {
 		}
 	    };
 
-        System.err.println("Loading main_char spr_1..3");
-        final Sprite mainChar;
-        try {
-	    final Image spr1 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png"));
-            final Image spr2 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png"));
-            final Image spr3 = ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png"));
-
-	    mainChar = new Sprite2D(0, new Point(10, 10), 3, spr2)
-		{
-		    final Image[] walkingSheet = { spr1, spr3 };
-		    boolean swappedFrame = false;
-
-		    @Override
-		    public void jumpToFrame (int frameIdx) {
-			super.jumpToFrame (frameIdx);
-			if (!swappedFrame) {
-			    swappedFrame = true;
-			    setFrames (walkingSheet);
-			}
-		    }
-		};
-	    mainChar.setVisible (true);
-	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load main_char spr_1..3");
-	    return;
-	}
-
 	final Sprite dummy = new Sprite (null, new Point (0, 0))
 	    {
 		@Override
@@ -287,7 +280,7 @@ public class Main {
 	    };
 
 	System.err.println("Initializing scenes");
-	final GScene scene_1 = new GScene (floor, blackBox, redBox, mainChar);
+	final GScene scene_1 = new GScene (floor, mainChar, redBox);
 	final GScene scene_2 = new GScene (floor, dummy, blueBox, greenBox, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
@@ -296,7 +289,9 @@ public class Main {
                 public void keyReleased (KeyEvent e, GFrame f){
 		    player_speed_x = 0;
 		    player_speed_y = 0;
+		    mainChar.setFrames (directionSheet[mainCharSprIdx.get()][0]);
                 }
+
                 @Override
 		public void keyPressed (KeyEvent e, GFrame f) {
 		    if (!ignoreKeys.get()) {
@@ -304,22 +299,26 @@ public class Main {
 			    {
 			    case KeyEvent.VK_A:
                                 player_speed_x = -5;
-				//blackBox.translate (-5, 0);
+				mainCharSprIdx.set (2);
+				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_D:
                                 player_speed_x = 5;
-                                //blackBox.translate (5, 0);
+				mainCharSprIdx.set (3);
+				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_W:
                                 player_speed_y = -5;
-                                //blackBox.translate (0, -5);
+				mainCharSprIdx.set (0);
+				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_S:
                                 player_speed_y = 5;
-                                //blackBox.translate (0, 5);
+				mainCharSprIdx.set (1);
+				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
 				redTileConditions ();
 			 	break;
 			    case KeyEvent.VK_Q:
