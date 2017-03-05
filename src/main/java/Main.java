@@ -106,11 +106,19 @@ public class Main {
 	    return;
 	}
 
-	
+	System.err.println("Loading squash court");
+        final Floor squashCourt;
+	try {
+	    squashCourt = new Floor(ImageIO.read(Main.class.getResourceAsStream("squash_court.png")));
+	} catch (IOException | IllegalArgumentException ex) {
+	    System.err.println("Failed to load squash court");
+	    return;
+	}
+
         System.err.println("Loading main_char spr_1..3");
-	final MainCharacter mainChar =
-	    new MainCharacter (new Point (10, 10), 8,
-			       player_speed_x, player_speed_y);
+	final MainCharacter mainChar = new MainCharacter(new Point(300, 380), 8,
+							 player_speed_x,
+							 player_speed_y);
 	mainChar.enable ();
 
 	System.err.println("Loading red box");
@@ -270,7 +278,7 @@ public class Main {
 	    };
 
 	System.err.println("Initializing scenes");
-	final GScene scene_1 = new GScene (floor, mainChar, redBox);
+	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox);
 	final GScene scene_2 = new GScene (floor, dummy, blueBox, greenBox, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
@@ -347,8 +355,10 @@ public class Main {
 	        private void redTileConditions () {
 		    ignoreKeys.set (true);
 		    if (Math.random() > 0.8) {
-			final int newX = (int) (Math.random() * 700);
-			final int newY = (int) (Math.random() * 400);
+			// Domain: [150, 500]
+			// Range: [72, 420]
+			final int newX = (int) (Math.random() * (500 - 150) + 150);
+			final int newY = (int) (Math.random() * (420 - 72) + 72);
 			redBox.move(newX, newY);
 		    	redBox.setCollidable (true);
 			System.err.println ("X: " + newX + ", Y: " + newY);
