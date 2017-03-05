@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package entity;
+
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.Sprite2D;
 
@@ -42,17 +44,17 @@ public class MainCharacter extends Sprite2D {
 	try {
 	    // 0 = up, 1 = down, 2 = left, 3 = right
 	    // 0 = idle, 1 = move
-	    DIRECTION_SHEET[0][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_11.png")) };
-	    DIRECTION_SHEET[0][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_10.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_12.png")) };
+	    DIRECTION_SHEET[0][0] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_11.png")) };
+	    DIRECTION_SHEET[0][1] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_10.png")), ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_12.png")) };
 
-	    DIRECTION_SHEET[1][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png")) };
-	    DIRECTION_SHEET[1][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png")) };
+	    DIRECTION_SHEET[1][0] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_2.png")) };
+	    DIRECTION_SHEET[1][1] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_1.png")), ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_3.png")) };
 
-	    DIRECTION_SHEET[2][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_8.png")) };
-	    DIRECTION_SHEET[2][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_7.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_9.png")) };
+	    DIRECTION_SHEET[2][0] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_8.png")) };
+	    DIRECTION_SHEET[2][1] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_7.png")), ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_9.png")) };
 
-	    DIRECTION_SHEET[3][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_5.png")) };
-	    DIRECTION_SHEET[3][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_4.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_6.png")) };
+	    DIRECTION_SHEET[3][0] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_5.png")) };
+	    DIRECTION_SHEET[3][1] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_4.png")), ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_6.png")) };
 	} catch (IOException | IllegalArgumentException ex) {
 	    System.err.println ("Failed to load main_char spr_1..3");
 	    System.exit (1);

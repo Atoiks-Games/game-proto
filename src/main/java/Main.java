@@ -25,6 +25,8 @@
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyAdapter;
 
+import entity.*;
+
 import javax.imageio.ImageIO;
 
 import java.awt.Image;
