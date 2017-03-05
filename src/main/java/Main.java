@@ -84,6 +84,8 @@ public class Main {
     static double squash_ball_direction = 180;
     static double squash_ball_speed = 5;
 
+    static Sprite squashBall;
+
     static int py_score;
     static int player_score;
 
@@ -181,7 +183,24 @@ public class Main {
         final Sprite blueBox;
         try {
 	    blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
-				 new Point(342, 317));
+				 new Point(342, 317))
+                                 {
+                                     @Override
+                                     public void update(long milliseconds, GFrame f){
+
+                                             double x_distance_to_target = squashBall.getLocation().x - origin.x;
+                                             double y_distance_to_target = squashBall.getLocation().y - origin.y;
+                                             if(x_distance_to_target == 0){
+                                                     return;
+                                             }
+                                             double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
+                                             double speed = 4;
+                                             if (player_score == 10){
+                                                      speed = 10;
+                                              }
+                                             translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
+                                     }
+                             };
 	    blueBox.setCollidable(true);
         } catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load blue box");
@@ -189,7 +208,6 @@ public class Main {
         }
 
         System.err.println("Loading squash ball");
-        final Sprite squashBall;
         try {
             final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("squash_ball_green.png"));
             final Image squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
@@ -201,7 +219,7 @@ public class Main {
                     @Override
                     public void onCollision (Sprite other, GFrame f) {
                         squash_ball_direction += 90 + 180 * Math.random();
-                        squash_ball_speed += 0.1;
+                        squash_ball_speed += 0.3;
                         if (other == greenBox) {
 			    setImage (squash_ball_green);
                         }
@@ -219,13 +237,13 @@ public class Main {
 
                         if (origin.x <= 0){
                             squash_ball_direction += 90 + 180 * Math.random();
-                            squash_ball_speed += 0.1;
+                            squash_ball_speed -= 0.1;
                             origin.x = 1;
                         }
 
                         if (origin.y <= 0){
                             squash_ball_direction += 90 + 180 * Math.random();
-                            squash_ball_speed += 0.1;
+                            squash_ball_speed -= 0.1;
                             origin.y = 1;
                         }
 
@@ -245,7 +263,7 @@ public class Main {
 
                         if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30){
 			    squash_ball_direction += 90 + 180 * Math.random();
-			    squash_ball_speed += 0.1;
+			    squash_ball_speed -= 0.1;
 			    origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
                         }
                     }
