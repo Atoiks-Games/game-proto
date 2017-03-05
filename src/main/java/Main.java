@@ -89,12 +89,11 @@ public class Main {
     static int py_score;
     static int player_score;
 
-    static int player_speed_x = 0;
-    static int player_speed_y = 0;
-
     public static void main(String[] args) {
 	// Global-ish variables
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
+	final AtomicInteger player_speed_x = new AtomicInteger(0);
+        final AtomicInteger player_speed_y = new AtomicInteger(0);
 
 	System.err.println("Loading default floor");
         final Floor floor;
@@ -107,39 +106,10 @@ public class Main {
 
 	
         System.err.println("Loading main_char spr_1..3");
-	final AtomicInteger mainCharSprIdx = new AtomicInteger (1);
-	final Image[][][] directionSheet = new Image[4][2][];
-        final Sprite2D mainChar;
-        try {
-	    // 0 = up, 1 = down, 2 = left, 3 = right
-	    // 0 = idle, 1 = move
-	    directionSheet[0][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_11.png")) };
-	    directionSheet[0][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_10.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_12.png")) };
-
-	    directionSheet[1][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_2.png")) };
-	    directionSheet[1][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_1.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_3.png")) };
-
-	    directionSheet[2][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_8.png")) };
-	    directionSheet[2][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_7.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_9.png")) };
-
-	    directionSheet[3][0] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_5.png")) };
-	    directionSheet[3][1] = new Image[] { ImageIO.read(Main.class.getResourceAsStream("main_char/spr_4.png")), ImageIO.read(Main.class.getResourceAsStream("main_char/spr_6.png")) };
-
-	    mainChar = new Sprite2D(0, new Point(10, 10), 8,
-				    directionSheet[mainCharSprIdx.get()][0])
-		{
-		    @Override
-		    public void update (long mills, GFrame f) {
-			// Call this to redraw sprite image
-			super.update (mills, f);
-			translate (player_speed_x, player_speed_y);
-		    }
-		};
-	    mainChar.enable ();
-	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load main_char spr_1..3");
-	    return;
-	}
+	final MainCharacter mainChar =
+	    new MainCharacter (new Point (10, 10), 8,
+			       player_speed_x, player_speed_y);
+	mainChar.enable ();
 
 	System.err.println("Loading red box");
 	final Sprite redBox;
@@ -170,7 +140,7 @@ public class Main {
 		{
 		    @Override
 		    public void update (long mills, GFrame f) {
-			translate (player_speed_x, player_speed_y);
+			translate (player_speed_x.get(), player_speed_y.get());
 		    };
 		};
 	    greenBox.setCollidable(true);
@@ -305,9 +275,9 @@ public class Main {
 	    {
 		@Override
                 public void keyReleased (KeyEvent e, GFrame f){
-		    player_speed_x = 0;
-		    player_speed_y = 0;
-		    mainChar.setFrames (directionSheet[mainCharSprIdx.get()][0]);
+		    mainChar.setIdleFrame ();
+		    player_speed_x.set(0);
+		    player_speed_y.set(0);
                 }
 
                 @Override
@@ -316,27 +286,27 @@ public class Main {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-                                player_speed_x = -5;
-				mainCharSprIdx.set (2);
-				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
+                                player_speed_x.set(-5);
+				mainChar.directionLeft ();
+				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_D:
-                                player_speed_x = 5;
-				mainCharSprIdx.set (3);
-				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
+                                player_speed_x.set(5);
+				mainChar.directionRight ();
+				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_W:
-                                player_speed_y = -5;
-				mainCharSprIdx.set (0);
-				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
+				player_speed_y.set(-5);
+				mainChar.directionUp ();
+				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_S:
-                                player_speed_y = 5;
-				mainCharSprIdx.set (1);
-				mainChar.setFrames (directionSheet[mainCharSprIdx.get()][1]);
+				player_speed_y.set(5);
+				mainChar.directionDown ();
+				mainChar.setActiveFrame ();
 				redTileConditions ();
 			 	break;
 			    case KeyEvent.VK_Q:
@@ -389,8 +359,8 @@ public class Main {
 	    {
                 @Override
                 public void keyReleased (KeyEvent e, GFrame f){
-                    player_speed_x = 0;
-                    player_speed_y = 0;
+                    player_speed_x.set(0);
+                    player_speed_y.set(0);
                 }
 
                 @Override
@@ -399,19 +369,19 @@ public class Main {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-                                player_speed_x = -5;
+				player_speed_x.set(-5);
 				//greenBox.translate (-5, 0);
 				break;
 			    case KeyEvent.VK_D:
-                                player_speed_x = 5;
+				player_speed_x.set(5);
 				//greenBox.translate (5, 0);
 				break;
 			    case KeyEvent.VK_W:
-                                player_speed_y = -5;
+				player_speed_y.set(-5);
                                 //greenBox.translate (0, -5);
 				break;
 			    case KeyEvent.VK_S:
-                                player_speed_y = 5;
+				player_speed_y.set(5);
                                 //greenBox.translate (0, 5);
 				break;
 			    case KeyEvent.VK_Q:
@@ -422,7 +392,6 @@ public class Main {
 		    }
 		}
 	    });
-
 
 	System.err.println("Launching in GUI mode");
 	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
