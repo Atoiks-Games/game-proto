@@ -84,16 +84,33 @@ public class Main {
     }
 
     // FIXME:Reduce visibility. I dislike these global variables.
-    static double squash_ball_direction = 180;
-    static double squash_ball_speed = 5;
+    double squash_ball_direction = 180;
+    double squash_ball_speed = 5;
 
-    static Sprite squashBall;
+    Sprite squashBall;
 
-    static int py_score;
-    static int player_score;
+    int py_score;
+    int player_score;
+
+    static Image squash_ball_blue;
+
+    static {
+        try {
+            squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println ("Failed to load blue squash ball");
+            System.exit (1);
+        }
+    }
 
     public static void main(String[] args) {
-	// Global-ish variables
+        new Main().run();
+    }
+
+    public Main () {
+    }
+
+    public void run () {
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
 	final AtomicInteger player_speed_x = new AtomicInteger(0);
         final AtomicInteger player_speed_y = new AtomicInteger(0);
@@ -143,23 +160,6 @@ public class Main {
 	    return;
 	}
 
-        // System.err.println("Loading green box");
-        // final Sprite greenBox;
-        // try {
-	//     greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("green_box.png")),
-	// 			  new Point(342, 117))
-	// 	{
-	// 	    @Override
-	// 	    public void update (long mills, GFrame f) {
-	// 		translate (player_speed_x.get(), player_speed_y.get());
-	// 	    };
-	// 	};
-	//     greenBox.setCollidable(true);
-        // } catch (IOException | IllegalArgumentException ex) {
-	//     System.err.println("Failed to load green box");
-	//     return;
-        // }
-
         System.err.println("Loading blue box");
         final Sprite blueBox;
         try {
@@ -168,18 +168,20 @@ public class Main {
 		{
 		    @Override
 		    public void update(long milliseconds, GFrame f){
+                        if (squashBall.getImage() != squash_ball_blue) {
 
-			double x_distance_to_target = squashBall.getLocation().x - origin.x;
-			double y_distance_to_target = squashBall.getLocation().y - origin.y;
-			if(x_distance_to_target == 0){
-			    return;
-			}
-			double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
-			double speed = 4;
-			if (player_score == 10){
-			    speed = 10;
-			}
-			translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
+                                double x_distance_to_target = squashBall.getLocation().x - origin.x;
+                                double y_distance_to_target = squashBall.getLocation().y - origin.y;
+                                if(x_distance_to_target == 0){
+                                        return;
+                                }
+                                double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
+                                double speed = 4;
+                                if (player_score == 10){
+                                        speed = 10;
+                                }
+                                translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
+                        }
 		    }
 		};
 	    blueBox.setCollidable(true);
@@ -191,7 +193,6 @@ public class Main {
         System.err.println("Loading squash ball");
         try {
             final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("squash_ball_green.png"));
-            final Image squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
             final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("squash_ball.png"));
 
             squashBall = new Sprite(squash_ball, new Point(342, 217))
@@ -272,7 +273,7 @@ public class Main {
 		    if (py_score >= 11) {
 			// Destroy window
 			f.dispose ();
-			javax.swing.JOptionPane.showMessageDialog(null, "GEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEET DUNKED ON!!");
+			javax.swing.JOptionPane.showMessageDialog(null, "You're trash...");
 		    }
 		    if(player_score >= 11) {
 			f.jumpToScene (0);
