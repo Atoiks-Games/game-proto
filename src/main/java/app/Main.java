@@ -173,6 +173,50 @@ public class Main {
 	    return;
 	}
 
+	System.err.println("Loading green box");
+	final Sprite greenBox;
+	try {
+	    greenBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("/green_box.png")),
+				  new Point(0, 0))
+		{
+		    @Override
+		    public void onCollision (Sprite other, GFrame f) {
+			if (other == mainChar) {
+			    setCollidable (false);
+			    ignoreKeys.set (true);
+			    f.setVisible (false);
+			    javax.swing.JOptionPane.showMessageDialog (null, "Solve this coding puzzle! If you don't, you cannot quit");
+			    final Object dummy = new Object ();
+			    final AsmMiniGame game = new AsmMiniGame (new int[]
+				{ 0, 1, 2, 3, 4 }, new int[]
+				{ 0, 1, 2, 3, 4 }, dummy);
+			    game.setVisible (true);
+			    new Thread (new Runnable ()
+				{
+				    @Override
+				    public void run () {
+					synchronized (dummy) {
+					    while (!game.passFlag) {
+						try {
+						    dummy.wait ();
+						} catch (InterruptedException ex) {
+						}
+					    }
+					}
+					f.setVisible (true);
+					ignoreKeys.set (false);
+				    }
+				}).start ();
+			}
+		    }
+		};
+	    greenBox.setVisible (false);
+	    greenBox.setCollidable (true);
+	} catch (IOException | IllegalArgumentException ex) {
+	    System.err.println("Failed to load red box");
+	    return;
+	}
+
         System.err.println("Loading py");
         final PyCharacter pyChar = new PyCharacter (new Point (342, 317), 8, this);
 	pyChar.setCollidable (true);
@@ -269,7 +313,7 @@ public class Main {
 	    };
 
 	System.err.println("Initializing scenes");
-	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox);
+	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox, greenBox);
 	final GScene scene_2 = new GScene (squashCourtSide, dummy, pyChar, mainChar, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
@@ -313,32 +357,6 @@ public class Main {
 			    case KeyEvent.VK_Q:
 				javax.swing.JOptionPane.showMessageDialog(null, "Move around!");
 				break;
-			    case KeyEvent.VK_N: {
-				ignoreKeys.set (true);
-				f.setVisible (false);
-				final Object dummy = new Object ();
-				final AsmMiniGame game = new AsmMiniGame (new int[]
-				    { 0, 1, 2, 3, 4 }, new int[]
-				    { 0, 1, 2, 3, 4 }, dummy);
-				game.setVisible (true);
-				new Thread (new Runnable ()
-				    {
-					@Override
-					public void run () {
-					    synchronized (dummy) {
-						while (!game.passFlag) {
-						    try {
-							dummy.wait ();
-						    } catch (InterruptedException ex) {
-						    }
-						}
-					    }
-					    f.setVisible (true);
-					    ignoreKeys.set (false);
-					}
-				    }).start ();
-				break;
-			    }
 			    }
 
 			Point loc = mainChar.getLocation ();
