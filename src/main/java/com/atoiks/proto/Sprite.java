@@ -102,6 +102,10 @@ public class Sprite implements GComponent {
 	origin.translate (x, y);
     }
 
+    public void setLocation (Point p) {
+	origin = p;
+    }
+
     public Point getLocation () {
 	return origin;
     }
