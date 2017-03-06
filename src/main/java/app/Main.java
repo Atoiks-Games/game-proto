@@ -249,14 +249,14 @@ public class Main {
                         translate((int) (horizontal_value * squash_ball_speed),
 				  (int) (verticle_value * squash_ball_speed));
 
-                        if (origin.x <= 0){
-                            squash_ball_direction += 90 + 180 * Math.random();
+                        if (origin.x <= 0) {
+			    squash_ball_direction = 180 - squash_ball_direction;
                             squash_ball_speed -= 0.1;
                             origin.x = 1;
                         }
 
-                        if (origin.y <= 0){
-                            squash_ball_direction += 90 + 180 * Math.random();
+                        if (origin.y <= 0) {
+			    squash_ball_direction *= -1;
                             squash_ball_speed -= 0.1;
                             origin.y = 1;
                         }
@@ -275,8 +275,8 @@ public class Main {
                             squash_ball_speed = 5;
                         }
 
-                        if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30){
-			    squash_ball_direction += 90 + 180 * Math.random();
+                        if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30) {
+			    squash_ball_direction *= -1;
 			    squash_ball_speed -= 0.1;
 			    origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
                         }
