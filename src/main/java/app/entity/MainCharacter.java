@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package entity;
+package app.entity;
 
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.Sprite2D;

@@ -22,6 +22,8 @@
  * SOFTWARE.
  */
 
+package app;
+
 import java.awt.Point;
 
 import java.util.List;

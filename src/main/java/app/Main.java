@@ -22,11 +22,13 @@
  * SOFTWARE.
  */
 
+package app;
+
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyAdapter;
 import com.atoiks.proto.event.GStateAdapter;
 
-import entity.*;
+import app.entity.*;
 
 import javax.imageio.ImageIO;
 
@@ -83,20 +85,21 @@ public class Main {
 	return null;
     }
 
-    // FIXME:Reduce visibility. I dislike these global variables.
-    double squash_ball_direction = 180;
-    double squash_ball_speed = 5;
+    public double squash_ball_direction = 180;
+    public double squash_ball_speed = 5;
 
-    Sprite squashBall;
+    public Sprite squashBall;
 
-    int py_score;
-    int player_score;
+    public int py_score;
+    public int player_score;
 
-    static Image squash_ball_blue;
+    public Image squash_ball_blue;
+
+    private static Image resSquashBallBlue;
 
     static {
         try {
-            squash_ball_blue = ImageIO.read(Main.class.getResourceAsStream("squash_ball_blue.png"));
+            resSquashBallBlue = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_blue.png"));
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println ("Failed to load blue squash ball");
             System.exit (1);
@@ -108,6 +111,7 @@ public class Main {
     }
 
     public Main () {
+	squash_ball_blue = resSquashBallBlue;
     }
 
     public void run () {
@@ -118,7 +122,7 @@ public class Main {
 	System.err.println("Loading default floor");
         final Floor floor;
 	try {
-	    floor = new Floor(ImageIO.read(Main.class.getResourceAsStream("default_floor.bmp")));
+	    floor = new Floor(ImageIO.read(Main.class.getResourceAsStream("/default_floor.bmp")));
 	} catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load default floor");
 	    return;
@@ -127,7 +131,7 @@ public class Main {
 	System.err.println("Loading squash court");
         final Floor squashCourt;
 	try {
-	    squashCourt = new Floor(ImageIO.read(Main.class.getResourceAsStream("squash_court.png")));
+	    squashCourt = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court.png")));
 	} catch (IOException | IllegalArgumentException ex) {
 	    System.err.println("Failed to load squash court");
 	    return;
@@ -136,7 +140,7 @@ public class Main {
         System.err.println("Loading squash court 2");
         final Floor squashCourtSide;
         try {
-            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("squash_court_side.png")));
+            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court_side.png")));
         } catch (IOException | IllegalArgumentException ex) {
             System.err.println("Failed to load squash court");
             return;
@@ -151,7 +155,7 @@ public class Main {
 	System.err.println("Loading red box");
 	final Sprite redBox;
 	try {
-	    redBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("red_box.bmp")),
+	    redBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("/red_box.bmp")),
 				new Point(50, 75))
 		{
 		    @Override
@@ -169,40 +173,14 @@ public class Main {
 	    return;
 	}
 
-        System.err.println("Loading blue box");
-        final Sprite blueBox;
-        try {
-	    blueBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("blue_box.png")),
-				 new Point(342, 317))
-		{
-		    @Override
-		    public void update(long milliseconds, GFrame f){
-                        if (squashBall.getImage() != squash_ball_blue) {
-
-                                double x_distance_to_target = squashBall.getLocation().x - origin.x;
-                                double y_distance_to_target = squashBall.getLocation().y - origin.y;
-                                if(x_distance_to_target == 0){
-                                        return;
-                                }
-                                double target_angle = Math.atan2(y_distance_to_target, x_distance_to_target);
-                                double speed = 4;
-                                if (player_score == 10){
-                                        speed = 10;
-                                }
-                                translate ((int) (speed * Math.cos(target_angle)), (int) (speed * Math.sin(target_angle)));
-                        }
-		    }
-		};
-	    blueBox.setCollidable(true);
-        } catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load blue box");
-	    return;
-        }
+        System.err.println("Loading py");
+        final PyCharacter pyChar = new PyCharacter (new Point (342, 317), 8, this);
+	pyChar.setCollidable (true);
 
         System.err.println("Loading squash ball");
         try {
-            final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("squash_ball_green.png"));
-            final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("squash_ball.png"));
+            final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_green.png"));
+            final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("/squash_ball.png"));
 
             squashBall = new Sprite(squash_ball, new Point(342, 217))
                 {
@@ -214,7 +192,7 @@ public class Main {
                         if (other == mainChar) {
 			    setImage (squash_ball_green);
                         }
-                        if (other == blueBox) {
+                        if (other == pyChar) {
 			    setImage (squash_ball_blue);
                         }
                     }
@@ -292,7 +270,7 @@ public class Main {
 
 	System.err.println("Initializing scenes");
 	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox);
-	final GScene scene_2 = new GScene (squashCourtSide, dummy, blueBox, mainChar, squashBall, squash_py_score);
+	final GScene scene_2 = new GScene (squashCourtSide, dummy, pyChar, mainChar, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
@@ -451,7 +429,7 @@ public class Main {
 				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_Q:
-				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
+				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
 				break;
 			    }
 		    }
