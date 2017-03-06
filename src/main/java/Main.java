@@ -133,6 +133,15 @@ public class Main {
 	    return;
 	}
 
+        System.err.println("Loading squash court 2");
+        final Floor squashCourtSide;
+        try {
+            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("squash_court_side.png")));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println("Failed to load squash court");
+            return;
+        }
+
         System.err.println("Loading main_char spr_1..3");
 	final MainCharacter mainChar = new MainCharacter(new Point(300, 380), 8,
 							 player_speed_x,
@@ -283,7 +292,7 @@ public class Main {
 
 	System.err.println("Initializing scenes");
 	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox);
-	final GScene scene_2 = new GScene (floor, dummy, blueBox, mainChar, squashBall, squash_py_score);
+	final GScene scene_2 = new GScene (squashCourtSide, dummy, blueBox, mainChar, squashBall, squash_py_score);
 
 	scene_1.addGKeyListener (new GKeyAdapter()
 	    {
