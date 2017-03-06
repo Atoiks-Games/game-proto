@@ -87,6 +87,16 @@ public class PyCharacter extends Sprite2D {
 	    }
 	    translate ((int) (speed * Math.cos(target_angle)),
 		       (int) (speed * Math.sin(target_angle)));
+	    if (Math.abs (dx) > Math.abs (dy)) {
+		if (dx > 0) directionRight ();
+		else directionLeft ();
+	    } else {
+		if (dy > 0) directionDown ();
+		else directionUp ();
+	    }
+	    setActiveFrame ();
+	} else {
+	    setIdleFrame ();
 	}
     }
 
