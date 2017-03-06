@@ -267,7 +267,7 @@ public class Main {
 
         System.err.println("Making the squash score board");
         final Text squash_py_score = new Text("PY: 0\nPlayer: 0",
-					      new Point(10, 10))
+					      new Point(10, 15))
 	    {
 		@Override
 		public void update (long milliseconds, GFrame f){
@@ -363,26 +363,24 @@ public class Main {
 			    }
 			    }
 
-			if (scene_1.getFloor () == squashCourt) {
-			    Point loc = mainChar.getLocation ();
-			    if (loc.y < 0) {
-				mainChar.move (loc.x, 0);
-			    }
-			    if (loc.y > 380) {
-				mainChar.move (loc.x, 380);
-			    }
-			    if (loc.x < 155) {
-				mainChar.move (155, loc.y);
-			    }
-			    if (loc.x > 480) {
-				mainChar.move (480, loc.y);
-			    }
+			Point loc = mainChar.getLocation ();
+			if (loc.y < 0) {
+			    mainChar.move (loc.x, 0);
+			}
+			if (loc.y > 380) {
+			    mainChar.move (loc.x, 380);
+			}
+			if (loc.x < 155) {
+			    mainChar.move (155, loc.y);
+			}
+			if (loc.x > 480) {
+			    mainChar.move (480, loc.y);
+			}
 
-			    loc = mainChar.getLocation ();
-			    if (loc.x > 300 && loc.x < 333 && loc.y > 370) {
-				System.err.println ("Leaving squash court");
-				return;
-			    }
+			loc = mainChar.getLocation ();
+			if (loc.x > 300 && loc.x < 333 && loc.y > 370) {
+			    System.err.println ("Leaving squash court");
+			    return;
 			}
 		    }
 		}
@@ -424,6 +422,7 @@ public class Main {
 		    mainChar.setIdleFrame ();
                     player_speed_x.set(0);
                     player_speed_y.set(0);
+		    boundCheck ();
                 }
 
                 @Override
@@ -455,6 +454,23 @@ public class Main {
 				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 5 wins!");
 				break;
 			    }
+		    }
+		    boundCheck ();
+		}
+
+		private void boundCheck () {
+		    final Point loc = mainChar.getLocation ();
+		    if (loc.y < 0) {
+			mainChar.move (loc.x, 0);
+		    }
+		    if (loc.y > GFrame.HEIGHT - 64) {
+			mainChar.move (loc.x, GFrame.HEIGHT - 64);
+		    }
+		    if (loc.x < 0) {
+			mainChar.move (0, loc.y);
+		    }
+		    if (loc.x > GFrame.WIDTH - 32) {
+			mainChar.move (GFrame.WIDTH - 32, loc.y);
 		    }
 		}
 	    });
