@@ -162,7 +162,7 @@ public class Main {
 		    public void onCollision (Sprite other, GFrame f) {
 			if (other == mainChar) {
 			    if (player_score == 0 && py_score == 0) {
-				javax.swing.JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!");
+				javax.swing.JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", javax.swing.JOptionPane.WARNING_MESSAGE);
 				f.jumpToScene (1);
 			    }
 			}
