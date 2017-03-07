@@ -34,9 +34,9 @@ public interface GComponent {
 
     public void render (Graphics g);
 
-    public void update (long millisec);
+    public void update (long millisec, GFrame f);
 
     public boolean containsPoint (Point p);
 
-    public void testCollision (GComponent comp);
+    public void testCollision (GComponent comp, GFrame f);
 }

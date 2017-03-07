@@ -75,7 +75,7 @@ items.forEach (item -> {
 });
 ```
 
-Space between operators
+Space between infix operators. None after prefix and before postfix operators.
 
 ## Other stuff?
 

@@ -24,37 +24,58 @@
 
 package com.atoiks.proto;
 
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.Graphics;
 
-/**
- * Essentially the background
- */
-public class Floor implements GComponent {
+public class Group implements GComponent {
 
-    protected Image image;
+    private final GComponent[] children;
 
-    public Floor (Image img) {
-	this.image = img;
+    public Group (GComponent... subcmp) {
+	this.children = subcmp;
+    }
+
+    public GComponent getChild (int idx) {
+	return children[idx];
+    }
+
+    public void setChild (int idx, GComponent comp) {
+	children[idx] = comp;
     }
 
     @Override
     public void render (Graphics g) {
-	g.drawImage (image, 0, 0, null);
+	for (GComponent child : children) {
+	    child.render (g);
+	}
+    }
+
+    @Override
+    public void update (long mills, GFrame f) {
+	for (GComponent child : children) {
+	    child.update (mills, f);
+	}
     }
 
     @Override
     public boolean containsPoint (Point p) {
-	// It is the background so guaranteed contains the point
-	return true;
-    }
-
-    @Override
-    public void update (long millisec, GFrame f) {
+	for (GComponent child : children) {
+	    if (child.containsPoint (p)) return true;
+	}
+	return false;
     }
 
     @Override
     public void testCollision (GComponent comp, GFrame f) {
+	for (GComponent child : children) {
+	    if (comp instanceof Group) {
+		final Group rhs = (Group) comp;
+		for (GComponent rhsChild : rhs.children) {
+		    child.testCollision (rhsChild, f);
+		}
+	    } else {
+		child.testCollision (comp, f);
+	    }
+	}
     }
 }

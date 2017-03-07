@@ -24,56 +24,79 @@
 
 package com.atoiks.proto;
 
-import java.awt.Image;
+import javax.swing.UIManager;
+
+import java.awt.Font;
+import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
-public class Sprite implements GComponent {
+public class Text implements GComponent {
 
-    protected Image image;
+    protected String text;
+
+    protected Font font;
+
+    protected Color color;
 
     protected Point origin;
 
     protected boolean visible;
 
-    protected boolean collidable;
+    public Text (String text, Point origin) {
+	this (text, UIManager.getDefaults ().getFont ("TextPane.font"),
+	      Color.black, origin);
+    }
 
-    public Sprite (Image image, Point origin) {
-	this.image = image;
+    public Text (String text, Font font, Color color, Point origin) {
+	this.text = text;
+	this.font = font;
+	this.color = color;
 	this.origin = origin;
 	this.visible = true;
-	this.collidable = false;
     }
 
     @Override
     public void render (Graphics g) {
-	if (visible)
-	    g.drawImage (image, origin.x, origin.y, null);
+	if (visible) {
+	    final int pt = font.getSize ();
+	    final String[] segs = text.split ("\n");
+	    final Color original = g.getColor ();
+	    for (int i = 0; i < segs.length; ++i) {
+		g.setColor (color);
+		g.drawString (segs[i], origin.x, origin.y + pt * i);
+	    }
+	    g.setColor (original);
+	}
     }
 
     @Override
     public boolean containsPoint (Point p) {
-	if (p.x < origin.x) return false;
-	if (p.x > image.getWidth(null)) return false;
-	if (p.y < origin.y) return false;
-	if (p.y > image.getHeight(null)) return false;
-	return true;
+        return false;
     }
 
-    public void setImage (Image img) {
-	this.image = img;
+    public void setText (String text) {
+	this.text = text;
     }
 
-    public Image getImage () {
-	return this.image;
+    public String getText () {
+	return this.text;
+    }
+	
+    public void setFont (Font f) {
+	this.font = f;
+    }
+	
+    public Font getFont () {
+	return this.font;
     }
 
-    public void setCollidable (boolean flag) {
-	this.collidable = flag;
+    public void setColor (Color c) {
+	this.color = c;
     }
 
-    public boolean isCollidable () {
-	return this.collidable;
+    public Color getColor () {
+	return this.color;
     }
 
     public void setVisible (boolean flag) {
@@ -84,26 +107,12 @@ public class Sprite implements GComponent {
 	return visible;
     }
 
-    public void disable () {
-	this.collidable = false;
-	this.visible = false;
-    }
-
-    public void enable () {
-	this.collidable = true;
-	this.visible = true;
-    }
-
     public void move (int x, int y) {
 	origin.move (x, y);
     }
 
     public void translate (int x, int y) {
 	origin.translate (x, y);
-    }
-
-    public void setLocation (Point p) {
-	origin = p;
     }
 
     public Point getLocation () {
@@ -116,20 +125,6 @@ public class Sprite implements GComponent {
 
     @Override
     public void testCollision (GComponent comp, GFrame f) {
-	if (!collidable) return;
-	// Floor is always the base layer (not above the obj)
-	if (!(comp instanceof Sprite)) return;
-
-	final Sprite sp2 = (Sprite) comp;
-	if (!sp2.collidable) return;
-	if ((origin.x < sp2.origin.x + sp2.image.getWidth(null))
-	    && (origin.x + image.getWidth(null) > sp2.origin.x)
-	    && (origin.y < sp2.origin.y + sp2.image.getHeight(null))
-	    && (origin.y + image.getHeight(null) > sp2.origin.y)) {
-	    onCollision (sp2, f);
-	}
-    }
-
-    public void onCollision (Sprite other, GFrame f) {
     }
 }
+

@@ -3,3 +3,5 @@ ADD YOUR INFO WHEN YOU SUBMIT A PATCH. IT SHOULD BE IN A FORMAT OF
     YYYY MM DD   GITHUB-NAME   FULL-NAME   EMAIL
 
 2017 02 28   Plankp   Paul Teng   plankp@outlook.com
+2017 03 02   PerenDarksbane   Alexander Bimm   abimm@stansteadcollege.ca
+2017 03 03   jliao8875   Jeffrey Liao   jliao@stansteadcollege.ca

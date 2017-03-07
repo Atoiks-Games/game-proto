@@ -24,9 +24,11 @@
 
 package com.atoiks.proto;
 
+import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
 import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 
 import java.util.List;
 import java.util.Arrays;
@@ -34,24 +36,26 @@ import java.util.ArrayList;
 
 public class GScene {
 
+    protected List<GKeyListener> keyEvts;
+
     protected List<GStateListener> listeners;
 
     protected List<GComponent> instances;
 
-    protected Floor floor;
-
-    public GScene (Floor floor, GComponent... insts) {
-	this.floor = floor;
-	this.instances = Arrays.asList (insts);
+    public GScene (GComponent floor, GComponent... insts) {
+	this.instances = new ArrayList<GComponent>();
+	this.instances.add (floor);
+	this.instances.addAll (Arrays.asList (insts));
 	this.listeners = new ArrayList<GStateListener>();
+	this.keyEvts = new ArrayList<GKeyListener>();
     }
 
-    public void setFloor (Floor floor) {
-	this.floor = floor;
+    public void setFloor (GComponent floor) {
+        this.instances.set (0, floor);
     }
 
-    public Floor getFloor () {
-	return floor;
+    public GComponent getFloor () {
+	return this.instances.get (0);
     }
 
     public void pushBackGComp (GComponent comp) {
@@ -63,11 +67,11 @@ public class GScene {
     }
 
     public void pushFrontGComp (GComponent comp) {
-        instances.add (0, comp);
+        instances.add (1, comp);
     }
 
     public GComponent popFrontGComp (GComponent comp) {
-	return instances.remove (0);
+	return instances.remove (1);
     }
 
     public GComponent getGComp (int idx) {
@@ -87,24 +91,22 @@ public class GScene {
     }
 
     public void renderStep (Graphics g) {
-	// Draw the floor before everything
-	if (floor != null) floor.render (g);
 	for (GComponent el : instances) {
 	    if (el != null) el.render (g);
 	}
     }
 
-    public void collisionStep () {
+    public void collisionStep (GFrame f) {
 	for (GComponent sp1 : instances) {
 	    for (GComponent sp2 : instances) {
-		sp1.testCollision (sp2);
+                if (sp1 != sp2) sp1.testCollision (sp2, f);
 	    }
 	}
     }
 
-    public void updateStep (long elapsed) {
+    public void updateStep (long elapsed, GFrame f) {
 	for (GComponent el : instances) {
-	    if (el != null) el.update (elapsed);
+	    if (el != null) el.update (elapsed, f);
 	}
     }
 
@@ -116,15 +118,41 @@ public class GScene {
 	this.listeners.remove (lis);
     }
 
-    public void onEnterTrigger () {
+    public void addGKeyListener (GKeyListener lis) {
+	this.keyEvts.add (lis);
+    }
+
+    public void removeGKeyListener (GKeyListener lis) {
+	this.keyEvts.remove (lis);
+    }
+
+    public final void onEnterTrigger () {
 	for (GStateListener lis : listeners) {
 	    lis.onEnter ();
 	}
     }
 
-    public void onLeaveTrigger () {
+    public final void onLeaveTrigger () {
 	for (GStateListener lis : listeners) {
 	    lis.onLeave ();
+	}
+    }
+
+    public final void onKeyTypedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyTyped (e, f);
+	}
+    }
+
+    public final void onKeyPressedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyPressed (e, f);
+	}
+    }
+
+    public final void onKeyReleasedTrigger (KeyEvent e, GFrame f) {
+	for (GKeyListener lis : keyEvts) {
+	    lis.keyReleased (e, f);
 	}
     }
 }

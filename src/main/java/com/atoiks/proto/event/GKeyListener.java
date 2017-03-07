@@ -22,39 +22,17 @@
  * SOFTWARE.
  */
 
-package com.atoiks.proto;
+package com.atoiks.proto.event;
 
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Graphics;
+import com.atoiks.proto.GFrame;
 
-/**
- * Essentially the background
- */
-public class Floor implements GComponent {
+import java.awt.event.KeyEvent;
 
-    protected Image image;
+public interface GKeyListener {
 
-    public Floor (Image img) {
-	this.image = img;
-    }
+    public void keyTyped (KeyEvent e, GFrame frame);
 
-    @Override
-    public void render (Graphics g) {
-	g.drawImage (image, 0, 0, null);
-    }
+    public void keyPressed (KeyEvent e, GFrame frame);
 
-    @Override
-    public boolean containsPoint (Point p) {
-	// It is the background so guaranteed contains the point
-	return true;
-    }
-
-    @Override
-    public void update (long millisec, GFrame f) {
-    }
-
-    @Override
-    public void testCollision (GComponent comp, GFrame f) {
-    }
+    public void keyReleased (KeyEvent e, GFrame frame);
 }
