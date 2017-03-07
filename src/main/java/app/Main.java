@@ -31,6 +31,7 @@ import com.atoiks.proto.event.GStateAdapter;
 import app.entity.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import java.awt.Image;
 import java.awt.Point;
@@ -85,15 +86,15 @@ public class Main {
 	return null;
     }
 
-    public double squash_ball_direction = 180;
-    public double squash_ball_speed = 5;
+    public double squashBallDirection = 180;
+    public double squashBallSpeed = 5;
 
     public Sprite squashBall;
 
-    public int py_score;
-    public int player_score;
+    public int pyScore;
+    public int playerScore;
 
-    public Image squash_ball_blue;
+    public Image squashBallBlue;
 
     private static Image resSquashBallBlue;
 
@@ -111,13 +112,13 @@ public class Main {
     }
 
     public Main () {
-	squash_ball_blue = resSquashBallBlue;
+	squashBallBlue = resSquashBallBlue;
     }
 
     public void run () {
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
-	final AtomicInteger player_speed_x = new AtomicInteger(0);
-        final AtomicInteger player_speed_y = new AtomicInteger(0);
+	final AtomicInteger playerSpeedX = new AtomicInteger(0);
+        final AtomicInteger playerSpeedY = new AtomicInteger(0);
 
 	System.err.println("Loading default floor");
         final Floor floor;
@@ -130,8 +131,8 @@ public class Main {
 
         System.err.println("Loading main_char spr_1..3");
 	final MainCharacter mainChar = new MainCharacter(new Point(300, 380), 8,
-							 player_speed_x,
-							 player_speed_y);
+							 playerSpeedX,
+							 playerSpeedY);
 	mainChar.enable ();
 
 	System.err.println("Loading red box");
@@ -143,8 +144,8 @@ public class Main {
 		    @Override
 		    public void onCollision (Sprite other, GFrame f) {
 			if (other == mainChar) {
-			    if (player_score == 0 && py_score == 0) {
-				javax.swing.JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", javax.swing.JOptionPane.WARNING_MESSAGE);
+			    if (playerScore == 0 && pyScore == 0) {
+			        JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", JOptionPane.WARNING_MESSAGE);
 				f.jumpToScene (1);
 			    }
 			}
@@ -167,7 +168,7 @@ public class Main {
 		    public void onCollision (Sprite comp, GFrame f) {
 			if (comp == mainChar) {
 			    // Has to be colliding on the left of border
-			    mainChar.translate (-player_speed_x.get() - 2, 0);
+			    mainChar.translate (-playerSpeedX.get() - 2, 0);
 			}
 		    }
 		};
@@ -178,10 +179,10 @@ public class Main {
 		    @Override
 		    public void onCollision (Sprite comp, GFrame f) {
 			if (comp == mainChar) {
-			    if (player_speed_y.get() != 0) {
-				mainChar.translate (0, -player_speed_y.get() - 2);
+			    if (playerSpeedY.get() != 0) {
+				mainChar.translate (0, -playerSpeedY.get() - 2);
 			    } else {
-				mainChar.translate (-player_speed_x.get() + 2, 0);
+				mainChar.translate (-playerSpeedX.get() + 2, 0);
 			    }
 			}
 		    }
@@ -214,7 +215,7 @@ public class Main {
 			    setCollidable (false);
 			    ignoreKeys.set (true);
 			    f.setVisible (false);
-			    javax.swing.JOptionPane.showMessageDialog (null, "Solve this coding puzzle! If you don't, you cannot quit");
+			    JOptionPane.showMessageDialog (null, "Solve this coding puzzle! If you don't, you cannot quit", "OOPS!", JOptionPane.ERROR_MESSAGE);
 			    final Object dummy = new Object ();
 			    final AsmMiniGame game = new AsmMiniGame (new int[]
 				{ 0, 1, 2, 3, 4 }, new int[]
@@ -247,65 +248,66 @@ public class Main {
 	}
 
         System.err.println("Loading py");
-        final PyCharacter pyChar = new PyCharacter (new Point (342, 317), 8, this);
+        final PyCharacter pyChar = new PyCharacter (new Point (342, 317),
+						    8, this);
 	pyChar.setCollidable (true);
 
         System.err.println("Loading squash ball");
         try {
-            final Image squash_ball_green = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_green.png"));
-            final Image squash_ball = ImageIO.read(Main.class.getResourceAsStream("/squash_ball.png"));
+            final Image squashBallGreen = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_green.png"));
+            final Image squashBallDefault = ImageIO.read(Main.class.getResourceAsStream("/squash_ball.png"));
 
-            squashBall = new Sprite(squash_ball, new Point(342, 217))
+            squashBall = new Sprite(squashBallDefault, new Point(342, 217))
                 {
 
                     @Override
                     public void onCollision (Sprite other, GFrame f) {
-                        squash_ball_direction += 90 + 180 * Math.random();
-                        squash_ball_speed += 0.3;
+                        squashBallDirection += 90 + 180 * Math.random();
+                        squashBallSpeed += 0.3;
                         if (other == mainChar) {
-			    setImage (squash_ball_green);
+			    setImage (squashBallGreen);
                         }
                         if (other == pyChar) {
-			    setImage (squash_ball_blue);
+			    setImage (squashBallBlue);
                         }
                     }
 
-                    public void update (long milliseconds, GFrame f){
-                        double radian_direction = Math.toRadians(squash_ball_direction);
-                        double verticle_value = Math.sin(radian_direction);
-                        double horizontal_value = Math.cos(radian_direction);
-                        translate((int) (horizontal_value * squash_ball_speed),
-				  (int) (verticle_value * squash_ball_speed));
+                    public void update (long milliseconds, GFrame f) {
+                        final double radianDirection = Math.toRadians(squashBallDirection);
+                        double verticalValue = Math.sin(radianDirection);
+                        double horizontalValue = Math.cos(radianDirection);
+                        translate((int) (horizontalValue * squashBallSpeed),
+				  (int) (verticalValue * squashBallSpeed));
 
                         if (origin.x <= 0) {
-			    squash_ball_direction = 180 - squash_ball_direction;
-                            squash_ball_speed -= 0.1;
+			    squashBallDirection = 180 - squashBallDirection;
+                            squashBallSpeed -= 0.1;
                             origin.x = 1;
                         }
 
                         if (origin.y <= 0) {
-			    squash_ball_direction *= -1;
-                            squash_ball_speed -= 0.1;
+			    squashBallDirection *= -1;
+                            squashBallSpeed -= 0.1;
                             origin.y = 1;
                         }
 
                         if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
-                            if (image == squash_ball_blue) {
-                                ++ py_score;
+                            if (image == squashBallBlue) {
+                                ++ pyScore;
                             }
-                            if (image == squash_ball_green) {
-                                ++ player_score;
+                            if (image == squashBallGreen) {
+                                ++ playerScore;
                             }
-                            image = squash_ball;
+                            image = squashBallDefault;
                             origin.x = 342;
                             origin.y = 217;
-                            squash_ball_direction = 180;
-                            squash_ball_speed = 5;
+                            squashBallDirection = 180;
+                            squashBallSpeed = 5;
                         }
 
                         if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30) {
-			    squash_ball_direction *= -1;
-			    squash_ball_speed -= 0.1;
+			    squashBallDirection *= -1;
+			    squashBallSpeed -= 0.1;
 			    origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
                         }
                     }
@@ -317,12 +319,12 @@ public class Main {
         }
 
         System.err.println("Making the squash score board");
-        final Text squash_py_score = new Text("PY: 0\nPlayer: 0",
-					      new Point(10, 15))
+        final Text squashScoreBoard = new Text("PY: 0\nPlayer: 0",
+					       new Point(10, 15))
 	    {
 		@Override
 		public void update (long milliseconds, GFrame f){
-		    setText("PY: " + py_score + "\nPlayer: " + player_score);
+		    setText("PY: " + pyScore + "\nPlayer: " + playerScore);
 		}
 	    };
 
@@ -330,28 +332,28 @@ public class Main {
 	    {
 		@Override
 		public void update (long milliseconds, GFrame f){
-		    if (py_score >= 11) {
+		    if (pyScore >= 11) {
 			// Destroy window
 			f.dispose ();
-			javax.swing.JOptionPane.showMessageDialog(null, "You're trash...");
+		        JOptionPane.showMessageDialog(null, "You're trash...");
 		    }
-		    if(player_score >= 11) {
+		    if(playerScore >= 11) {
 			f.jumpToScene (0);
 		    }
 		}
 	    };
 
 	System.err.println("Initializing scenes");
-	final GScene scene_1 = new GScene (squashCourt, mainChar, redBox, greenBox);
-	final GScene scene_2 = new GScene (squashCourtSide, dummy, pyChar, mainChar, squashBall, squash_py_score);
+	final GScene scene1 = new GScene (squashCourt, mainChar, redBox, greenBox);
+	final GScene scene2 = new GScene (squashCourtSide, dummy, pyChar, mainChar, squashBall, squashScoreBoard);
 
-	scene_1.addGKeyListener (new GKeyAdapter()
+	scene1.addGKeyListener (new GKeyAdapter()
 	    {
 		@Override
                 public void keyReleased (KeyEvent e, GFrame f){
 		    mainChar.setIdleFrame ();
-		    player_speed_x.set(0);
-		    player_speed_y.set(0);
+		    playerSpeedX.set(0);
+		    playerSpeedY.set(0);
                 }
 
                 @Override
@@ -360,39 +362,39 @@ public class Main {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-                                player_speed_x.set(-5);
-				player_speed_y.set(0);
+                                playerSpeedX.set(-5);
+				playerSpeedY.set(0);
 
 				mainChar.directionLeft ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_D:
-                                player_speed_x.set(5);
-				player_speed_y.set(0);
+                                playerSpeedX.set(5);
+				playerSpeedY.set(0);
 
 				mainChar.directionRight ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_W:
-				player_speed_x.set(0);
-				player_speed_y.set(-5);
+				playerSpeedX.set(0);
+				playerSpeedY.set(-5);
 
 				mainChar.directionUp ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_S:
-				player_speed_x.set(0);
-				player_speed_y.set(5);
+				playerSpeedX.set(0);
+				playerSpeedY.set(5);
 
 				mainChar.directionDown ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 			 	break;
 			    case KeyEvent.VK_Q:
-				javax.swing.JOptionPane.showMessageDialog(null, "Move around!");
+			        JOptionPane.showMessageDialog(null, "Move around!");
 				break;
 			    }
 
@@ -426,7 +428,7 @@ public class Main {
 		    ignoreKeys.set (false);
 		}
 	    });
-	scene_1.addGStateListener (new GStateAdapter()
+	scene1.addGStateListener (new GStateAdapter()
 	    {
 		Point mainCharLastLoc;
 
@@ -442,13 +444,13 @@ public class Main {
 		}
 	    });
 
-	scene_2.addGKeyListener (new GKeyAdapter()
+	scene2.addGKeyListener (new GKeyAdapter()
 	    {
                 @Override
                 public void keyReleased (KeyEvent e, GFrame f) {
 		    mainChar.setIdleFrame ();
-                    player_speed_x.set(0);
-                    player_speed_y.set(0);
+                    playerSpeedX.set(0);
+                    playerSpeedY.set(0);
 		    boundCheck ();
                 }
 
@@ -458,27 +460,27 @@ public class Main {
 			switch (e.getKeyCode())
 			    {
 			    case KeyEvent.VK_A:
-				player_speed_x.set(-5);
+				playerSpeedX.set(-5);
 				mainChar.directionLeft ();
 				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_D:
-				player_speed_x.set(5);
+				playerSpeedX.set(5);
 				mainChar.directionRight ();
 				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_W:
-				player_speed_y.set(-5);
+				playerSpeedY.set(-5);
 				mainChar.directionUp ();
 				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_S:
-				player_speed_y.set(5);
+				playerSpeedY.set(5);
 				mainChar.directionDown ();
 				mainChar.setActiveFrame ();
 				break;
 			    case KeyEvent.VK_Q:
-				javax.swing.JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
+				JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
 				break;
 			    }
 		    }
@@ -501,18 +503,18 @@ public class Main {
 		    }
 		}
 	    });
-	scene_2.addGStateListener (new GStateAdapter()
+	scene2.addGStateListener (new GStateAdapter()
 	    {
 		@Override
 		public void onEnter () {
-		    player_speed_x.set (0);
-		    player_speed_y.set (0);
+		    playerSpeedX.set (0);
+		    playerSpeedY.set (0);
 		    mainChar.move (342, 117);
 		}
 	    });
 
 	System.err.println("Launching in GUI mode");
-	final GFrame app = new GFrame("Prototype", scene_1, scene_2);
+	final GFrame app = new GFrame("Prototype", scene1, scene2);
 	app.setVisible (true);
     }
 }

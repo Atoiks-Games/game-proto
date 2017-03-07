@@ -74,19 +74,19 @@ public class PyCharacter extends Sprite2D {
     @Override
     public void update (long mills, GFrame f) {
         super.update (mills, f);
-	if (session.squashBall.getImage() != session.squash_ball_blue) {
+	if (session.squashBall.getImage() != session.squashBallBlue) {
 	    final double dx = session.squashBall.getLocation().x - origin.x;
 	    final double dy = session.squashBall.getLocation().y - origin.y;
 	    if(dx == 0) {
 		return;
 	    }
-	    final double target_angle = Math.atan2(dy, dx);
+	    final double targetAngle = Math.atan2(dy, dx);
 	    double speed = 4;
-	    if (session.player_score == 10) {
+	    if (session.playerScore == 10) {
 		speed = 10;
 	    }
-	    translate ((int) (speed * Math.cos(target_angle)),
-		       (int) (speed * Math.sin(target_angle)));
+	    translate ((int) (speed * Math.cos(targetAngle)),
+		       (int) (speed * Math.sin(targetAngle)));
 	    if (Math.abs (dx) > Math.abs (dy)) {
 		if (dx > 0) directionRight ();
 		else directionLeft ();
