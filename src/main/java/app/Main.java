@@ -128,24 +128,6 @@ public class Main {
 	    return;
 	}
 
-	System.err.println("Loading squash court");
-        final Floor squashCourt;
-	try {
-	    squashCourt = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court.png")));
-	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println("Failed to load squash court");
-	    return;
-	}
-
-        System.err.println("Loading squash court 2");
-        final Floor squashCourtSide;
-        try {
-            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court_side.png")));
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load squash court");
-            return;
-        }
-
         System.err.println("Loading main_char spr_1..3");
 	final MainCharacter mainChar = new MainCharacter(new Point(300, 380), 8,
 							 player_speed_x,
@@ -173,6 +155,52 @@ public class Main {
 	    System.err.println("Failed to load red box");
 	    return;
 	}
+
+	System.err.println("Loading squash court");
+        final Group squashCourt;
+	try {
+	    final Floor rawFloor = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court/spr1.png")));
+	    final Sprite rightBorder = new Sprite(ImageIO.read(Main.class.getResourceAsStream("/squash_court/border_right.png")),
+						  new Point (700 - 186, 0))
+		{
+		    @Override
+		    public void onCollision (Sprite comp, GFrame f) {
+			if (comp == mainChar) {
+			    // Has to be colliding on the left of border
+			    mainChar.translate (-player_speed_x.get() - 2, 0);
+			}
+		    }
+		};
+	    rightBorder.enable ();
+	    final Sprite leftBorder = new Sprite(ImageIO.read(Main.class.getResourceAsStream("/squash_court/border_left.png")),
+						 new Point (0, 52))
+		{
+		    @Override
+		    public void onCollision (Sprite comp, GFrame f) {
+			if (comp == mainChar) {
+			    if (player_speed_y.get() != 0) {
+				mainChar.translate (0, -player_speed_y.get() - 2);
+			    } else {
+				mainChar.translate (-player_speed_x.get() + 2, 0);
+			    }
+			}
+		    }
+		};
+	    leftBorder.enable ();
+	    squashCourt = new Group (rawFloor, rightBorder, leftBorder);
+	} catch (IOException | IllegalArgumentException ex) {
+	    System.err.println("Failed to load squash court");
+	    return;
+	}
+
+        System.err.println("Loading squash court 2");
+        final Floor squashCourtSide;
+        try {
+            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court_side.png")));
+        } catch (IOException | IllegalArgumentException ex) {
+            System.err.println("Failed to load squash court");
+            return;
+        }
 
 	System.err.println("Loading green box");
 	final Sprite greenBox;
@@ -333,24 +361,32 @@ public class Main {
 			    {
 			    case KeyEvent.VK_A:
                                 player_speed_x.set(-5);
+				player_speed_y.set(0);
+
 				mainChar.directionLeft ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_D:
                                 player_speed_x.set(5);
+				player_speed_y.set(0);
+
 				mainChar.directionRight ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_W:
+				player_speed_x.set(0);
 				player_speed_y.set(-5);
+
 				mainChar.directionUp ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
 				break;
 			    case KeyEvent.VK_S:
+				player_speed_x.set(0);
 				player_speed_y.set(5);
+
 				mainChar.directionDown ();
 				mainChar.setActiveFrame ();
 				redTileConditions ();
@@ -366,12 +402,6 @@ public class Main {
 			}
 			if (loc.y > 380) {
 			    mainChar.move (loc.x, 380);
-			}
-			if (loc.x < 155) {
-			    mainChar.move (155, loc.y);
-			}
-			if (loc.x > 480) {
-			    mainChar.move (480, loc.y);
 			}
 
 			loc = mainChar.getLocation ();
@@ -475,6 +505,8 @@ public class Main {
 	    {
 		@Override
 		public void onEnter () {
+		    player_speed_x.set (0);
+		    player_speed_y.set (0);
 		    mainChar.move (342, 117);
 		}
 	    });

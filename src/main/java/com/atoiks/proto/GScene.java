@@ -42,21 +42,20 @@ public class GScene {
 
     protected List<GComponent> instances;
 
-    protected Floor floor;
-
-    public GScene (Floor floor, GComponent... insts) {
-	this.floor = floor;
-	this.instances = new ArrayList<GComponent>(Arrays.asList (insts));
+    public GScene (GComponent floor, GComponent... insts) {
+	this.instances = new ArrayList<GComponent>();
+	this.instances.add (floor);
+	this.instances.addAll (Arrays.asList (insts));
 	this.listeners = new ArrayList<GStateListener>();
 	this.keyEvts = new ArrayList<GKeyListener>();
     }
 
-    public void setFloor (Floor floor) {
-	this.floor = floor;
+    public void setFloor (GComponent floor) {
+        this.instances.set (0, floor);
     }
 
-    public Floor getFloor () {
-	return floor;
+    public GComponent getFloor () {
+	return this.instances.get (0);
     }
 
     public void pushBackGComp (GComponent comp) {
@@ -68,11 +67,11 @@ public class GScene {
     }
 
     public void pushFrontGComp (GComponent comp) {
-        instances.add (0, comp);
+        instances.add (1, comp);
     }
 
     public GComponent popFrontGComp (GComponent comp) {
-	return instances.remove (0);
+	return instances.remove (1);
     }
 
     public GComponent getGComp (int idx) {
@@ -92,8 +91,6 @@ public class GScene {
     }
 
     public void renderStep (Graphics g) {
-	// Draw the floor before everything
-	if (floor != null) floor.render (g);
 	for (GComponent el : instances) {
 	    if (el != null) el.render (g);
 	}
