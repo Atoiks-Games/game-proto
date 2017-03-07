@@ -31,6 +31,7 @@ import com.atoiks.proto.event.GStateAdapter;
 import app.entity.*;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 import java.awt.Image;
@@ -145,7 +146,7 @@ public class Main {
 		    public void onCollision (Sprite other, GFrame f) {
 			if (other == mainChar) {
 			    if (playerScore == 0 && pyScore == 0) {
-			        JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", JOptionPane.WARNING_MESSAGE);
+			        JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", JOptionPane.WARNING_MESSAGE, new ImageIcon(PyCharacter.DIRECTION_SHEET[1][0][0]));
 				f.jumpToScene (1);
 			    }
 			}

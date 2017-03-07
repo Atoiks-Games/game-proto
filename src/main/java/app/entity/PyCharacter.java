@@ -39,7 +39,7 @@ import java.io.IOException;
 
 public class PyCharacter extends Sprite2D {
 
-    private static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
+    public static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
 
     static {
 	try {
