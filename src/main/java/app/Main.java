@@ -260,7 +260,6 @@ public class Main {
 
             squashBall = new Sprite(squashBallDefault, new Point(342, 217))
                 {
-
                     @Override
                     public void onCollision (Sprite other, GFrame f) {
                         squashBallDirection += 90 + 180 * Math.random();
@@ -324,7 +323,7 @@ public class Main {
 					       new Point(10, 15))
 	    {
 		@Override
-		public void update (long milliseconds, GFrame f){
+		public void update (long milliseconds, GFrame f) {
 		    setText("PY: " + pyScore + "\nPlayer: " + playerScore);
 		}
 	    };
@@ -332,7 +331,7 @@ public class Main {
 	final Sprite dummy = new Sprite (null, new Point (0, 0))
 	    {
 		@Override
-		public void update (long milliseconds, GFrame f){
+		public void update (long milliseconds, GFrame f) {
 		    if (pyScore >= 11) {
 			// Destroy window
 			f.dispose ();
@@ -351,7 +350,14 @@ public class Main {
 	scene1.addGKeyListener (new GKeyAdapter()
 	    {
 		@Override
-                public void keyReleased (KeyEvent e, GFrame f){
+                public void keyReleased (KeyEvent e, GFrame f) {
+		    if (e.getKeyCode () == KeyEvent.VK_ESCAPE) {
+			if (f.isPaused ())
+			    f.resume ();
+			else
+			    f.pause ();
+			return;
+		    }
 		    mainChar.setIdleFrame ();
 		    playerSpeedX.set(0);
 		    playerSpeedY.set(0);
@@ -443,12 +449,29 @@ public class Main {
 		public void onLeave () {
 		    mainCharLastLoc = mainChar.getLocation ();
 		}
+
+		@Override
+		public void onPause () {
+		    ignoreKeys.set (true);
+		}
+
+		@Override
+		public void onResume () {
+		    ignoreKeys.set (false);
+		}
 	    });
 
 	scene2.addGKeyListener (new GKeyAdapter()
 	    {
                 @Override
                 public void keyReleased (KeyEvent e, GFrame f) {
+		    if (e.getKeyCode () == KeyEvent.VK_ESCAPE) {
+			if (f.isPaused ())
+			    f.resume ();
+			else
+			    f.pause ();
+			return;
+		    }
 		    mainChar.setIdleFrame ();
                     playerSpeedX.set(0);
                     playerSpeedY.set(0);
@@ -511,6 +534,16 @@ public class Main {
 		    playerSpeedX.set (0);
 		    playerSpeedY.set (0);
 		    mainChar.move (342, 117);
+		}
+
+		@Override
+		public void onPause () {
+		    ignoreKeys.set (true);
+		}
+
+		@Override
+		public void onResume () {
+		    ignoreKeys.set (false);
 		}
 	    });
 
