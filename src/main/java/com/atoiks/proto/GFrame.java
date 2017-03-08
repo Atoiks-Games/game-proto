@@ -34,6 +34,7 @@ import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GFrame extends JFrame {
 
@@ -50,6 +51,8 @@ public class GFrame extends JFrame {
 
     private boolean first;
 
+    private AtomicBoolean pauseFlag;
+
     public GFrame (String title, GScene... scenes) {
 	super (title);
 	setSize (WIDTH, HEIGHT);
@@ -64,6 +67,7 @@ public class GFrame extends JFrame {
 	    };
 	this.add (panel);
 	this.first = true;
+	this.pauseFlag = new AtomicBoolean (false);
 	this.scenes = scenes;
 	this.addKeyListener (new KeyListener()
 	    {
@@ -90,6 +94,22 @@ public class GFrame extends JFrame {
 	scenes[sceneIdx = idx].onEnterTrigger ();
     }
 
+    public void pause () {
+	if (pauseFlag.compareAndSet (false, true)) {
+	    scenes[sceneIdx].onPauseTrigger ();
+	}
+    }
+
+    public void resume () {
+	if (pauseFlag.compareAndSet (true, false)) {
+	    scenes[sceneIdx].onResumeTrigger ();
+	}
+    }
+
+    public boolean isPaused () {
+	return pauseFlag.get();
+    }
+
     @Override
     public void setVisible (boolean f) {
 	super.setVisible (f);
@@ -104,11 +124,13 @@ public class GFrame extends JFrame {
 	    threads.execute(() -> {
 		    long lastTime = System.currentTimeMillis ();
 		    while (threads != null && !threads.isShutdown ()) {
-		        scenes[sceneIdx].collisionStep (this);
-
 			final long current = System.currentTimeMillis ();
-		        scenes[sceneIdx].updateStep (current - lastTime, this);
-			repaint ();
+			if (!pauseFlag.get()) {
+			    scenes[sceneIdx].collisionStep (this);
+			    scenes[sceneIdx].updateStep (current - lastTime,
+							 this);
+			    repaint ();
+			}
 			lastTime = current;
 			try {
 			    // This line is just here so your youtube

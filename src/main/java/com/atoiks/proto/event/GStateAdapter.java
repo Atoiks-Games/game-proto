@@ -33,4 +33,12 @@ public abstract class GStateAdapter implements GStateListener {
     @Override
     public void onLeave () {
     }
+
+    @Override
+    public void onPause () {
+    }
+
+    @Override
+    public void onResume () {
+    }
 }

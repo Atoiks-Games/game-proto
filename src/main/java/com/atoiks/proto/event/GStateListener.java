@@ -38,4 +38,14 @@ public interface GStateListener {
      * when the rendering scene changes.
      */
     public void onLeave ();
+
+    /**
+     * Called right after the game loop pauses
+     */
+    public void onPause ();
+
+    /**
+     * Called right before the game loop resumes
+     */
+    public void onResume ();
 }

@@ -138,6 +138,18 @@ public class GScene {
 	}
     }
 
+    public final void onPauseTrigger () {
+	for (GStateListener lis : listeners) {
+	    lis.onPause ();
+	}
+    }
+
+    public final void onResumeTrigger () {
+	for (GStateListener lis : listeners) {
+	    lis.onResume ();
+	}
+    }
+
     public final void onKeyTypedTrigger (KeyEvent e, GFrame f) {
 	for (GKeyListener lis : keyEvts) {
 	    lis.keyTyped (e, f);
