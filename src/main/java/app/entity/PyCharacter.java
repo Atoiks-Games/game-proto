@@ -24,8 +24,6 @@
 
 package app.entity;
 
-import app.Main;
-
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.Sprite;
 import com.atoiks.proto.Sprite2D;
@@ -64,25 +62,23 @@ public class PyCharacter extends Sprite2D {
 
     private int idx = 1;
 
-    private Main session;
-
-    public PyCharacter (Point pt, int fps, Main main) {
+    public PyCharacter (Point pt, int fps) {
 	super (0, pt, fps, DIRECTION_SHEET[1][0]);
-	this.session = main;
     }
 
     @Override
     public void update (long mills, GFrame f) {
         super.update (mills, f);
-	if (session.squashBall.getImage() != session.squashBallBlue) {
-	    final double dx = session.squashBall.getLocation().x - origin.x;
-	    final double dy = session.squashBall.getLocation().y - origin.y;
-	    if(dx == 0) {
+	final SquashGameScene scene = SquashGameScene.getInstance();
+	if (!scene.isBallBlue()) {
+	    final double dx = scene.getBallLocation().x - origin.x;
+	    final double dy = scene.getBallLocation().y - origin.y;
+	    if (dx == 0) {
 		return;
 	    }
 	    final double targetAngle = Math.atan2(dy, dx);
 	    double speed = 4;
-	    if (session.playerScore == 10) {
+	    if (scene.getPlayerScore() == 10) {
 		speed = 10;
 	    }
 	    translate ((int) (speed * Math.cos(targetAngle)),

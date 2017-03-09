@@ -87,36 +87,13 @@ public class Main {
 	return null;
     }
 
-    public double squashBallDirection = 180;
-    public double squashBallSpeed = 5;
-
-    public Sprite squashBall;
-
-    public int pyScore;
-    public int playerScore;
-
-    public Image squashBallBlue;
-
-    private static Image resSquashBallBlue;
-
-    static {
-        try {
-            resSquashBallBlue = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_blue.png"));
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println ("Failed to load blue squash ball");
-            System.exit (1);
-        }
-    }
-
     public static void main(String[] args) {
         new Main().run();
     }
 
-    public Main () {
-	squashBallBlue = resSquashBallBlue;
-    }
-
     public void run () {
+	final SquashGameScene scene2 = SquashGameScene.getInstance ();
+
 	final AtomicBoolean ignoreKeys = new AtomicBoolean(false);
 	final AtomicInteger playerSpeedX = new AtomicInteger(0);
         final AtomicInteger playerSpeedY = new AtomicInteger(0);
@@ -145,7 +122,7 @@ public class Main {
 		    @Override
 		    public void onCollision (Sprite other, GFrame f) {
 			if (other == mainChar) {
-			    if (playerScore == 0 && pyScore == 0) {
+			    if (scene2.getPlayerScore() == 0 && scene2.getPyScore() == 0) {
 			        JOptionPane.showMessageDialog (null, "You found me! NOW PLAY AGAINST ME!!!", "PY", JOptionPane.WARNING_MESSAGE, new ImageIcon(PyCharacter.DIRECTION_SHEET[1][0][0]));
 				f.jumpToScene (1);
 			    }
@@ -195,15 +172,6 @@ public class Main {
 	    return;
 	}
 
-        System.err.println("Loading squash court 2");
-        final Floor squashCourtSide;
-        try {
-            squashCourtSide = new Floor(ImageIO.read(Main.class.getResourceAsStream("/squash_court_side.png")));
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load squash court");
-            return;
-        }
-
 	System.err.println("Loading green box");
 	final Sprite greenBox;
 	try {
@@ -248,104 +216,8 @@ public class Main {
 	    return;
 	}
 
-        System.err.println("Loading py");
-        final PyCharacter pyChar = new PyCharacter (new Point (342, 317),
-						    8, this);
-	pyChar.setCollidable (true);
-
-        System.err.println("Loading squash ball");
-        try {
-            final Image squashBallGreen = ImageIO.read(Main.class.getResourceAsStream("/squash_ball_green.png"));
-            final Image squashBallDefault = ImageIO.read(Main.class.getResourceAsStream("/squash_ball.png"));
-
-            squashBall = new Sprite(squashBallDefault, new Point(342, 217))
-                {
-                    @Override
-                    public void onCollision (Sprite other, GFrame f) {
-                        squashBallDirection += 90 + 180 * Math.random();
-                        squashBallSpeed += 0.3;
-                        if (other == mainChar) {
-			    setImage (squashBallGreen);
-                        }
-                        if (other == pyChar) {
-			    setImage (squashBallBlue);
-                        }
-                    }
-
-                    public void update (long milliseconds, GFrame f) {
-                        final double radianDirection = Math.toRadians(squashBallDirection);
-                        double verticalValue = Math.sin(radianDirection);
-                        double horizontalValue = Math.cos(radianDirection);
-                        translate((int) (horizontalValue * squashBallSpeed),
-				  (int) (verticalValue * squashBallSpeed));
-
-                        if (origin.x <= 0) {
-			    squashBallDirection = 180 - squashBallDirection;
-                            squashBallSpeed -= 0.1;
-                            origin.x = 1;
-                        }
-
-                        if (origin.y <= 0) {
-			    squashBallDirection *= -1;
-                            squashBallSpeed -= 0.1;
-                            origin.y = 1;
-                        }
-
-                        if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
-                            if (image == squashBallBlue) {
-                                ++ pyScore;
-                            }
-                            if (image == squashBallGreen) {
-                                ++ playerScore;
-                            }
-                            image = squashBallDefault;
-                            origin.x = 342;
-                            origin.y = 217;
-                            squashBallDirection = 180;
-                            squashBallSpeed = 5;
-                        }
-
-                        if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30) {
-			    squashBallDirection *= -1;
-			    squashBallSpeed -= 0.1;
-			    origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
-                        }
-                    }
-                };
-	    squashBall.setCollidable(true);
-        } catch (IOException | IllegalArgumentException ex) {
-            System.err.println("Failed to load squash ball");
-            return;
-        }
-
-        System.err.println("Making the squash score board");
-        final Text squashScoreBoard = new Text("PY: 0\nPlayer: 0",
-					       new Point(10, 15))
-	    {
-		@Override
-		public void update (long milliseconds, GFrame f) {
-		    setText("PY: " + pyScore + "\nPlayer: " + playerScore);
-		}
-	    };
-
-	final Sprite dummy = new Sprite (null, new Point (0, 0))
-	    {
-		@Override
-		public void update (long milliseconds, GFrame f) {
-		    if (pyScore >= 11) {
-			// Destroy window
-			f.dispose ();
-		        JOptionPane.showMessageDialog(null, "You're trash...");
-		    }
-		    if(playerScore >= 11) {
-			f.jumpToScene (0);
-		    }
-		}
-	    };
-
 	System.err.println("Initializing scenes");
 	final GScene scene1 = new GScene (squashCourt, mainChar, redBox, greenBox);
-	final GScene scene2 = new GScene (squashCourtSide, dummy, pyChar, mainChar, squashBall, squashScoreBoard);
 
 	scene1.addGKeyListener (new GKeyAdapter()
 	    {
@@ -443,97 +315,13 @@ public class Main {
 		public void onEnter () {
 		    if (mainCharLastLoc == null) return;
 		    mainChar.setLocation (mainCharLastLoc);
+		    playerSpeedX.set(0);
+		    playerSpeedY.set(0);
 		}
 
 		@Override
 		public void onLeave () {
 		    mainCharLastLoc = mainChar.getLocation ();
-		}
-
-		@Override
-		public void onPause () {
-		    ignoreKeys.set (true);
-		}
-
-		@Override
-		public void onResume () {
-		    ignoreKeys.set (false);
-		}
-	    });
-
-	scene2.addGKeyListener (new GKeyAdapter()
-	    {
-                @Override
-                public void keyReleased (KeyEvent e, GFrame f) {
-		    if (e.getKeyCode () == KeyEvent.VK_ESCAPE) {
-			if (f.isPaused ())
-			    f.resume ();
-			else
-			    f.pause ();
-			return;
-		    }
-		    mainChar.setIdleFrame ();
-                    playerSpeedX.set(0);
-                    playerSpeedY.set(0);
-		    boundCheck ();
-                }
-
-                @Override
-		public void keyPressed (KeyEvent e, GFrame f) {
-		    if (!ignoreKeys.get()) {
-			switch (e.getKeyCode())
-			    {
-			    case KeyEvent.VK_A:
-				playerSpeedX.set(-5);
-				mainChar.directionLeft ();
-				mainChar.setActiveFrame ();
-				break;
-			    case KeyEvent.VK_D:
-				playerSpeedX.set(5);
-				mainChar.directionRight ();
-				mainChar.setActiveFrame ();
-				break;
-			    case KeyEvent.VK_W:
-				playerSpeedY.set(-5);
-				mainChar.directionUp ();
-				mainChar.setActiveFrame ();
-				break;
-			    case KeyEvent.VK_S:
-				playerSpeedY.set(5);
-				mainChar.directionDown ();
-				mainChar.setActiveFrame ();
-				break;
-			    case KeyEvent.VK_Q:
-				JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
-				break;
-			    }
-		    }
-		    boundCheck ();
-		}
-
-		private void boundCheck () {
-		    final Point loc = mainChar.getLocation ();
-		    if (loc.y < 0) {
-			mainChar.move (loc.x, 0);
-		    }
-		    if (loc.y > GFrame.HEIGHT - 64) {
-			mainChar.move (loc.x, GFrame.HEIGHT - 64);
-		    }
-		    if (loc.x < 0) {
-			mainChar.move (0, loc.y);
-		    }
-		    if (loc.x > GFrame.WIDTH - 32) {
-			mainChar.move (GFrame.WIDTH - 32, loc.y);
-		    }
-		}
-	    });
-	scene2.addGStateListener (new GStateAdapter()
-	    {
-		@Override
-		public void onEnter () {
-		    playerSpeedX.set (0);
-		    playerSpeedY.set (0);
-		    mainChar.move (342, 117);
 		}
 
 		@Override
