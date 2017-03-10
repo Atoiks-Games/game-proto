@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package app;
+package app.entity;
 
 import javax.swing.JList;
 import javax.swing.JPanel;

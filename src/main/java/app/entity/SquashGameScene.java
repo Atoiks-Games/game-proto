@@ -56,22 +56,14 @@ public class SquashGameScene
 	return instance;
     }
 
-    public static final Floor SQUASH_COURT_SIDE = new Floor (loadImage ("/squash_court_side.png"));
+    public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
 
-    public static final Image GREEN_BALL_IMG = loadImage ("/squash_ball_green.png");
+    public static final Image GREEN_BALL_IMG = Utils.loadImage ("/squash_ball_green.png");
 
-    public static final Image BLUE_BALL_IMG = loadImage ("/squash_ball_blue.png");
+    public static final Image BLUE_BALL_IMG = Utils.loadImage ("/squash_ball_blue.png");
 
-    public static final Image DEFAULT_BALL_IMG = loadImage ("/squash_ball.png");
+    public static final Image DEFAULT_BALL_IMG = Utils.loadImage ("/squash_ball.png");
 
-    private static Image loadImage (String path) {
-	try {
-	    return ImageIO.read (SquashGameScene.class.getResourceAsStream (path));
-	} catch (IOException | IllegalArgumentException ex) {
-	    throw new GameInitError ("Failed to load " + path);
-	}
-    }
-    
     private Sprite dummy;
 
     private PyCharacter py;

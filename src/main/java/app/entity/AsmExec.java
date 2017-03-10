@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package app;
+package app.entity;
 
 import java.awt.Point;
 
