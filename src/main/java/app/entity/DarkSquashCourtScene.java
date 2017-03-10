@@ -71,6 +71,21 @@ public class DarkSquashCourtScene
 	player.enable ();
 	this.instances.add (player);
 
+	Sprite light = new Sprite (SquashCourtScene.GREEN_BOX,
+				   new Point (GFrame.WIDTH - 15, 0))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			player.translate (-playerSpeedX.get() - 2, 0);
+			toggleLight ();
+		    }
+		}
+	    };
+	light.setVisible (false);
+	light.setCollidable (true);
+	this.instances.add (light);
+
 	// This has to be the last item added
 	this.instances.add (greyShader);
     }
@@ -81,6 +96,14 @@ public class DarkSquashCourtScene
 
 	addGKeyListener (this);
 	addGStateListener (this);
+    }
+
+    public boolean isLightOff () {
+	return greyShader.isVisible ();
+    }
+
+    public void toggleLight () {
+        greyShader.setVisible (!greyShader.isVisible ());
     }
 
     private void playerBoundCheck () {
