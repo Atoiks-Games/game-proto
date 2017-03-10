@@ -27,7 +27,6 @@ package app.entity;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextArea;

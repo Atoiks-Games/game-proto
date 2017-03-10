@@ -41,6 +41,10 @@ public class MainCharacter extends Sprite2D {
     private static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
 
     static {
+	loadSheet ();
+    }
+
+    private static void loadSheet () {
 	try {
 	    // 0 = up, 1 = down, 2 = left, 3 = right
 	    // 0 = idle, 1 = move
@@ -56,8 +60,7 @@ public class MainCharacter extends Sprite2D {
 	    DIRECTION_SHEET[3][0] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_5.png")) };
 	    DIRECTION_SHEET[3][1] = new Image[] { ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_4.png")), ImageIO.read(MainCharacter.class.getResourceAsStream("/main_char/spr_6.png")) };
 	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println ("Failed to load main_char spr_1..3");
-	    System.exit (1);
+	    throw new GameInitError ("Failed to load main_char spr_1..3");
 	}
     }
     
