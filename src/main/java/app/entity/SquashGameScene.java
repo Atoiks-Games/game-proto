@@ -34,7 +34,6 @@ import java.awt.event.KeyEvent;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class SquashGameScene
@@ -42,17 +41,6 @@ public class SquashGameScene
     implements GKeyListener, GStateListener {
 
     private static SquashGameScene instance;
-
-    public static SquashGameScene getInstance () {
-	if (instance == null) {
-	    synchronized (SquashGameScene.class) {
-		if (instance == null) {
-		    instance = new SquashGameScene ();
-		}
-	    }
-	}
-	return instance;
-    }
 
     public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
 
@@ -85,6 +73,17 @@ public class SquashGameScene
     private AtomicInteger playerSpeedX;
 
     private AtomicInteger playerSpeedY;
+
+    public static SquashGameScene getInstance () {
+	if (instance == null) {
+	    synchronized (SquashGameScene.class) {
+		if (instance == null) {
+		    instance = new SquashGameScene ();
+		}
+	    }
+	}
+	return instance;
+    }
 
     private void initComponents () {
 	dummy = new Sprite (null, new Point (0, 0))
@@ -213,6 +212,7 @@ public class SquashGameScene
 
     @Override
     public void keyTyped (KeyEvent e, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -255,6 +255,8 @@ public class SquashGameScene
 		case KeyEvent.VK_Q:
 		    JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
 		    break;
+		default:
+		    break;
 		}
 	}
 	playerBoundCheck ();
@@ -272,6 +274,7 @@ public class SquashGameScene
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override

@@ -40,6 +40,12 @@ public class MainCharacter extends Sprite2D {
 
     private static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
 
+    private AtomicInteger dx;
+
+    private AtomicInteger dy;
+
+    private int idx = 1;
+
     static {
 	loadSheet ();
     }
@@ -63,12 +69,6 @@ public class MainCharacter extends Sprite2D {
 	    throw new GameInitError ("Failed to load main_char spr_1..3");
 	}
     }
-    
-    private AtomicInteger dx;
-
-    private AtomicInteger dy;
-
-    private int idx = 1;
 
     public MainCharacter (Point pt, int fps,
 			  AtomicInteger dx, AtomicInteger dy) {

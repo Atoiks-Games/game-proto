@@ -54,15 +54,9 @@ import java.io.ByteArrayOutputStream;
 
 public class AsmMiniGame extends JFrame {
 
-    private int[] inputs;
-
-    private int[] expects;
-
     private DefaultListModel<Integer> outputs;
 
     private DefaultTableModel hexPad;
-
-    private Object notify;
 
     public boolean passFlag = false;
 
@@ -104,10 +98,7 @@ public class AsmMiniGame extends JFrame {
     }
 
     public AsmMiniGame (int[] inputs, int[] expects, Object notify) {
-	this.inputs = inputs;
-	this.expects = expects;
 	this.outputs = new DefaultListModel<Integer> ();
-	this.notify = notify;
 
 	setSize (500, 450);
 	setResizable (false);
@@ -141,8 +132,7 @@ public class AsmMiniGame extends JFrame {
 
 		@Override
 		public boolean isCellEditable (int row, int column) {
-		    if (column == 0) return false;
-		    return true;
+		    return column != 0;
 		}
 	    };
 	hexPad.addColumn ("");

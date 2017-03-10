@@ -43,17 +43,6 @@ public class SquashCourtScene
 
     private static SquashCourtScene instance;
 
-    public static SquashCourtScene getInstance () {
-	if (instance == null) {
-	    synchronized (SquashCourtScene.class) {
-		if (instance == null) {
-		    instance = new SquashCourtScene ();
-		}
-	    }
-	}
-	return instance;
-    }
-
     public static final Image RED_BOX = Utils.loadImage ("/red_box.bmp");
 
     public static final Image GREEN_BOX = Utils.loadImage ("/green_box.png");
@@ -77,6 +66,17 @@ public class SquashCourtScene
     private AtomicInteger playerSpeedX;
 
     private AtomicInteger playerSpeedY;
+
+    public static SquashCourtScene getInstance () {
+	if (instance == null) {
+	    synchronized (SquashCourtScene.class) {
+		if (instance == null) {
+		    instance = new SquashCourtScene ();
+		}
+	    }
+	}
+	return instance;
+    }
 
     private void initComponents () {
 	playerSpeedX = new AtomicInteger (0);
@@ -238,6 +238,8 @@ public class SquashCourtScene
 		    break;
 		case KeyEvent.VK_Q:
 		    JOptionPane.showMessageDialog(null, "Move around!");
+		    break;
+		default:
 		    break;
 		}
 
