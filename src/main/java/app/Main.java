@@ -26,6 +26,8 @@ package app;
 
 import app.entity.*;
 
+import com.atoiks.proto.GFrame;
+
 public class Main {
 
     public final class WeightWrapper<T> {
