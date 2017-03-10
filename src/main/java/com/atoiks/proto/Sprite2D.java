@@ -26,7 +26,6 @@ package com.atoiks.proto;
 
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Graphics;
 
 public class Sprite2D extends Sprite {
 

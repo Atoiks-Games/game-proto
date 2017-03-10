@@ -22,9 +22,7 @@
  * SOFTWARE.
  */
 
-package app;
-
-import java.awt.Point;
+package app.entity;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -265,7 +263,7 @@ public class AsmExec {
 		break;
 	    }
 	    default:
-		throw new RuntimeException ("Illegal opcode(" + mem[regs[15]] + ") found!");
+		throw new RunAsmException ("Illegal opcode(" + mem[regs[15]] + ") found!");
 	    }
 	}
 	final int[] rst = new int[output.size()];

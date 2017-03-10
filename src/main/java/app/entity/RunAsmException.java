@@ -22,26 +22,11 @@
  * SOFTWARE.
  */
 
-package com.atoiks.proto.event;
+package app.entity;
 
-import com.atoiks.proto.GFrame;
+public class RunAsmException extends RuntimeException {
 
-import java.awt.event.KeyEvent;
-
-public interface GKeyListener {
-
-    /**
-     * See keyTyped for KeyListener
-     */
-    public void keyTyped (KeyEvent e, GFrame frame);
-
-    /**
-     * See keyPressed fpr KeyListener
-     */
-    public void keyPressed (KeyEvent e, GFrame frame);
-
-    /**
-     * See keyReleased for KeyListener
-     */
-    public void keyReleased (KeyEvent e, GFrame frame);
+    RunAsmException (String msg) {
+	super (msg);
+    }
 }

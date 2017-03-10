@@ -1,6 +1,24 @@
 # Staventure
 
-An adventure game
+> The game that you could play during school time because there is no music!!!
+
+You wake up in a school campus.
+
+You don't know where you are,
+
+so you decide to walk around
+
+and figure out what is going on.
+
+You could find many people,
+
+or the same person
+
+again and again.
+
+What is this place? Why am I here?
+
+-----
 
 To build the game, you will need jdk8 installed.
 

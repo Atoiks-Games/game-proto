@@ -52,9 +52,12 @@ public class Floor implements GComponent {
 
     @Override
     public void update (long millisec, GFrame f) {
+	// You cannot change the image of the floor
+	// so do nothing
     }
 
     @Override
     public void testCollision (GComponent comp, GFrame f) {
+	// You cannot collide with the floor
     }
 }

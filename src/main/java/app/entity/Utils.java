@@ -22,26 +22,21 @@
  * SOFTWARE.
  */
 
-package com.atoiks.proto.event;
+package app.entity;
 
-import com.atoiks.proto.GFrame;
+import java.io.IOException;
 
-import java.awt.event.KeyEvent;
+import java.awt.Image;
 
-public interface GKeyListener {
+import javax.imageio.ImageIO;
 
-    /**
-     * See keyTyped for KeyListener
-     */
-    public void keyTyped (KeyEvent e, GFrame frame);
+public final class Utils {
 
-    /**
-     * See keyPressed fpr KeyListener
-     */
-    public void keyPressed (KeyEvent e, GFrame frame);
-
-    /**
-     * See keyReleased for KeyListener
-     */
-    public void keyReleased (KeyEvent e, GFrame frame);
+    public static Image loadImage (String path) {
+	try {
+	    return ImageIO.read (Utils.class.getResourceAsStream (path));
+	} catch (IOException | IllegalArgumentException ex) {
+	    throw new GameInitError ("Failed to load " + path);
+	}
+    }
 }

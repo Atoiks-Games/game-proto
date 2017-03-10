@@ -125,6 +125,7 @@ public class Text implements GComponent {
 
     @Override
     public void testCollision (GComponent comp, GFrame f) {
+	// You cannot collide with an text object
     }
 }
 

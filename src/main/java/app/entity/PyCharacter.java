@@ -24,10 +24,7 @@
 
 package app.entity;
 
-import app.Main;
-
 import com.atoiks.proto.GFrame;
-import com.atoiks.proto.Sprite;
 import com.atoiks.proto.Sprite2D;
 
 import javax.imageio.ImageIO;
@@ -42,6 +39,10 @@ public class PyCharacter extends Sprite2D {
     public static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
 
     static {
+	loadSheet ();
+    }
+
+    private static void loadSheet () {
 	try {
 	    // 0 = up, 1 = down, 2 = left, 3 = right
 	    // 0 = idle, 1 = move
@@ -57,32 +58,29 @@ public class PyCharacter extends Sprite2D {
 	    DIRECTION_SHEET[3][0] = new Image[] { ImageIO.read(PyCharacter.class.getResourceAsStream("/py/spr_5.png")) };
 	    DIRECTION_SHEET[3][1] = new Image[] { ImageIO.read(PyCharacter.class.getResourceAsStream("/py/spr_4.png")), ImageIO.read(PyCharacter.class.getResourceAsStream("/py/spr_6.png")) };
 	} catch (IOException | IllegalArgumentException ex) {
-	    System.err.println ("Failed to load py spr_1..3");
-	    System.exit (1);
+	    throw new GameInitError ("Failed to load py spr_1..3");
 	}
     }
 
     private int idx = 1;
 
-    private Main session;
-
-    public PyCharacter (Point pt, int fps, Main main) {
+    public PyCharacter (Point pt, int fps) {
 	super (0, pt, fps, DIRECTION_SHEET[1][0]);
-	this.session = main;
     }
 
     @Override
     public void update (long mills, GFrame f) {
         super.update (mills, f);
-	if (session.squashBall.getImage() != session.squashBallBlue) {
-	    final double dx = session.squashBall.getLocation().x - origin.x;
-	    final double dy = session.squashBall.getLocation().y - origin.y;
-	    if(dx == 0) {
+	final SquashGameScene scene = SquashGameScene.getInstance();
+	if (!scene.isBallBlue()) {
+	    final double dx = scene.getBallLocation().x - origin.x;
+	    final double dy = scene.getBallLocation().y - origin.y;
+	    if (dx == 0) {
 		return;
 	    }
 	    final double targetAngle = Math.atan2(dy, dx);
 	    double speed = 4;
-	    if (session.playerScore == 10) {
+	    if (scene.getPlayerScore() == 10) {
 		speed = 10;
 	    }
 	    translate ((int) (speed * Math.cos(targetAngle)),

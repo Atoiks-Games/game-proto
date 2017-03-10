@@ -22,12 +22,11 @@
  * SOFTWARE.
  */
 
-package app;
+package app.entity;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
@@ -180,7 +179,6 @@ public class AsmMiniGame extends JFrame {
 	    {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-		    // hexEditor.setEditable (false);
 		    final AsmExec session;
 		    try (ByteArrayOutputStream buf = new ByteArrayOutputStream()) {
 			for (int i = 0; i < hexPad.getRowCount(); ++i) {
@@ -225,7 +223,6 @@ public class AsmMiniGame extends JFrame {
 			    notify.notify ();
 			}
 		    }
-		    // hexEditor.setEditable (true);
 		}
 	    });
     }

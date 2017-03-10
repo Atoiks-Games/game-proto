@@ -112,6 +112,7 @@ public class Sprite implements GComponent {
 
     @Override
     public void update (long millisec, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -130,6 +131,10 @@ public class Sprite implements GComponent {
 	}
     }
 
+    /**
+     * Called on collision
+     */
     public void onCollision (Sprite other, GFrame f) {
+	// Do nothing
     }
 }
