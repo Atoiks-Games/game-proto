@@ -28,8 +28,6 @@ import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
-import java.io.IOException;
-
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;

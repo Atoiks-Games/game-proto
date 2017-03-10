@@ -179,7 +179,6 @@ public class AsmMiniGame extends JFrame {
 	    {
 		@Override
 		public void actionPerformed (ActionEvent e) {
-		    // hexEditor.setEditable (false);
 		    final AsmExec session;
 		    try (ByteArrayOutputStream buf = new ByteArrayOutputStream()) {
 			for (int i = 0; i < hexPad.getRowCount(); ++i) {
@@ -224,7 +223,6 @@ public class AsmMiniGame extends JFrame {
 			    notify.notify ();
 			}
 		    }
-		    // hexEditor.setEditable (true);
 		}
 	    });
     }
