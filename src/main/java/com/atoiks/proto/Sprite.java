@@ -56,8 +56,7 @@ public class Sprite implements GComponent {
 	if (p.x < origin.x) return false;
 	if (p.x > image.getWidth(null)) return false;
 	if (p.y < origin.y) return false;
-	if (p.y > image.getHeight(null)) return false;
-	return true;
+        return p.y <= image.getHeight(null);
     }
 
     public void setImage (Image img) {

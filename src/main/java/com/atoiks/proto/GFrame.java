@@ -38,9 +38,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class GFrame extends JFrame {
 
     public static final int HEIGHT = 450;
-    public static final int WIDTH = 700;
 
-    private final JPanel panel;
+    public static final int WIDTH = 700;
 
     private ExecutorService threads;
 
@@ -58,7 +57,7 @@ public class GFrame extends JFrame {
 	setResizable (false);
 	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
-        panel = new JPanel ()
+        final JPanel panel = new JPanel ()
 	    {
 	        protected void paintComponent (Graphics g) {
 		    scenes[sceneIdx].renderStep (g);

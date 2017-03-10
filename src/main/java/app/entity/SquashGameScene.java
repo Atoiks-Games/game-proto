@@ -50,15 +50,11 @@ public class SquashGameScene
 
     public static final Image DEFAULT_BALL_IMG = Utils.loadImage ("/squash_ball.png");
 
-    private Sprite dummy;
-
     private PyCharacter py;
 
     private MainCharacter player;
 
     private Sprite ball;
-
-    private Text scoreBoard;
 
     private double ballDirection;
 
@@ -86,7 +82,7 @@ public class SquashGameScene
     }
 
     private void initComponents () {
-	dummy = new Sprite (null, new Point (0, 0))
+	Sprite dummy = new Sprite (null, new Point (0, 0))
 	    {
 		@Override
 		public void update (long mills, GFrame f) {
@@ -160,7 +156,7 @@ public class SquashGameScene
 	ball.setCollidable (true);
 	this.instances.add (ball);
 
-	scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
+	Text scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
 	    {
 		@Override
 		public void update (long mills, GFrame f) {

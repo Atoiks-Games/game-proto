@@ -53,13 +53,9 @@ public class SquashCourtScene
 
     public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/border_left.png");
 
-    private Group court;
-
     private MainCharacter player;
 
     private Sprite redBox;
-
-    private Sprite greenBox;
 
     private boolean ignoreKeys;
 
@@ -103,7 +99,7 @@ public class SquashCourtScene
 	redBox.disable ();
 	this.instances.add (redBox);
 
-	greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
+	Sprite greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -173,9 +169,8 @@ public class SquashCourtScene
 		}
 	    };
 	leftBorder.enable ();
-	court = new Group (base, rightBorder, leftBorder);
 	// Set court as floor!
-	this.instances.set (0, court);
+	this.instances.set (0, new Group (base, rightBorder, leftBorder));
 
 	initComponents ();
 
