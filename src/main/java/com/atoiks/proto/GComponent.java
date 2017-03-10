@@ -32,11 +32,23 @@ import java.awt.Graphics;
  */
 public interface GComponent {
 
+    /**
+     * All the drawing should be done here
+     */
     public void render (Graphics g);
 
+    /**
+     * Non-drawing changes should be done here
+     */
     public void update (long millisec, GFrame f);
 
+    /**
+     * Test to see if the component encapsulates the point
+     */
     public boolean containsPoint (Point p);
 
+    /**
+     * Collision testing should be done here
+     */
     public void testCollision (GComponent comp, GFrame f);
 }

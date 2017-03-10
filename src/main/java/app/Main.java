@@ -24,24 +24,7 @@
 
 package app;
 
-import com.atoiks.proto.*;
-import com.atoiks.proto.event.GKeyAdapter;
-import com.atoiks.proto.event.GStateAdapter;
-
 import app.entity.*;
-
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.event.KeyEvent;
-
-import java.io.IOException;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Main {
 
@@ -94,7 +77,7 @@ public class Main {
 	final SquashCourtScene scene0 = SquashCourtScene.getInstance ();
 	final SquashGameScene scene1 = SquashGameScene.getInstance ();
 
-	final GFrame app = new GFrame("Prototype", scene0, scene1);
+	final GFrame app = new GFrame("Staventure", scene0, scene1);
 	app.setVisible (true);
     }
 }
