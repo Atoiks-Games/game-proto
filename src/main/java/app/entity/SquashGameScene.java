@@ -137,10 +137,10 @@ public class SquashGameScene
 			ballSpeed = 5;
 		    }
 		    // Test bottom wall
-		    if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30) {
+		    if (origin.y >= GFrame.HEIGHT - image.getHeight(null)) {
 			ballDirection *= -1;
 			ballSpeed -= 0.1;
-			origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
+			origin.y = GFrame.HEIGHT - image.getHeight(null) - 1;
 		    }
 		}
 	    };
@@ -170,8 +170,8 @@ public class SquashGameScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 64) {
-	    player.move (loc.x, GFrame.HEIGHT - 64);
+	if (loc.y > GFrame.HEIGHT - 32) {
+	    player.move (loc.x, GFrame.HEIGHT - 32);
 	}
 	if (loc.x < 0) {
 	    player.move (0, loc.y);

@@ -51,6 +51,8 @@ public class SquashCourtScene
 
     public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/border_left.png");
 
+    public static final Point SPAWN = new Point (300, 380);
+
     private MainCharacter player;
 
     private Sprite redBox;
@@ -69,7 +71,7 @@ public class SquashCourtScene
     }
 
     private void initComponents () {
-	player = new MainCharacter (new Point (300, 380), 8);
+	player = new MainCharacter (new Point (SPAWN), 8);
 	player.enable ();
 	this.instances.add (player);
 
@@ -90,7 +92,21 @@ public class SquashCourtScene
 	redBox.disable ();
 	this.instances.add (redBox);
 
-	Sprite greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point(306, GFrame.HEIGHT - 3))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			final CourtHallway hway = CourtHallway.getInstance ();
+			hway.playerSpawn = new Point (CourtHallway.TOP_SPAWN);
+			f.jumpToScene (3);
+		    }
+		}
+	    };
+	door.enable();
+	this.instances.add (door);
+
+	final Sprite greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -183,6 +199,7 @@ public class SquashCourtScene
         player.setIdleFrame ();
 	player.dx = 0;
 	player.dy = 0;
+	boundCheck ();
     }
 
     @Override
@@ -228,21 +245,20 @@ public class SquashCourtScene
 		default:
 		    break;
 		}
-
-	    Point loc = player.getLocation ();
-	    if (loc.y < 0) {
-		player.move (loc.x, 0);
-	    }
-	    if (loc.y > 380) {
-		player.move (loc.x, 380);
-	    }
-
-	    loc = player.getLocation ();
-	    if (loc.x > 300 && loc.x < 333 && loc.y > 370) {
-		System.err.println ("Leaving squash court");
-		return;
-	    }
+	    boundCheck ();
 	}
+    }
+
+    private void boundCheck () {
+	ignoreKeys = true;
+	final Point loc = player.getLocation ();
+	if (loc.y < 0) {
+	    player.move (loc.x, 0);
+	}
+	if (loc.y > GFrame.HEIGHT - 32) {
+	    player.move (loc.x, GFrame.HEIGHT - 32);
+	}
+	ignoreKeys = false;
     }
 
     private void redTileConditions () {
@@ -264,6 +280,7 @@ public class SquashCourtScene
 	player.setIdleFrame ();
         player.dx = 0;
 	player.dy = 0;
+	player.setLocation (new Point (SPAWN));
     }
 
     @Override
