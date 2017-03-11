@@ -28,6 +28,10 @@ import com.atoiks.proto.GFrame;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * An abstract adapter class for key events. The methods in this class are
+ * empty.
+ */
 public abstract class GKeyAdapter implements GKeyListener {
 
     @Override

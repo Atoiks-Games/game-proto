@@ -31,24 +31,57 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
 
+/**
+ * Renders a non-collidable string.
+ */
 public class Text implements GComponent {
 
+    /**
+     * The string being rendered, supports {@code '\n'} as new line.
+     */
     protected String text;
 
+    /**
+     * The font of the string.
+     */
     protected Font font;
 
+    /**
+     * The color of the string.
+     */
     protected Color color;
 
+    /**
+     * The top-left corner of the string box.
+     */
     protected Point origin;
 
+    /**
+     * Flag for if text will be rendered.
+     */
     protected boolean visible;
 
+    /**
+     * Constructs a string with an origin.
+     *
+     * @param text The string
+     * @param origin The origin
+     */
     public Text (String text, Point origin) {
-	this (text, UIManager.getDefaults ().getFont ("TextPane.font"),
-	      Color.black, origin);
+	this (text, origin,
+	      UIManager.getDefaults ().getFont ("TextPane.font"),
+	      Color.black);
     }
 
-    public Text (String text, Font font, Color color, Point origin) {
+    /**
+     * Constructs a string with an origin, font, and color.
+     *
+     * @param text The string
+     * @param origin The origin
+     * @param font The font of the string
+     * @param color The color of the string
+     */
+    public Text (String text, Point origin, Font font, Color color) {
 	this.text = text;
 	this.font = font;
 	this.color = color;
@@ -82,11 +115,11 @@ public class Text implements GComponent {
     public String getText () {
 	return this.text;
     }
-	
+
     public void setFont (Font f) {
 	this.font = f;
     }
-	
+
     public Font getFont () {
 	return this.font;
     }
@@ -107,16 +140,32 @@ public class Text implements GComponent {
 	return visible;
     }
 
+    /**
+     * Sets the origin to (x, y)
+     *
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     */
     public void move (int x, int y) {
 	origin.move (x, y);
     }
 
-    public void translate (int x, int y) {
-	origin.translate (x, y);
+    /**
+     * Sets the origin to (x+dx, y+dy)
+     *
+     * @param dx Change in X coordinate
+     * @param dy Change in Y coordinate
+     */
+    public void translate (int dx, int dy) {
+	origin.translate (dx, dy);
     }
 
     public Point getLocation () {
 	return origin;
+    }
+
+    public void setLocation (Point pt) {
+	origin = pt;
     }
 
     @Override
