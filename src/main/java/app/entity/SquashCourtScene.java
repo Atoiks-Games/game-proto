@@ -187,6 +187,7 @@ public class SquashCourtScene
 
     @Override
     public void keyTyped (KeyEvent e, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -285,6 +286,7 @@ public class SquashCourtScene
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override

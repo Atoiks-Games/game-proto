@@ -28,17 +28,21 @@ public abstract class GStateAdapter implements GStateListener {
 
     @Override
     public void onEnter () {
+	// Do nothing
     }
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override
     public void onPause () {
+	// Do nothing
     }
 
     @Override
     public void onResume () {
+	// Do nothing
     }
 }

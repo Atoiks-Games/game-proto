@@ -32,13 +32,16 @@ public abstract class GKeyAdapter implements GKeyListener {
 
     @Override
     public void keyTyped (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 
     @Override
     public void keyPressed (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 
     @Override
     public void keyReleased (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 }

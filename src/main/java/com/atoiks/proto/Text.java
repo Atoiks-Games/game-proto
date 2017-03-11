@@ -121,6 +121,7 @@ public class Text implements GComponent {
 
     @Override
     public void update (long millisec, GFrame f) {
+	// Do nothing
     }
 
     @Override

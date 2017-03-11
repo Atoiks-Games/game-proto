@@ -62,6 +62,7 @@ public class Shader implements GComponent {
 
     @Override
     public void update (long mills, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -71,5 +72,6 @@ public class Shader implements GComponent {
 
     @Override
     public void testCollision (GComponent comp, GFrame f) {
+	// Do nothing
     }
 }

@@ -196,6 +196,7 @@ public class CourtHallway
 
     @Override
     public void keyTyped (KeyEvent evt, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -281,6 +282,7 @@ public class CourtHallway
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override
