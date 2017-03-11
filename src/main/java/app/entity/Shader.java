@@ -30,13 +30,12 @@ import com.atoiks.proto.GComponent;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 
 public class Shader implements GComponent {
 
-    final Color color;
+    private final Color color;
 
-    boolean render;
+    private boolean render;
 
     public Shader (Color color) {
 	this.color = color;
