@@ -29,12 +29,22 @@ import java.awt.Point;
 import java.awt.Graphics;
 
 /**
- * Essentially the background
+ * A non-collidable sprite that is usally used as a background.
+ * <br>
+ * {@code containsPoint} will always return true
  */
 public class Floor implements GComponent {
 
+    /**
+     * The image being rendered as the floor
+     */
     protected Image image;
 
+    /**
+     * Constructs a new floor.
+     *
+     * @param img The image for the floor
+     */
     public Floor (Image img) {
 	this.image = img;
     }

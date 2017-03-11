@@ -28,27 +28,39 @@ import java.awt.Point;
 import java.awt.Graphics;
 
 /**
- * Graphics component
+ * Any component inside a scene.
  */
 public interface GComponent {
 
     /**
-     * All the drawing should be done here
+     * All the drawing should be done here.
+     *
+     * @param g The canvas for drawing
      */
     public void render (Graphics g);
 
     /**
-     * Non-drawing changes should be done here
+     * Non-drawing changes should be done here.
+     *
+     * @param millisec The amount of time (in milliseconds) since last update
+     * @param f The GFrame the component is in
      */
     public void update (long millisec, GFrame f);
 
     /**
-     * Test to see if the component encapsulates the point
+     * Test to see if the component encapsulates the point.
+     *
+     * @param p The point that is potentially in the component
+     *
+     * @return True if the point is contained by the component
      */
     public boolean containsPoint (Point p);
 
     /**
      * Collision testing should be done here
+     *
+     * @param other The component that is potentially colliding
+     * @param f The GFrame the component is in
      */
-    public void testCollision (GComponent comp, GFrame f);
+    public void testCollision (GComponent other, GFrame f);
 }

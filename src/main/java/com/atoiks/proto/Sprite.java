@@ -83,11 +83,17 @@ public class Sprite implements GComponent {
 	return visible;
     }
 
+    /**
+     * Sets both {@code collidable} and {@code visible} to false
+     */
     public void disable () {
 	this.collidable = false;
 	this.visible = false;
     }
 
+    /**
+     * Sets both {@code collidable} and {@code visible} to true
+     */
     public void enable () {
 	this.collidable = true;
 	this.visible = true;

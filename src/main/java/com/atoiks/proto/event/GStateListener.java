@@ -24,6 +24,9 @@
 
 package com.atoiks.proto.event;
 
+/**
+ * GFrame state receiver.
+ */
 public interface GStateListener {
 
     /**
@@ -40,12 +43,12 @@ public interface GStateListener {
     public void onLeave ();
 
     /**
-     * Called right after the game loop pauses
+     * Called right after the game loop pauses.
      */
     public void onPause ();
 
     /**
-     * Called right before the game loop resumes
+     * Called right before the game loop resumes.
      */
     public void onResume ();
 }

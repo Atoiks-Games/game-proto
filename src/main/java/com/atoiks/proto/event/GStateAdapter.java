@@ -24,6 +24,10 @@
 
 package com.atoiks.proto.event;
 
+/**
+ * An abstract adapter class for GFrame events. The methods in this class are
+ * empty.
+ */
 public abstract class GStateAdapter implements GStateListener {
 
     @Override
