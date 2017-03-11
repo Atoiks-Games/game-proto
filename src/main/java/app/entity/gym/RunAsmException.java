@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
 
 public class RunAsmException extends RuntimeException {
 

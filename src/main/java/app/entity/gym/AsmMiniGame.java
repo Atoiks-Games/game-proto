@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
 
 import javax.swing.JList;
 import javax.swing.JPanel;

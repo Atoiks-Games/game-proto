@@ -22,7 +22,11 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
+
+import app.entity.Utils;
+import app.entity.Shader;
+import app.entity.MainCharacter;
 
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyListener;

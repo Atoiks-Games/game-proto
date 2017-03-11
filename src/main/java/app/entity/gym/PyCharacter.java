@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
+
+import app.entity.GameInitError;
 
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.Sprite2D;

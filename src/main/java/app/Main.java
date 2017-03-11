@@ -24,9 +24,13 @@
 
 package app;
 
-import app.entity.*;
+import app.entity.gym.CourtHallway;
+import app.entity.gym.SquashGameScene;
+import app.entity.gym.SquashCourtScene;
+import app.entity.gym.DarkSquashCourtScene;
 
 import com.atoiks.proto.GFrame;
+import com.atoiks.proto.GScene;
 
 public class Main {
 
@@ -76,10 +80,10 @@ public class Main {
     }
 
     public void run () {
-	final SquashCourtScene scene0 = SquashCourtScene.getInstance ();
-	final SquashGameScene scene1 = SquashGameScene.getInstance ();
-	final DarkSquashCourtScene scene2 = DarkSquashCourtScene.getInstance ();
-	final CourtHallway scene3 = CourtHallway.getInstance ();
+	final GScene scene0 = SquashCourtScene.getInstance ();
+	final GScene scene1 = SquashGameScene.getInstance ();
+	final GScene scene2 = DarkSquashCourtScene.getInstance ();
+	final GScene scene3 = CourtHallway.getInstance ();
 
 	final GFrame app = new GFrame("Staventure",
 				      scene0, scene1, scene2, scene3);
