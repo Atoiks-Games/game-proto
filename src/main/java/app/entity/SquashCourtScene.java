@@ -271,7 +271,6 @@ public class SquashCourtScene
 	    final int newY = (int) (Math.random() * (420 - 72) + 72);
 	    redBox.move (newX, newY);
 	    redBox.setCollidable (true);
-	    System.err.println ("X: " + newX + ", Y: " + newY);
 	}
 	ignoreKeys = false;
     }

@@ -42,21 +42,11 @@ public class SquashGameScene
 
     public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
 
-    public static final Image GREEN_BALL_IMG = Utils.loadImage ("/squash_ball_green.png");
-
-    public static final Image BLUE_BALL_IMG = Utils.loadImage ("/squash_ball_blue.png");
-
-    public static final Image DEFAULT_BALL_IMG = Utils.loadImage ("/squash_ball.png");
-
     private PyCharacter py;
 
     private MainCharacter player;
 
-    private Sprite ball;
-
-    private double ballDirection;
-
-    private double ballSpeed;
+    private SquashBall ball;
 
     private int pyScore;
 
@@ -99,55 +89,26 @@ public class SquashGameScene
 	player.enable ();
 	this.instances.add (player);
 
-	ball = new Sprite (DEFAULT_BALL_IMG, new Point (342, 217))
+	ball = new SquashBall (new Point (342, 217))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
-		    ballDirection += 90 + 180 * Math.random ();
-		    ballSpeed += 0.3;
-		    if (other == player) setImage (GREEN_BALL_IMG);
-		    if (other == py) setImage (BLUE_BALL_IMG);
+		    super.onCollision (other, f);
+
+		    if (other == player) setImage (SquashBall.GREEN_BALL_IMG);
+		    if (other == py) setImage (SquashBall.BLUE_BALL_IMG);
 		}
 
 		@Override
-		public void update (long mills, GFrame f) {
-		    final double radDirection = Math.toRadians (ballDirection);
-		    translate ((int) (Math.cos (radDirection) * ballSpeed),
-			       (int) (Math.sin (radDirection) * ballSpeed));
-
-		    if (origin.x <= 0) {
-			ballDirection = 180 - ballDirection;
-			ballSpeed -= 0.1;
-			origin.x = 1;
-		    }
-		    if (origin.y <= 0) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = 1;
-		    }
-		    // Test right wall
-		    if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
-			if (image == BLUE_BALL_IMG) ++pyScore;
-			if (image == GREEN_BALL_IMG) ++playerScore;
-
-			image = DEFAULT_BALL_IMG;
-			origin.x = 342;
-			origin.y = 217;
-			ballDirection = 180;
-			ballSpeed = 5;
-		    }
-		    // Test bottom wall
-		    if (origin.y >= GFrame.HEIGHT - image.getHeight(null)) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = GFrame.HEIGHT - image.getHeight(null) - 1;
-		    }
+		public void onTakePoint () {
+		    if (image == SquashBall.BLUE_BALL_IMG) ++pyScore;
+		    if (image == SquashBall.GREEN_BALL_IMG) ++playerScore;
 		}
 	    };
-	ball.setCollidable (true);
+	ball.enable ();
 	this.instances.add (ball);
 
-	Text scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
+	final Text scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
 	    {
 		@Override
 		public void update (long mills, GFrame f) {
@@ -194,7 +155,7 @@ public class SquashGameScene
     }
 
     public boolean isBallBlue () {
-	return ball.getImage () == BLUE_BALL_IMG;
+	return ball.isBlue ();
     }
 
     @Override
@@ -254,9 +215,7 @@ public class SquashGameScene
 	player.dx = 0;
 	player.dy = 0;
 	player.move (342, 117);
-
-	ballDirection = 180;
-	ballSpeed = 5;
+	ball.resetAngleAndSpeed ();
     }
 
     @Override
