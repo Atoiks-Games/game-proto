@@ -51,9 +51,13 @@ public class CourtHallway
 
     public static final Image HORIZ = Utils.loadImage ("/court_hallway/horiz.png");
 
+    public static final Image VERT = Utils.loadImage ("/court_hallway/vert.png");
+
     public static final Point TOP_SPAWN = new Point (64, 12);
 
     public static final Point BOT_SPAWN = new Point (64, GFrame.HEIGHT - 12);
+
+    public static final Point RIGHT_SPAWN = new Point (600, GFrame.HEIGHT / 2 - 16);
 
     private MainCharacter player;
 
@@ -96,11 +100,22 @@ public class CourtHallway
 		    if (other == player) {
 			f.jumpToScene (2);
 		    }
-		    return;
 		}
 	    };
 	botDoor.enable ();
 	this.instances.add (botDoor);
+
+	final Sprite rightDoor = new Sprite (VERT, new Point (GFrame.WIDTH - VERT.getWidth (null), 181))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			System.err.println ("Leaving hallway");
+		    }
+		}
+	    };
+	rightDoor.enable ();
+	this.instances.add (rightDoor);
     }
 
     private CourtHallway () {
@@ -207,6 +222,7 @@ public class CourtHallway
 		default:
 		    break;
 		}
+	    boundCheck ();
 	}
     }
 
@@ -220,6 +236,25 @@ public class CourtHallway
         player.setIdleFrame ();
 	player.dx = 0;
 	player.dy = 0;
+	boundCheck ();
+    }
+
+    private void boundCheck () {
+	ignoreKeys = true;
+	final Point loc = player.getLocation ();
+	if (loc.x < 0) {
+	    player.move (0, loc.y);
+	}
+	if (loc.x > GFrame.WIDTH - 32) {
+	    player.move (GFrame.WIDTH - 32, loc.y);
+	}
+	if (loc.y < 0) {
+	    player.move (loc.x, 0);
+	}
+	if (loc.y > GFrame.HEIGHT - 32) {
+	    player.move (loc.x, GFrame.HEIGHT - 32);
+	}
+	ignoreKeys = false;
     }
 
     @Override
