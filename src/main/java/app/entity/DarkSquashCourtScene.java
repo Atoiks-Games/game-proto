@@ -28,47 +28,32 @@ import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JOptionPane;
 
-public class SquashGameScene
+public class DarkSquashCourtScene
     extends GScene
     implements GKeyListener, GStateListener {
 
-    private static SquashGameScene instance;
+    private static DarkSquashCourtScene instance;
 
-    public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
+    public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/left_full.png");
 
-    public static final Image GREEN_BALL_IMG = Utils.loadImage ("/squash_ball_green.png");
-
-    public static final Image BLUE_BALL_IMG = Utils.loadImage ("/squash_ball_blue.png");
-
-    public static final Image DEFAULT_BALL_IMG = Utils.loadImage ("/squash_ball.png");
-
-    private PyCharacter py;
+    private final Shader greyShader = new Shader (new Color (0x2A, 0x2A, 0x2A, (int) (255 * 0.75)));
 
     private MainCharacter player;
 
-    private Sprite ball;
-
-    private double ballDirection;
-
-    private double ballSpeed;
-
-    private int pyScore;
-
-    private int playerScore;
-
     private boolean ignoreKeys;
 
-    public static SquashGameScene getInstance () {
+    public static DarkSquashCourtScene getInstance () {
 	if (instance == null) {
-	    synchronized (SquashGameScene.class) {
+	    synchronized (DarkSquashCourtScene.class) {
 		if (instance == null) {
-		    instance = new SquashGameScene ();
+		    instance = new DarkSquashCourtScene ();
 		}
 	    }
 	}
@@ -76,93 +61,69 @@ public class SquashGameScene
     }
 
     private void initComponents () {
-	Sprite dummy = new Sprite (null, new Point (0, 0))
-	    {
-		@Override
-		public void update (long mills, GFrame f) {
-		    if (pyScore >= 11) {
-			f.dispose ();
-			JOptionPane.showMessageDialog(null, "You're trash");
-		    }
-		    if (playerScore >= 11) {
-			f.jumpToScene (0);
-		    }
-		}
-	    };
-	this.instances.add (dummy);
-
-	py = new PyCharacter (new Point (342, 317), 8);
-	py.setCollidable (true);
-	this.instances.add (py);
-
 	player = new MainCharacter (new Point (300, 380), 8);
 	player.enable ();
 	this.instances.add (player);
 
-	ball = new Sprite (DEFAULT_BALL_IMG, new Point (342, 217))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point (306, GFrame.HEIGHT - 3))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
-		    ballDirection += 90 + 180 * Math.random ();
-		    ballSpeed += 0.3;
-		    if (other == player) setImage (GREEN_BALL_IMG);
-		    if (other == py) setImage (BLUE_BALL_IMG);
-		}
-
-		@Override
-		public void update (long mills, GFrame f) {
-		    final double radDirection = Math.toRadians (ballDirection);
-		    translate ((int) (Math.cos (radDirection) * ballSpeed),
-			       (int) (Math.sin (radDirection) * ballSpeed));
-
-		    if (origin.x <= 0) {
-			ballDirection = 180 - ballDirection;
-			ballSpeed -= 0.1;
-			origin.x = 1;
-		    }
-		    if (origin.y <= 0) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = 1;
-		    }
-		    // Test right wall
-		    if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
-			if (image == BLUE_BALL_IMG) ++pyScore;
-			if (image == GREEN_BALL_IMG) ++playerScore;
-
-			image = DEFAULT_BALL_IMG;
-			origin.x = 342;
-			origin.y = 217;
-			ballDirection = 180;
-			ballSpeed = 5;
-		    }
-		    // Test bottom wall
-		    if (origin.y >= GFrame.HEIGHT - image.getHeight(null)) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = GFrame.HEIGHT - image.getHeight(null) - 1;
+		    if (other == player) {
+			final CourtHallway hway = CourtHallway.getInstance ();
+			hway.playerSpawn = new Point (CourtHallway.BOT_SPAWN);
+			f.jumpToScene (3);
 		    }
 		}
 	    };
-	ball.setCollidable (true);
-	this.instances.add (ball);
+	door.enable();
+	this.instances.add (door);
 
-	Text scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
-	    {
-		@Override
-		public void update (long mills, GFrame f) {
-		    setText ("PY: " + pyScore + "\nPlayer: " + playerScore);
-		}
-	    };
-	this.instances.add (scoreBoard);
+	// THIS has to be the last item added
+	this.instances.add (greyShader);
     }
 
-    private SquashGameScene () {
-	super (SQUASH_COURT_SIDE);
+    private DarkSquashCourtScene () {
+	super (null);
+
+	final Floor base = new Floor (SquashCourtScene.SQUASH_COURT);
+	final Sprite rightBorder = new Sprite (SquashCourtScene.BORDER_RIGHT,
+					       new Point (700 - 186, 0))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			player.translate (-player.dx - 2, 0);
+		    }
+		}
+	    };
+	rightBorder.enable ();
+
+	final Sprite leftBorder = new Sprite (BORDER_LEFT, new Point (0, 52))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			player.translate (-player.dx + 2, 0);
+		    }
+		}
+	    };
+	leftBorder.enable ();
+	// Set court as floor!
+	this.instances.set (0, new Group (base, rightBorder, leftBorder));
+
 	initComponents ();
 
 	addGKeyListener (this);
 	addGStateListener (this);
+    }
+
+    public boolean isLightOff () {
+	return greyShader.isVisible ();
+    }
+
+    public void toggleLight () {
+        greyShader.setVisible (!greyShader.isVisible ());
     }
 
     private void playerBoundCheck () {
@@ -170,8 +131,8 @@ public class SquashGameScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 32) {
-	    player.move (loc.x, GFrame.HEIGHT - 32);
+	if (loc.y > GFrame.HEIGHT - 64) {
+	    player.move (loc.x, GFrame.HEIGHT - 64);
 	}
 	if (loc.x < 0) {
 	    player.move (0, loc.y);
@@ -179,22 +140,6 @@ public class SquashGameScene
 	if (loc.x > GFrame.WIDTH - 32) {
 	    player.move (GFrame.WIDTH - 32, loc.y);
 	}
-    }
-
-    public int getPyScore () {
-	return pyScore;
-    }
-
-    public int getPlayerScore () {
-	return playerScore;
-    }
-
-    public Point getBallLocation () {
-	return ball.getLocation ();
-    }
-
-    public boolean isBallBlue () {
-	return ball.getImage () == BLUE_BALL_IMG;
     }
 
     @Override
@@ -240,7 +185,7 @@ public class SquashGameScene
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_Q:
-		    JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
+		    JOptionPane.showMessageDialog(null, "??? ??? ??? ??? ???");
 		    break;
 		default:
 		    break;
@@ -253,10 +198,7 @@ public class SquashGameScene
     public void onEnter () {
 	player.dx = 0;
 	player.dy = 0;
-	player.move (342, 117);
-
-	ballDirection = 180;
-	ballSpeed = 5;
+	player.move (300, 380);
     }
 
     @Override

@@ -78,8 +78,11 @@ public class Main {
     public void run () {
 	final SquashCourtScene scene0 = SquashCourtScene.getInstance ();
 	final SquashGameScene scene1 = SquashGameScene.getInstance ();
+	final DarkSquashCourtScene scene2 = DarkSquashCourtScene.getInstance ();
+	final CourtHallway scene3 = CourtHallway.getInstance ();
 
-	final GFrame app = new GFrame("Staventure", scene0, scene1);
+	final GFrame app = new GFrame("Staventure",
+				      scene0, scene1, scene2, scene3);
 	app.setVisible (true);
     }
 }

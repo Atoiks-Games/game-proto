@@ -34,15 +34,13 @@ import java.awt.Point;
 
 import java.io.IOException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class MainCharacter extends Sprite2D {
 
     private static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
 
-    private AtomicInteger dx;
+    public int dx;
 
-    private AtomicInteger dy;
+    public int dy;
 
     private int idx = 1;
 
@@ -70,17 +68,14 @@ public class MainCharacter extends Sprite2D {
 	}
     }
 
-    public MainCharacter (Point pt, int fps,
-			  AtomicInteger dx, AtomicInteger dy) {
+    public MainCharacter (Point pt, int fps) {
 	super (0, pt, fps, DIRECTION_SHEET[1][0]);
-	this.dx = dx;
-	this.dy = dy;
     }
 
     @Override
     public void update (long mills, GFrame f) {
 	super.update (mills, f);
-	translate (dx.get(), dy.get());
+	translate (dx, dy);
     }
 
     public void directionUp () {

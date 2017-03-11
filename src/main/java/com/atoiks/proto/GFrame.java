@@ -53,7 +53,7 @@ public class GFrame extends JFrame {
 
     public GFrame (String title, GScene... scenes) {
 	super (title);
-	setSize (WIDTH, HEIGHT);
+	setSize (WIDTH + 6, HEIGHT + 30);
 	setResizable (false);
 	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
