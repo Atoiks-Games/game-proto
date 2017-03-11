@@ -99,7 +99,7 @@ public class DarkSquashCourtScene
 	    };
 	rightBorder.enable ();
 
-	final Sprite leftBorder = new Sprite (BORDER_LEFT, new Point (0, 52))
+	final Sprite leftBorder = new Sprite (BORDER_LEFT, new Point (0, 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -166,21 +166,29 @@ public class DarkSquashCourtScene
 		{
 		case KeyEvent.VK_A:
 		    player.dx = -5;
+		    player.dy = 0;
+
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_D:
 		    player.dx = 5;
+		    player.dy = 0;
+
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_W:
+		    player.dx = 0;
 		    player.dy = -5;
+
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_S:
+		    player.dx = 0;
 		    player.dy = 5;
+
 		    player.directionDown ();
 		    player.setActiveFrame ();
 		    break;
