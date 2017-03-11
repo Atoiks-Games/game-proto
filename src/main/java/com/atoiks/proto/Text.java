@@ -108,68 +108,34 @@ public class Text implements GComponent {
         return false;
     }
 
-    /**
-     * Sets the string being rendered.
-     */
     public void setText (String text) {
 	this.text = text;
     }
 
-    /**
-     * Get the string being rendered.
-     *
-     * @return The text
-     */
     public String getText () {
 	return this.text;
     }
 
-    /**
-     * Sets the font.
-     */
     public void setFont (Font f) {
 	this.font = f;
     }
 
-    /**
-     * Get the font.
-     *
-     * @return The font
-     */
     public Font getFont () {
 	return this.font;
     }
 
-    /**
-     * Sets the color
-     */
     public void setColor (Color c) {
 	this.color = c;
     }
 
-    /**
-     * Get the color.
-     *
-     * @return The color
-     */
     public Color getColor () {
 	return this.color;
     }
 
-    /**
-     * Set visibility
-     *
-     * @param flag The visibility
-     */
     public void setVisible (boolean flag) {
 	this.visible = flag;
     }
 
-    /**
-     * Get visibility
-     *
-     * @return true if visible, false otherwise
-     */
     public boolean isVisible () {
 	return visible;
     }
@@ -194,20 +160,10 @@ public class Text implements GComponent {
 	origin.translate (dx, dy);
     }
 
-    /**
-     * Get the origin
-     *
-     * @return origin
-     */
     public Point getLocation () {
 	return origin;
     }
 
-    /**
-     * Sets the origin
-     *
-     * @param pt New origin
-     */
     public void setLocation (Point pt) {
 	origin = pt;
     }
