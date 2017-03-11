@@ -29,6 +29,7 @@ import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
@@ -39,6 +40,8 @@ public class DarkSquashCourtScene
     implements GKeyListener, GStateListener {
 
     private static DarkSquashCourtScene instance;
+
+    public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/left_full.png");
 
     private final Shader greyShader = new Shader (new Color (0x2A, 0x2A, 0x2A, (int) (255 * 0.75)));
 
@@ -62,27 +65,53 @@ public class DarkSquashCourtScene
 	player.enable ();
 	this.instances.add (player);
 
-	Sprite light = new Sprite (SquashCourtScene.GREEN_BOX,
-				   new Point (GFrame.WIDTH - 15, 0))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point (306, GFrame.HEIGHT - 3))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			final CourtHallway hway = CourtHallway.getInstance ();
+			hway.playerSpawn = new Point (CourtHallway.BOT_SPAWN);
+			f.jumpToScene (3);
+		    }
+		}
+	    };
+	door.enable();
+	this.instances.add (door);
+
+	// THIS has to be the last item added
+	this.instances.add (greyShader);
+    }
+
+    private DarkSquashCourtScene () {
+	super (null);
+
+	final Floor base = new Floor (SquashCourtScene.SQUASH_COURT);
+	final Sprite rightBorder = new Sprite (SquashCourtScene.BORDER_RIGHT,
+					       new Point (700 - 186, 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
 			player.translate (-player.dx - 2, 0);
-			toggleLight ();
 		    }
 		}
 	    };
-	light.setVisible (false);
-	light.setCollidable (true);
-	this.instances.add (light);
+	rightBorder.enable ();
 
-	// This has to be the last item added
-	this.instances.add (greyShader);
-    }
+	final Sprite leftBorder = new Sprite (BORDER_LEFT, new Point (0, 52))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			player.translate (-player.dx + 2, 0);
+		    }
+		}
+	    };
+	leftBorder.enable ();
+	// Set court as floor!
+	this.instances.set (0, new Group (base, rightBorder, leftBorder));
 
-    private DarkSquashCourtScene () {
-	super (SquashGameScene.SQUASH_COURT_SIDE);
 	initComponents ();
 
 	addGKeyListener (this);

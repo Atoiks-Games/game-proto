@@ -53,9 +53,11 @@ public class CourtHallway
 
     public static final Image VERT = Utils.loadImage ("/court_hallway/vert.png");
 
+    public static final Image LIGHT = Utils.loadImage ("/court_hallway/light.png");
+
     public static final Point TOP_SPAWN = new Point (64, 12);
 
-    public static final Point BOT_SPAWN = new Point (64, GFrame.HEIGHT - 12);
+    public static final Point BOT_SPAWN = new Point (64, GFrame.HEIGHT - 42);
 
     public static final Point RIGHT_SPAWN = new Point (600, GFrame.HEIGHT / 2 - 16);
 
@@ -116,6 +118,20 @@ public class CourtHallway
 	    };
 	rightDoor.enable ();
 	this.instances.add (rightDoor);
+
+	final Sprite light = new Sprite (LIGHT, new Point (0, 410))
+	    {
+		@Override
+		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			final DarkSquashCourtScene tmp = DarkSquashCourtScene.getInstance ();
+			tmp.toggleLight ();
+			player.translate (-player.dx + 2, 0);
+		    }
+		}
+	    };
+	light.enable ();
+	this.instances.add (light);
     }
 
     private CourtHallway () {
