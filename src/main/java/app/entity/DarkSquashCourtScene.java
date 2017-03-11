@@ -32,8 +32,6 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.JOptionPane;
 
 public class DarkSquashCourtScene
@@ -45,10 +43,6 @@ public class DarkSquashCourtScene
     private final Shader greyShader = new Shader (new Color (0x2A, 0x2A, 0x2A, (int) (255 * 0.75)));
 
     private MainCharacter player;
-
-    private AtomicInteger playerSpeedX;
-
-    private AtomicInteger playerSpeedY;
 
     private boolean ignoreKeys;
 
@@ -64,10 +58,7 @@ public class DarkSquashCourtScene
     }
 
     private void initComponents () {
-	playerSpeedX = new AtomicInteger (0);
-	playerSpeedY = new AtomicInteger (0);
-	player = new MainCharacter (new Point (300, 380), 8,
-				    playerSpeedX, playerSpeedY);
+	player = new MainCharacter (new Point (300, 380), 8);
 	player.enable ();
 	this.instances.add (player);
 
@@ -77,7 +68,7 @@ public class DarkSquashCourtScene
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
-			player.translate (-playerSpeedX.get() - 2, 0);
+			player.translate (-player.dx - 2, 0);
 			toggleLight ();
 		    }
 		}
@@ -135,8 +126,8 @@ public class DarkSquashCourtScene
 	    return;
 	}
 	player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+        player.dx = 0;
+	player.dy = 0;
     }
 
     @Override
@@ -145,22 +136,22 @@ public class DarkSquashCourtScene
 	    switch (e.getKeyCode())
 		{
 		case KeyEvent.VK_A:
-		    playerSpeedX.set(-5);
+		    player.dx = -5;
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_D:
-		    playerSpeedX.set(5);
+		    player.dx = 5;
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_W:
-		    playerSpeedY.set(-5);
+		    player.dy = -5;
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_S:
-		    playerSpeedY.set(5);
+		    player.dy = 5;
 		    player.directionDown ();
 		    player.setActiveFrame ();
 		    break;
@@ -176,8 +167,8 @@ public class DarkSquashCourtScene
 
     @Override
     public void onEnter () {
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+	player.dx = 0;
+	player.dy = 0;
 	player.move (300, 380);
     }
 

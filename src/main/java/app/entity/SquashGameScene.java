@@ -32,8 +32,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.JOptionPane;
 
 public class SquashGameScene
@@ -66,10 +64,6 @@ public class SquashGameScene
 
     private boolean ignoreKeys;
 
-    private AtomicInteger playerSpeedX;
-
-    private AtomicInteger playerSpeedY;
-
     public static SquashGameScene getInstance () {
 	if (instance == null) {
 	    synchronized (SquashGameScene.class) {
@@ -101,10 +95,7 @@ public class SquashGameScene
 	py.setCollidable (true);
 	this.instances.add (py);
 
-	playerSpeedX = new AtomicInteger (0);
-	playerSpeedY = new AtomicInteger (0);
-	player = new MainCharacter (new Point (300, 380), 8,
-				    playerSpeedX, playerSpeedY);
+	player = new MainCharacter (new Point (300, 380), 8);
 	player.enable ();
 	this.instances.add (player);
 
@@ -219,8 +210,8 @@ public class SquashGameScene
 	    return;
 	}
 	player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+        player.dx = 0;
+	player.dy = 0;
     }
 
     @Override
@@ -229,22 +220,22 @@ public class SquashGameScene
 	    switch (e.getKeyCode())
 		{
 		case KeyEvent.VK_A:
-		    playerSpeedX.set(-5);
+		    player.dx = -5;
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_D:
-		    playerSpeedX.set(5);
+		    player.dx = 5;
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_W:
-		    playerSpeedY.set(-5);
+		    player.dy = -5;
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_S:
-		    playerSpeedY.set(5);
+		    player.dy = 5;
 		    player.directionDown ();
 		    player.setActiveFrame ();
 		    break;
@@ -260,8 +251,8 @@ public class SquashGameScene
 
     @Override
     public void onEnter () {
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+	player.dx = 0;
+	player.dy = 0;
 	player.move (342, 117);
 
 	ballDirection = 180;

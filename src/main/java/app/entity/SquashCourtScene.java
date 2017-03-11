@@ -32,8 +32,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -59,10 +57,6 @@ public class SquashCourtScene
 
     private boolean ignoreKeys;
 
-    private AtomicInteger playerSpeedX;
-
-    private AtomicInteger playerSpeedY;
-
     public static SquashCourtScene getInstance () {
 	if (instance == null) {
 	    synchronized (SquashCourtScene.class) {
@@ -75,10 +69,7 @@ public class SquashCourtScene
     }
 
     private void initComponents () {
-	playerSpeedX = new AtomicInteger (0);
-	playerSpeedY = new AtomicInteger (0);
-	player = new MainCharacter (new Point (300, 380), 8,
-				    playerSpeedX, playerSpeedY);
+	player = new MainCharacter (new Point (300, 380), 8);
 	player.enable ();
 	this.instances.add (player);
 
@@ -148,7 +139,7 @@ public class SquashCourtScene
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
-			player.translate (-playerSpeedX.get() - 2, 0);
+			player.translate (-player.dx - 2, 0);
 		    }
 		}
 	    };
@@ -160,10 +151,10 @@ public class SquashCourtScene
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
-			if (playerSpeedY.get() != 0) {
-			    player.translate (0, -playerSpeedY.get() - 2);
+			if (player.dy != 0) {
+			    player.translate (0, -player.dy - 2);
 			} else {
-			    player.translate (-playerSpeedX.get() + 2, 0);
+			    player.translate (-player.dx + 2, 0);
 			}
 		    }
 		}
@@ -190,8 +181,8 @@ public class SquashCourtScene
 	    return;
 	}
         player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+	player.dx = 0;
+	player.dy = 0;
     }
 
     @Override
@@ -200,32 +191,32 @@ public class SquashCourtScene
 	    switch (e.getKeyCode())
 		{
 		case KeyEvent.VK_A:
-		    playerSpeedX.set(-5);
-		    playerSpeedY.set(0);
+		    player.dx = -5;
+		    player.dy = 0;
 
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_D:
-		    playerSpeedX.set(5);
-		    playerSpeedY.set(0);
+		    player.dx = 5;
+		    player.dy = 0;
 
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_W:
-		    playerSpeedX.set(0);
-		    playerSpeedY.set(-5);
+		    player.dx = 0;
+		    player.dy = -5;
 
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_S:
-		    playerSpeedX.set(0);
-		    playerSpeedY.set(5);
+		    player.dx = 0;
+		    player.dy = 5;
 
 		    player.directionDown ();
 		    player.setActiveFrame ();
@@ -271,8 +262,8 @@ public class SquashCourtScene
     @Override
     public void onEnter () {
 	player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+        player.dx = 0;
+	player.dy = 0;
     }
 
     @Override
