@@ -46,17 +46,13 @@ public class GStateTest implements GStateListener {
 
     private int pstate;
 
-    private GScene scene0;
-
-    private GScene scene1;
-
     private HeadlessFrame f;
 
     @Before
     public void initComponent () {
-	scene0 = new GScene (null);
+	final GScene scene0 = new GScene (null);
 	scene0.addGStateListener (this);
-	scene1 = new GScene (null);
+	final GScene scene1 = new GScene (null);
 	f = new HeadlessFrame (100, 100, scene0, scene1);
     }
 

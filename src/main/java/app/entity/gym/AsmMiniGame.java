@@ -42,12 +42,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import java.util.Arrays;
 
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
