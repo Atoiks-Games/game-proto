@@ -24,9 +24,19 @@
 
 package com.atoiks.proto;
 
+import java.awt.Image;
+import java.awt.Graphics;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
 
+/**
+ * A frame that does not actually create a window.
+ *
+ * TODO: Add support for key events
+ */
 public class HeadlessFrame implements GFrame {
+
+    private BufferedImage img;
 
     private int width;
 
@@ -39,10 +49,13 @@ public class HeadlessFrame implements GFrame {
     private boolean pauseFlag;
 
     private boolean visibleFlag;
+
+    private long lastTime;
     
     public HeadlessFrame (int width, int height, GScene... scenes) {
 	this.width = width;
 	this.height = height;
+	this.img = new BufferedImage (width, height, BufferedImage.TYPE_INT_ARGB);
 	this.scenes = scenes;
 	scenes[this.sceneIdx = 0].onEnterTrigger ();
     }
@@ -113,5 +126,26 @@ public class HeadlessFrame implements GFrame {
     @Override
     public void dispose () {
 	// Do nothing
+    }
+
+    public void setLastTimeToNow () {
+	lastTime = System.currentTimeMillis ();
+    }
+
+    public void nextStep () {
+	final long current = System.currentTimeMillis ();
+	if (!pauseFlag) {
+	    scenes[sceneIdx].collisionStep (this);
+	    scenes[sceneIdx].updateStep (current - lastTime, this);
+
+	    final Graphics g = img.createGraphics ();
+	    scenes[sceneIdx].renderStep (g);
+	    g.dispose ();
+	}
+	lastTime = current;
+    }
+
+    public Image getImage () {
+	return img;
     }
 }
