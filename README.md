@@ -1,4 +1,4 @@
-# Staventure
+# Staventure [![Build Status](https://travis-ci.org/Atoiks-Games/staventure.svg?branch=master)](https://travis-ci.org/Atoiks-Games/staventure) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/57131ef5b1674972b3b770975e32d201)](https://www.codacy.com/app/plankp/staventure?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Atoiks-Games/staventure&amp;utm_campaign=Badge_Grade) [![codecov.io](https://codecov.io/github/Atoiks-Games/staventure/coverage.svg?branch=master)](https://codecov.io/github/Atoiks-Games/staventure?branch=master)
 
 The game that you could play during school time because there is no music!!!
 
