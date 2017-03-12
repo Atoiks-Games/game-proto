@@ -68,6 +68,11 @@ public interface GFrame {
     public void setVisible (boolean f);
 
     /**
+     * @return visibility
+     */
+    public boolean isVisible ();
+
+    /**
      * @return Width of the scene
      */
     public int getFrameWidth ();
