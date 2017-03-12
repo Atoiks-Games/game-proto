@@ -28,17 +28,24 @@ import com.atoiks.proto.GFrame;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * An abstract adapter class for key events. The methods in this class are
+ * empty.
+ */
 public abstract class GKeyAdapter implements GKeyListener {
 
     @Override
     public void keyTyped (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 
     @Override
     public void keyPressed (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 
     @Override
     public void keyReleased (KeyEvent e, GFrame frame) {
+	// Do nothing
     }
 }

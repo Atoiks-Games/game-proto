@@ -24,29 +24,75 @@
 
 package com.atoiks.proto.event;
 
-/**
- * An abstract adapter class for GFrame events. The methods in this class are
- * empty.
- */
-public abstract class GStateAdapter implements GStateListener {
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+import org.junit.Before;
+
+import com.atoiks.proto.GScene;
+import com.atoiks.proto.HeadlessFrame;
+
+public class GStateTest implements GStateListener {
+
+    public static final int FOCUSED = 1;
+
+    public static final int NOT_FOCUSED = 0;
+
+    public static final int PAUSED = 1;
+
+    public static final int RUNNING = 0;
+
+    private int state;
+
+    private int pstate;
+
+    private HeadlessFrame f;
+
+    @Before
+    public void initComponent () {
+	final GScene scene0 = new GScene (null);
+	scene0.addGStateListener (this);
+	final GScene scene1 = new GScene (null);
+	f = new HeadlessFrame (100, 100, scene0, scene1);
+    }
+
+    @Test
+    public void testSceneChange () {
+	f.jumpToScene (1);
+	assertEquals ("Expected state to be NOT FOCUSED", NOT_FOCUSED, state);
+	f.jumpToScene (0);
+	assertEquals ("Expected state to be FOCUSED", FOCUSED, state);
+    }
+
+    @Test
+    public void testPause () {
+	f.pause ();
+	assertEquals ("Expected pstate to be PAUSE", PAUSED, pstate);
+    }
+
+    @Test
+    public void testResume () {
+	f.resume ();
+	assertEquals ("Expected pstate to be RUNNING", RUNNING, pstate);
+    }
 
     @Override
     public void onEnter () {
-	// Do nothing
+	state = FOCUSED;
     }
 
     @Override
     public void onLeave () {
-	// Do nothing
+	state = NOT_FOCUSED;
     }
 
     @Override
     public void onPause () {
-	// Do nothing
+	pstate = PAUSED;
     }
 
     @Override
     public void onResume () {
-	// Do nothing
+	pstate = RUNNING;
     }
 }

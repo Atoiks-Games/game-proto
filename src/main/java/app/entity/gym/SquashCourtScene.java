@@ -22,7 +22,12 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
+
+import static app.Main.HEIGHT;
+
+import app.entity.Utils;
+import app.entity.MainCharacter;
 
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyListener;
@@ -32,8 +37,6 @@ import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -42,6 +45,24 @@ public class SquashCourtScene
     implements GKeyListener, GStateListener {
 
     private static SquashCourtScene instance;
+
+    public static final Image RED_BOX = Utils.loadImage ("/red_box.bmp");
+
+    public static final Image GREEN_BOX = Utils.loadImage ("/green_box.png");
+
+    public static final Image SQUASH_COURT = Utils.loadImage ("/squash_court/spr1.png");
+
+    public static final Image BORDER_RIGHT = Utils.loadImage ("/squash_court/border_right.png");
+
+    public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/border_left.png");
+
+    public static final Point SPAWN = new Point (300, 380);
+
+    private MainCharacter player;
+
+    private Sprite redBox;
+
+    private boolean ignoreKeys;
 
     public static SquashCourtScene getInstance () {
 	if (instance == null) {
@@ -54,35 +75,8 @@ public class SquashCourtScene
 	return instance;
     }
 
-    public static final Image RED_BOX = Utils.loadImage ("/red_box.bmp");
-
-    public static final Image GREEN_BOX = Utils.loadImage ("/green_box.png");
-
-    public static final Image SQUASH_COURT = Utils.loadImage ("/squash_court/spr1.png");
-
-    public static final Image BORDER_RIGHT = Utils.loadImage ("/squash_court/border_right.png");
-
-    public static final Image BORDER_LEFT = Utils.loadImage ("/squash_court/border_left.png");
-
-    private Group court;
-
-    private MainCharacter player;
-
-    private Sprite redBox;
-
-    private Sprite greenBox;
-
-    private boolean ignoreKeys;
-
-    private AtomicInteger playerSpeedX;
-
-    private AtomicInteger playerSpeedY;
-
     private void initComponents () {
-	playerSpeedX = new AtomicInteger (0);
-	playerSpeedY = new AtomicInteger (0);
-	player = new MainCharacter (new Point (300, 380), 8,
-				    playerSpeedX, playerSpeedY);
+	player = new MainCharacter (new Point (SPAWN), 8);
 	player.enable ();
 	this.instances.add (player);
 
@@ -103,10 +97,24 @@ public class SquashCourtScene
 	redBox.disable ();
 	this.instances.add (redBox);
 
-	greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point(306, HEIGHT - 3))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
+		    if (other == player) {
+			final CourtHallway hway = CourtHallway.getInstance ();
+			hway.playerSpawn = new Point (CourtHallway.TOP_SPAWN);
+			f.jumpToScene (3);
+		    }
+		}
+	    };
+	door.enable();
+	this.instances.add (door);
+
+	final Sprite greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
+	    {
+		@Override
+		public void onCollision (Sprite other, final GFrame f) {
 		    if (other == player) {
 			setCollidable (false);
 			ignoreKeys = true;
@@ -152,7 +160,7 @@ public class SquashCourtScene
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
-			player.translate (-playerSpeedX.get() - 2, 0);
+			player.translate (-player.dx - 2, 0);
 		    }
 		}
 	    };
@@ -164,18 +172,17 @@ public class SquashCourtScene
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
 		    if (other == player) {
-			if (playerSpeedY.get() != 0) {
-			    player.translate (0, -playerSpeedY.get() - 2);
+			if (player.dy != 0) {
+			    player.translate (0, -player.dy - 2);
 			} else {
-			    player.translate (-playerSpeedX.get() + 2, 0);
+			    player.translate (-player.dx + 2, 0);
 			}
 		    }
 		}
 	    };
 	leftBorder.enable ();
-	court = new Group (base, rightBorder, leftBorder);
 	// Set court as floor!
-	this.instances.set (0, court);
+	this.instances.set (0, new Group (base, rightBorder, leftBorder));
 
 	initComponents ();
 
@@ -185,6 +192,7 @@ public class SquashCourtScene
 
     @Override
     public void keyTyped (KeyEvent e, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -195,8 +203,9 @@ public class SquashCourtScene
 	    return;
 	}
         player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+	player.dx = 0;
+	player.dy = 0;
+	boundCheck ();
     }
 
     @Override
@@ -205,32 +214,32 @@ public class SquashCourtScene
 	    switch (e.getKeyCode())
 		{
 		case KeyEvent.VK_A:
-		    playerSpeedX.set(-5);
-		    playerSpeedY.set(0);
+		    player.dx = -5;
+		    player.dy = 0;
 
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_D:
-		    playerSpeedX.set(5);
-		    playerSpeedY.set(0);
+		    player.dx = 5;
+		    player.dy = 0;
 
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_W:
-		    playerSpeedX.set(0);
-		    playerSpeedY.set(-5);
+		    player.dx = 0;
+		    player.dy = -5;
 
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    redTileConditions ();
 		    break;
 		case KeyEvent.VK_S:
-		    playerSpeedX.set(0);
-		    playerSpeedY.set(5);
+		    player.dx = 0;
+		    player.dy = 5;
 
 		    player.directionDown ();
 		    player.setActiveFrame ();
@@ -239,22 +248,23 @@ public class SquashCourtScene
 		case KeyEvent.VK_Q:
 		    JOptionPane.showMessageDialog(null, "Move around!");
 		    break;
+		default:
+		    break;
 		}
-
-	    Point loc = player.getLocation ();
-	    if (loc.y < 0) {
-		player.move (loc.x, 0);
-	    }
-	    if (loc.y > 380) {
-		player.move (loc.x, 380);
-	    }
-
-	    loc = player.getLocation ();
-	    if (loc.x > 300 && loc.x < 333 && loc.y > 370) {
-		System.err.println ("Leaving squash court");
-		return;
-	    }
+	    boundCheck ();
 	}
+    }
+
+    private void boundCheck () {
+	ignoreKeys = true;
+	final Point loc = player.getLocation ();
+	if (loc.y < 0) {
+	    player.move (loc.x, 0);
+	}
+	if (loc.y > HEIGHT - 32) {
+	    player.move (loc.x, HEIGHT - 32);
+	}
+	ignoreKeys = false;
     }
 
     private void redTileConditions () {
@@ -266,7 +276,6 @@ public class SquashCourtScene
 	    final int newY = (int) (Math.random() * (420 - 72) + 72);
 	    redBox.move (newX, newY);
 	    redBox.setCollidable (true);
-	    System.err.println ("X: " + newX + ", Y: " + newY);
 	}
 	ignoreKeys = false;
     }
@@ -274,12 +283,14 @@ public class SquashCourtScene
     @Override
     public void onEnter () {
 	player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+        player.dx = 0;
+	player.dy = 0;
+	player.setLocation (new Point (SPAWN));
     }
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override

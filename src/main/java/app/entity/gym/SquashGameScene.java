@@ -22,19 +22,21 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
+
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
+import app.entity.Utils;
+import app.entity.MainCharacter;
 
 import com.atoiks.proto.*;
 import com.atoiks.proto.event.GKeyListener;
 import com.atoiks.proto.event.GStateListener;
 
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 
 public class SquashGameScene
@@ -42,6 +44,20 @@ public class SquashGameScene
     implements GKeyListener, GStateListener {
 
     private static SquashGameScene instance;
+
+    public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
+
+    private PyCharacter py;
+
+    private MainCharacter player;
+
+    private SquashBall ball;
+
+    private int pyScore;
+
+    private int playerScore;
+
+    private boolean ignoreKeys;
 
     public static SquashGameScene getInstance () {
 	if (instance == null) {
@@ -54,40 +70,8 @@ public class SquashGameScene
 	return instance;
     }
 
-    public static final Floor SQUASH_COURT_SIDE = new Floor (Utils.loadImage ("/squash_court_side.png"));
-
-    public static final Image GREEN_BALL_IMG = Utils.loadImage ("/squash_ball_green.png");
-
-    public static final Image BLUE_BALL_IMG = Utils.loadImage ("/squash_ball_blue.png");
-
-    public static final Image DEFAULT_BALL_IMG = Utils.loadImage ("/squash_ball.png");
-
-    private Sprite dummy;
-
-    private PyCharacter py;
-
-    private MainCharacter player;
-
-    private Sprite ball;
-
-    private Text scoreBoard;
-
-    private double ballDirection;
-
-    private double ballSpeed;
-
-    private int pyScore;
-
-    private int playerScore;
-
-    private boolean ignoreKeys;
-
-    private AtomicInteger playerSpeedX;
-
-    private AtomicInteger playerSpeedY;
-
     private void initComponents () {
-	dummy = new Sprite (null, new Point (0, 0))
+	Sprite dummy = new Sprite (null, new Point (0, 0))
 	    {
 		@Override
 		public void update (long mills, GFrame f) {
@@ -106,62 +90,30 @@ public class SquashGameScene
 	py.setCollidable (true);
 	this.instances.add (py);
 
-	playerSpeedX = new AtomicInteger (0);
-	playerSpeedY = new AtomicInteger (0);
-	player = new MainCharacter (new Point (300, 380), 8,
-				    playerSpeedX, playerSpeedY);
+	player = new MainCharacter (new Point (300, 380), 8);
 	player.enable ();
 	this.instances.add (player);
 
-	ball = new Sprite (DEFAULT_BALL_IMG, new Point (342, 217))
+	ball = new SquashBall (new Point (342, 217))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
-		    ballDirection += 90 + 180 * Math.random ();
-		    ballSpeed += 0.3;
-		    if (other == player) setImage (GREEN_BALL_IMG);
-		    if (other == py) setImage (BLUE_BALL_IMG);
+		    super.onCollision (other, f);
+
+		    if (other == player) setImage (SquashBall.GREEN_BALL_IMG);
+		    if (other == py) setImage (SquashBall.BLUE_BALL_IMG);
 		}
 
 		@Override
-		public void update (long mills, GFrame f) {
-		    final double radDirection = Math.toRadians (ballDirection);
-		    translate ((int) (Math.cos (radDirection) * ballSpeed),
-			       (int) (Math.sin (radDirection) * ballSpeed));
-
-		    if (origin.x <= 0) {
-			ballDirection = 180 - ballDirection;
-			ballSpeed -= 0.1;
-			origin.x = 1;
-		    }
-		    if (origin.y <= 0) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = 1;
-		    }
-		    // Test right wall
-		    if (origin.x >= GFrame.WIDTH - image.getWidth(null) - 10) {
-			if (image == BLUE_BALL_IMG) ++pyScore;
-			if (image == GREEN_BALL_IMG) ++playerScore;
-
-			image = DEFAULT_BALL_IMG;
-			origin.x = 342;
-			origin.y = 217;
-			ballDirection = 180;
-			ballSpeed = 5;
-		    }
-		    // Test bottom wall
-		    if (origin.y >= GFrame.HEIGHT - image.getHeight(null) - 30) {
-			ballDirection *= -1;
-			ballSpeed -= 0.1;
-			origin.y = GFrame.HEIGHT - image.getHeight(null) - 31;
-		    }
+		public void onTakePoint () {
+		    if (image == SquashBall.BLUE_BALL_IMG) ++pyScore;
+		    if (image == SquashBall.GREEN_BALL_IMG) ++playerScore;
 		}
 	    };
-	ball.setCollidable (true);
+	ball.enable ();
 	this.instances.add (ball);
 
-	scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
+	final Text scoreBoard = new Text ("PY: 0\nPlayer: 0", new Point (10, 15))
 	    {
 		@Override
 		public void update (long mills, GFrame f) {
@@ -184,14 +136,14 @@ public class SquashGameScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 64) {
-	    player.move (loc.x, GFrame.HEIGHT - 64);
+	if (loc.y > HEIGHT - 32) {
+	    player.move (loc.x, HEIGHT - 32);
 	}
 	if (loc.x < 0) {
 	    player.move (0, loc.y);
 	}
-	if (loc.x > GFrame.WIDTH - 32) {
-	    player.move (GFrame.WIDTH - 32, loc.y);
+	if (loc.x > WIDTH - 32) {
+	    player.move (WIDTH - 32, loc.y);
 	}
     }
 
@@ -208,11 +160,12 @@ public class SquashGameScene
     }
 
     public boolean isBallBlue () {
-	return ball.getImage () == BLUE_BALL_IMG;
+	return ball.isBlue ();
     }
 
     @Override
     public void keyTyped (KeyEvent e, GFrame f) {
+	// Do nothing
     }
 
     @Override
@@ -223,8 +176,8 @@ public class SquashGameScene
 	    return;
 	}
 	player.setIdleFrame ();
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+        player.dx = 0;
+	player.dy = 0;
     }
 
     @Override
@@ -233,27 +186,29 @@ public class SquashGameScene
 	    switch (e.getKeyCode())
 		{
 		case KeyEvent.VK_A:
-		    playerSpeedX.set(-5);
+		    player.dx = -5;
 		    player.directionLeft ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_D:
-		    playerSpeedX.set(5);
+		    player.dx = 5;
 		    player.directionRight ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_W:
-		    playerSpeedY.set(-5);
+		    player.dy = -5;
 		    player.directionUp ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_S:
-		    playerSpeedY.set(5);
+		    player.dy = 5;
 		    player.directionDown ();
 		    player.setActiveFrame ();
 		    break;
 		case KeyEvent.VK_Q:
 		    JOptionPane.showMessageDialog(null, "Don't let the ball be blue when it hits the back wall! First to 11 wins!");
+		    break;
+		default:
 		    break;
 		}
 	}
@@ -262,16 +217,15 @@ public class SquashGameScene
 
     @Override
     public void onEnter () {
-	playerSpeedX.set(0);
-	playerSpeedY.set(0);
+	player.dx = 0;
+	player.dy = 0;
 	player.move (342, 117);
-
-	ballDirection = 180;
-	ballSpeed = 5;
+	ball.resetAngleAndSpeed ();
     }
 
     @Override
     public void onLeave () {
+	// Do nothing
     }
 
     @Override

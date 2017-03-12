@@ -28,20 +28,32 @@ import com.atoiks.proto.GFrame;
 
 import java.awt.event.KeyEvent;
 
+/**
+ * Key event receiver for a GFrame.
+ */
 public interface GKeyListener {
 
     /**
-     * See keyTyped for KeyListener
+     * Invoked when a key has been typed.
+     *
+     * @param e Information about the keys
+     * @param frame The GFrame that received the keys
      */
     public void keyTyped (KeyEvent e, GFrame frame);
 
     /**
-     * See keyPressed fpr KeyListener
+     * Invoked when a key has been pressed.
+     *
+     * @param e Information about the keys
+     * @param frame The GFrame that received the keys
      */
     public void keyPressed (KeyEvent e, GFrame frame);
 
     /**
-     * See keyReleased for KeyListener
+     * Invoked when a key has been released.
+     *
+     * @param e Information about the keys
+     * @param frame The GFrame that received the keys
      */
     public void keyReleased (KeyEvent e, GFrame frame);
 }

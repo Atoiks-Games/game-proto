@@ -34,11 +34,15 @@ import java.awt.Point;
 
 import java.io.IOException;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class MainCharacter extends Sprite2D {
 
     private static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
+
+    public int dx;
+
+    public int dy;
+
+    private int idx = 1;
 
     static {
 	loadSheet ();
@@ -63,24 +67,15 @@ public class MainCharacter extends Sprite2D {
 	    throw new GameInitError ("Failed to load main_char spr_1..3");
 	}
     }
-    
-    private AtomicInteger dx;
 
-    private AtomicInteger dy;
-
-    private int idx = 1;
-
-    public MainCharacter (Point pt, int fps,
-			  AtomicInteger dx, AtomicInteger dy) {
+    public MainCharacter (Point pt, int fps) {
 	super (0, pt, fps, DIRECTION_SHEET[1][0]);
-	this.dx = dx;
-	this.dy = dy;
     }
 
     @Override
     public void update (long mills, GFrame f) {
 	super.update (mills, f);
-	translate (dx.get(), dy.get());
+	translate (dx, dy);
     }
 
     public void directionUp () {

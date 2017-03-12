@@ -22,7 +22,9 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
+
+import app.entity.GameInitError;
 
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.Sprite2D;
@@ -37,6 +39,8 @@ import java.io.IOException;
 public class PyCharacter extends Sprite2D {
 
     public static final Image[][][] DIRECTION_SHEET = new Image[4][2][];
+
+    private int idx = 1;
 
     static {
 	loadSheet ();
@@ -61,8 +65,6 @@ public class PyCharacter extends Sprite2D {
 	    throw new GameInitError ("Failed to load py spr_1..3");
 	}
     }
-
-    private int idx = 1;
 
     public PyCharacter (Point pt, int fps) {
 	super (0, pt, fps, DIRECTION_SHEET[1][0]);

@@ -56,8 +56,7 @@ public class Sprite implements GComponent {
 	if (p.x < origin.x) return false;
 	if (p.x > image.getWidth(null)) return false;
 	if (p.y < origin.y) return false;
-	if (p.y > image.getHeight(null)) return false;
-	return true;
+        return p.y <= image.getHeight(null);
     }
 
     public void setImage (Image img) {
@@ -84,22 +83,40 @@ public class Sprite implements GComponent {
 	return visible;
     }
 
+    /**
+     * Sets both {@code collidable} and {@code visible} to false
+     */
     public void disable () {
 	this.collidable = false;
 	this.visible = false;
     }
 
+    /**
+     * Sets both {@code collidable} and {@code visible} to true
+     */
     public void enable () {
 	this.collidable = true;
 	this.visible = true;
     }
 
+    /**
+     * Sets the origin to (x, y)
+     *
+     * @param x The new X coordinate
+     * @param y The new Y coordinate
+     */
     public void move (int x, int y) {
 	origin.move (x, y);
     }
 
-    public void translate (int x, int y) {
-	origin.translate (x, y);
+    /**
+     * Sets the origin to (x+dx, y+dy)
+     *
+     * @param dx Change in X coordinate
+     * @param dy Change in Y coordinate
+     */
+    public void translate (int dx, int dy) {
+	origin.translate (dx, dy);
     }
 
     public void setLocation (Point p) {
@@ -116,7 +133,7 @@ public class Sprite implements GComponent {
     }
 
     @Override
-    public void testCollision (GComponent comp, GFrame f) {
+    public final void testCollision (GComponent comp, GFrame f) {
 	if (!collidable) return;
 	// Floor is always the base layer (not above the obj)
 	if (!(comp instanceof Sprite)) return;
@@ -133,6 +150,9 @@ public class Sprite implements GComponent {
 
     /**
      * Called on collision
+     *
+     * @param other The sprite it collided with
+     * @param f The frame containing the sprite
      */
     public void onCollision (Sprite other, GFrame f) {
 	// Do nothing

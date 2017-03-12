@@ -24,11 +24,20 @@
 
 package app;
 
-import app.entity.*;
+import app.entity.gym.CourtHallway;
+import app.entity.gym.SquashGameScene;
+import app.entity.gym.SquashCourtScene;
+import app.entity.gym.DarkSquashCourtScene;
 
 import com.atoiks.proto.GFrame;
+import com.atoiks.proto.GScene;
+import com.atoiks.proto.SwingFrame;
 
 public class Main {
+
+    public static final int HEIGHT = 450;
+
+    public static final int WIDTH = 700;
 
     public final class WeightWrapper<T> {
 
@@ -76,10 +85,13 @@ public class Main {
     }
 
     public void run () {
-	final SquashCourtScene scene0 = SquashCourtScene.getInstance ();
-	final SquashGameScene scene1 = SquashGameScene.getInstance ();
+	final GScene scene0 = SquashCourtScene.getInstance ();
+	final GScene scene1 = SquashGameScene.getInstance ();
+	final GScene scene2 = DarkSquashCourtScene.getInstance ();
+	final GScene scene3 = CourtHallway.getInstance ();
 
-	final GFrame app = new GFrame("Staventure", scene0, scene1);
+	final GFrame app = new SwingFrame("Staventure", WIDTH, HEIGHT,
+					  scene0, scene1, scene2, scene3);
 	app.setVisible (true);
     }
 }

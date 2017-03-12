@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package app.entity.gym;
 
 import java.util.List;
 import java.util.ArrayList;
