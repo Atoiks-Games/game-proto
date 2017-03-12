@@ -20,7 +20,7 @@ The game that you could play during school time because there is no music!!!
 
 -----
 
-To build the game, you will need jdk8 installed.
+To build the game, you will need jdk7 (or above) installed.
 
 open the terminal and run `gradlew assemble` to build or `gradlew run` to run the app.
 

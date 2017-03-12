@@ -58,7 +58,8 @@ public class SwingFrame
 
     private int height;
 
-    public SwingFrame (String title, int width, int height, GScene... scenes) {
+    public SwingFrame (String title, int width, int height,
+		       final GScene... scenes) {
 	super (title);
 
 	if (width < 1) {

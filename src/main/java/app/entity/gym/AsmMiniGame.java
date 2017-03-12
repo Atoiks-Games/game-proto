@@ -97,7 +97,16 @@ public class AsmMiniGame extends JFrame {
 	}
     }
 
-    public AsmMiniGame (int[] inputs, int[] expects, Object notify) {
+    private static Object[] toObjArray (int[] arr) {
+	final Object[] rst = new Object[arr.length];
+	for (int i = 0; i < arr.length; ++i) {
+	    rst[i] = arr;
+	}
+	return rst;
+    }
+
+    public AsmMiniGame (final int[] inputs, final int[] expects,
+			final Object notify) {
 	this.outputs = new DefaultListModel<Integer> ();
 
 	setSize (500, 450);
@@ -105,12 +114,8 @@ public class AsmMiniGame extends JFrame {
 	setDefaultCloseOperation (JFrame.DO_NOTHING_ON_CLOSE);
 
 	final JPanel leftBar = new JPanel (new BorderLayout ());
-	leftBar.add (new JList<Object> (Arrays.stream (inputs)
-				      .boxed().toArray()),
-		     BorderLayout.WEST);
-	leftBar.add (new JList<Object> (Arrays.stream (expects)
-				      .boxed().toArray()),
-		     BorderLayout.EAST);
+	leftBar.add (new JList<Object> (toObjArray (inputs)), BorderLayout.WEST);
+	leftBar.add (new JList<Object> (toObjArray (expects)), BorderLayout.EAST);
 	add (leftBar, BorderLayout.WEST);
 
 	final JList<Integer> outList = new JList<Integer> (outputs);

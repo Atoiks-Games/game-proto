@@ -115,7 +115,7 @@ public class SquashCourtScene
 	final Sprite greenBox = new Sprite (GREEN_BOX, new Point (0, 0))
 	    {
 		@Override
-		public void onCollision (Sprite other, GFrame f) {
+		public void onCollision (Sprite other, final GFrame f) {
 		    if (other == player) {
 			setCollidable (false);
 			ignoreKeys = true;
