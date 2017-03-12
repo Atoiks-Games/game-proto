@@ -24,7 +24,6 @@
 
 package app.entity.gym;
 
-import static app.Main.WIDTH;
 import static app.Main.HEIGHT;
 
 import app.entity.Utils;
