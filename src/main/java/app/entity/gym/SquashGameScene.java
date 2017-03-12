@@ -24,6 +24,9 @@
 
 package app.entity.gym;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import app.entity.Utils;
 import app.entity.MainCharacter;
 
@@ -133,14 +136,14 @@ public class SquashGameScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 32) {
-	    player.move (loc.x, GFrame.HEIGHT - 32);
+	if (loc.y > HEIGHT - 32) {
+	    player.move (loc.x, HEIGHT - 32);
 	}
 	if (loc.x < 0) {
 	    player.move (0, loc.y);
 	}
-	if (loc.x > GFrame.WIDTH - 32) {
-	    player.move (GFrame.WIDTH - 32, loc.y);
+	if (loc.x > WIDTH - 32) {
+	    player.move (WIDTH - 32, loc.y);
 	}
     }
 

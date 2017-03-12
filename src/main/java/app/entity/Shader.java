@@ -24,6 +24,9 @@
 
 package app.entity;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import com.atoiks.proto.GFrame;
 import com.atoiks.proto.GComponent;
 
@@ -55,7 +58,7 @@ public class Shader implements GComponent {
 	if (render) {
 	    final Color old = g.getColor ();
 	    g.setColor (color);
-	    g.fillRect (0, 0, GFrame.WIDTH, GFrame.HEIGHT);
+	    g.fillRect (0, 0, WIDTH, HEIGHT);
 	    g.setColor (old);
 	}
     }

@@ -24,126 +24,66 @@
 
 package com.atoiks.proto;
 
-import javax.swing.JPanel;
-import javax.swing.JFrame;
+import java.awt.Dimension;
 
-import java.awt.Graphics;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+/**
+ * A frame that can host and process GScenes.
+ */
+public interface GFrame {
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicBoolean;
+    /**
+     * Changes the scene being displayed into another one.
+     *
+     * @param idx The index number of the scene
+     */
+    public void jumpToScene (int idx);
 
-public class GFrame extends JFrame {
+    /**
+     * Pauses the scene. If scene was already paused, nothing happens.
+     */
+    public void pause ();
 
-    public static final int HEIGHT = 450;
+    /**
+     * Resumes the scene. If scene was already running, nothing happens.
+     */
+    public void resume ();
 
-    public static final int WIDTH = 700;
+    /**
+     * Checks if scene is paused.
+     *
+     * @return True if paused, false otherwise.
+     */
+    public boolean isPaused ();
 
-    private ExecutorService threads;
+    /**
+     * Alters between pause and resume.
+     */
+    public void toggleState ();
 
-    private GScene[] scenes;
+    /**
+     * Sets visibility of scene.
+     *
+     * @param f visibility
+     */
+    public void setVisible (boolean f);
 
-    private int sceneIdx;
+    /**
+     * @return Width of the scene
+     */
+    public int getFrameWidth ();
 
-    private boolean first;
+    /**
+     * @return Height of the scene
+     */
+    public int getFrameHeight ();
 
-    private AtomicBoolean pauseFlag;
+    /**
+     * @return Dimension of the scene
+     */
+    public Dimension getFrameSize ();
 
-    public GFrame (String title, GScene... scenes) {
-	super (title);
-	setSize (WIDTH + 6, HEIGHT + 30);
-	setResizable (false);
-	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
-
-        final JPanel panel = new JPanel ()
-	    {
-	        protected void paintComponent (Graphics g) {
-		    scenes[sceneIdx].renderStep (g);
-		}
-	    };
-	this.add (panel);
-	this.first = true;
-	this.pauseFlag = new AtomicBoolean (false);
-	this.scenes = scenes;
-	this.addKeyListener (new KeyListener()
-	    {
-		@Override
-		public void keyTyped (KeyEvent e) {
-		    scenes[sceneIdx].onKeyTypedTrigger (e, GFrame.this);
-		}
-
-		@Override
-		public void keyPressed (KeyEvent e) {
-		    scenes[sceneIdx].onKeyPressedTrigger (e, GFrame.this);
-		}
-
-		@Override
-		public void keyReleased (KeyEvent e) {
-		    scenes[sceneIdx].onKeyReleasedTrigger (e, GFrame.this);
-		}
-	    });
-	scenes[this.sceneIdx = 0].onEnterTrigger ();
-    }
-
-    public void jumpToScene (int idx) {
-	scenes[sceneIdx].onLeaveTrigger ();
-	scenes[sceneIdx = idx].onEnterTrigger ();
-    }
-
-    public void pause () {
-	if (pauseFlag.compareAndSet (false, true)) {
-	    scenes[sceneIdx].onPauseTrigger ();
-	}
-    }
-
-    public void resume () {
-	if (pauseFlag.compareAndSet (true, false)) {
-	    scenes[sceneIdx].onResumeTrigger ();
-	}
-    }
-
-    public boolean isPaused () {
-	return pauseFlag.get();
-    }
-
-    @Override
-    public void setVisible (boolean f) {
-	super.setVisible (f);
-
-	if (first && f) {
-	    first = false;
-	    if (threads != null) {
-		threads.shutdownNow();
-	    }
-	    threads = Executors.newFixedThreadPool (1);
-	    // Rendering thread
-	    threads.execute(() -> {
-		    long lastTime = System.currentTimeMillis ();
-		    while (threads != null && !threads.isShutdown ()) {
-			final long current = System.currentTimeMillis ();
-			if (!pauseFlag.get()) {
-			    scenes[sceneIdx].collisionStep (this);
-			    scenes[sceneIdx].updateStep (current - lastTime,
-							 this);
-			    repaint ();
-			}
-			lastTime = current;
-			try {
-			    // This line is just here so your youtube
-			    // videos don't start glitching because of
-			    // excessive lagggggggg. :-)
-			    Thread.sleep(15);
-			} catch (java.lang.InterruptedException ex) {
-			}
-		    }
-		    threads = null;
-		});
-	}
-	if (!f) {
-	    first = true;
-	    threads.shutdownNow();
-	}
-    }
+    /**
+     * Destroys the frame and release resources.
+     */
+    public void dispose ();
 }

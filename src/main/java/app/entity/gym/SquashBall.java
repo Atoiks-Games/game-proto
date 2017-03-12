@@ -24,6 +24,9 @@
 
 package app.entity.gym;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import app.entity.Utils;
 
 import com.atoiks.proto.GFrame;
@@ -89,7 +92,7 @@ public abstract class SquashBall extends Sprite {
 	    origin.y = 1;
 	}
 
-	if (origin.x > GFrame.WIDTH - image.getWidth (null) - 10) {
+	if (origin.x > WIDTH - image.getWidth (null) - 10) {
 	    onTakePoint ();
 
 	    image = DEFAULT_BALL_IMG;
@@ -97,10 +100,10 @@ public abstract class SquashBall extends Sprite {
 	    resetAngleAndSpeed ();
 	}
 
-	if (origin.y > GFrame.HEIGHT - image.getHeight (null)) {
+	if (origin.y > HEIGHT - image.getHeight (null)) {
 	    angle *= -1;
 	    speed -= 0.1;
-	    origin.y = GFrame.HEIGHT - image.getHeight (null);
+	    origin.y = HEIGHT - image.getHeight (null);
 	}
     }
 

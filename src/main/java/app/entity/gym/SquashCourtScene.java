@@ -24,6 +24,9 @@
 
 package app.entity.gym;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import app.entity.Utils;
 import app.entity.MainCharacter;
 
@@ -95,7 +98,7 @@ public class SquashCourtScene
 	redBox.disable ();
 	this.instances.add (redBox);
 
-	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point(306, GFrame.HEIGHT - 3))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point(306, HEIGHT - 3))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -259,8 +262,8 @@ public class SquashCourtScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 32) {
-	    player.move (loc.x, GFrame.HEIGHT - 32);
+	if (loc.y > HEIGHT - 32) {
+	    player.move (loc.x, HEIGHT - 32);
 	}
 	ignoreKeys = false;
     }

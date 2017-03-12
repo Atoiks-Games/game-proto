@@ -24,6 +24,9 @@
 
 package app.entity.gym;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import app.entity.Utils;
 import app.entity.Shader;
 import app.entity.MainCharacter;
@@ -69,7 +72,7 @@ public class DarkSquashCourtScene
 	player.enable ();
 	this.instances.add (player);
 
-	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point (306, GFrame.HEIGHT - 3))
+	final Sprite door = new Sprite (CourtHallway.HORIZ, new Point (306, HEIGHT - 3))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -92,7 +95,7 @@ public class DarkSquashCourtScene
 
 	final Floor base = new Floor (SquashCourtScene.SQUASH_COURT);
 	final Sprite rightBorder = new Sprite (SquashCourtScene.BORDER_RIGHT,
-					       new Point (700 - 186, 0))
+					       new Point (WIDTH - 186, 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -135,14 +138,14 @@ public class DarkSquashCourtScene
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 64) {
-	    player.move (loc.x, GFrame.HEIGHT - 64);
+	if (loc.y > HEIGHT - 64) {
+	    player.move (loc.x, HEIGHT - 64);
 	}
 	if (loc.x < 0) {
 	    player.move (0, loc.y);
 	}
-	if (loc.x > GFrame.WIDTH - 32) {
-	    player.move (GFrame.WIDTH - 32, loc.y);
+	if (loc.x > WIDTH - 32) {
+	    player.move (WIDTH - 32, loc.y);
 	}
     }
 

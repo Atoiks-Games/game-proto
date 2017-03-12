@@ -24,6 +24,9 @@
 
 package app.entity.gym;
 
+import static app.Main.WIDTH;
+import static app.Main.HEIGHT;
+
 import app.entity.Utils;
 import app.entity.MainCharacter;
 
@@ -59,9 +62,9 @@ public class CourtHallway
 
     public static final Point TOP_SPAWN = new Point (64, 12);
 
-    public static final Point BOT_SPAWN = new Point (64, GFrame.HEIGHT - 42);
+    public static final Point BOT_SPAWN = new Point (64, HEIGHT - 42);
 
-    public static final Point RIGHT_SPAWN = new Point (600, GFrame.HEIGHT / 2 - 16);
+    public static final Point RIGHT_SPAWN = new Point (600, HEIGHT / 2 - 16);
 
     private MainCharacter player;
 
@@ -97,7 +100,7 @@ public class CourtHallway
 	topDoor.enable ();
 	this.instances.add (topDoor);
 
-	final Sprite botDoor = new Sprite (HORIZ, new Point (56, GFrame.HEIGHT - 1))
+	final Sprite botDoor = new Sprite (HORIZ, new Point (56, HEIGHT - 1))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -109,7 +112,7 @@ public class CourtHallway
 	botDoor.enable ();
 	this.instances.add (botDoor);
 
-	final Sprite rightDoor = new Sprite (VERT, new Point (GFrame.WIDTH - VERT.getWidth (null), 181))
+	final Sprite rightDoor = new Sprite (VERT, new Point (WIDTH - VERT.getWidth (null), 181))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -139,7 +142,7 @@ public class CourtHallway
     private CourtHallway () {
 	super (null);
 
-	final Sprite topRight = new Sprite (TOP_RIGHT, new Point (GFrame.WIDTH - TOP_RIGHT.getWidth (null), 0))
+	final Sprite topRight = new Sprite (TOP_RIGHT, new Point (WIDTH - TOP_RIGHT.getWidth (null), 0))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -154,7 +157,7 @@ public class CourtHallway
 	    };
 	topRight.enable ();
 
-	final Sprite botRight = new Sprite (BOT_RIGHT, new Point (GFrame.WIDTH - BOT_RIGHT.getWidth (null), GFrame.HEIGHT - BOT_RIGHT.getHeight (null)))
+	final Sprite botRight = new Sprite (BOT_RIGHT, new Point (WIDTH - BOT_RIGHT.getWidth (null), HEIGHT - BOT_RIGHT.getHeight (null)))
 	    {
 		@Override
 		public void onCollision (Sprite other, GFrame f) {
@@ -264,14 +267,14 @@ public class CourtHallway
 	if (loc.x < 0) {
 	    player.move (0, loc.y);
 	}
-	if (loc.x > GFrame.WIDTH - 32) {
-	    player.move (GFrame.WIDTH - 32, loc.y);
+	if (loc.x > WIDTH - 32) {
+	    player.move (WIDTH - 32, loc.y);
 	}
 	if (loc.y < 0) {
 	    player.move (loc.x, 0);
 	}
-	if (loc.y > GFrame.HEIGHT - 32) {
-	    player.move (loc.x, GFrame.HEIGHT - 32);
+	if (loc.y > HEIGHT - 32) {
+	    player.move (loc.x, HEIGHT - 32);
 	}
 	ignoreKeys = false;
     }
