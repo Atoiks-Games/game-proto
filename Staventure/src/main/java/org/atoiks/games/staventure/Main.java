@@ -41,7 +41,7 @@ public class Main {
                 .setFps(60)
                 .setSize(WIDTH, HEIGHT)
                 .setLoader(new LoadingScene())
-                .setGameScenes(new SquashCourtScene());
+                .setGameScenes(new SquashCourtScene(), new CourtHallwayScene());
         try (final Frame frame = new Frame(info)) {
             frame.init();
             frame.loop();

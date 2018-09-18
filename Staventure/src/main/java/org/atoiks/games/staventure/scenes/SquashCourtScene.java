@@ -27,9 +27,22 @@ public final class SquashCourtScene extends GameScene {
         bg = (Image) scene.resources().get("/squash_court/squash_court.png");
 
         player = new Player();
-        player.direction = Player.Direction.DOWN;
         player.state = Player.IDLE_FRAME;
+        player.direction = Player.Direction.DOWN;
+        player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
+        player.y = 180;
         player.speed = 50;
+    }
+
+    @Override
+    public void enter(int from) {
+        switch (from) {
+            case 1: // CourtHallwayScebe
+                player.direction = Player.Direction.UP;
+                player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
+                player.y = 420;
+                break;
+        }
     }
 
     @Override

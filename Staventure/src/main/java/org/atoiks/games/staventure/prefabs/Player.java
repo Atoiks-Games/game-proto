@@ -48,26 +48,22 @@ public class Player {
 
     public void update(final float dt, final SceneManager scene) {
         elapsed += dt;
-        boolean updateState = false;
+        boolean updateState = true;
         final float dsp = speed * dt;
         if (scene.keyboard().isKeyDown(KeyEvent.VK_W)) {
             this.y -= dsp;
             direction = Direction.UP;
-            updateState = true;
         } else if (scene.keyboard().isKeyDown(KeyEvent.VK_S)) {
             this.y += dsp;
             direction = Direction.DOWN;
-            updateState = true;
-        }
-
-        if (scene.keyboard().isKeyDown(KeyEvent.VK_A)) {
+        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_A)) {
             this.x -= dsp;
             direction = Direction.LEFT;
-            updateState = true;
         } else if (scene.keyboard().isKeyDown(KeyEvent.VK_D)) {
             this.x += dsp;
             direction = Direction.RIGHT;
-            updateState = true;
+        } else {
+            updateState = false;
         }
 
         if (!updateState) {
