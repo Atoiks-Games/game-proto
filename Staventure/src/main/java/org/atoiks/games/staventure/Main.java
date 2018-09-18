@@ -40,7 +40,8 @@ public class Main {
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)
                 .setSize(WIDTH, HEIGHT)
-                .setScenes(new LoadingScene(), new SquashCourtScene());
+                .setLoader(new LoadingScene())
+                .setGameScenes(new SquashCourtScene());
         try (final Frame frame = new Frame(info)) {
             frame.init();
             frame.loop();

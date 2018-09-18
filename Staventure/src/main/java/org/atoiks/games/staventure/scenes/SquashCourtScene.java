@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
-import org.atoiks.games.framework2d.Scene;
+import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
 
-public final class SquashCourtScene extends Scene {
+public final class SquashCourtScene extends GameScene {
 
     private static final int X1 = 155;
     private static final int Y1 = 4;
@@ -23,16 +23,13 @@ public final class SquashCourtScene extends Scene {
     private Player player;
 
     @Override
-    public void enter (int from) {
-        //  Load resources if we transition from LoadingScene
-        if (from == 0) {
-            bg = (Image) scene.resources().get("/squash_court/squash_court.png");
+    public void init() {
+        bg = (Image) scene.resources().get("/squash_court/squash_court.png");
 
-            player = new Player();
-            player.direction = Player.Direction.DOWN;
-            player.state = Player.IDLE_FRAME;
-            player.speed = 50;
-        }
+        player = new Player();
+        player.direction = Player.Direction.DOWN;
+        player.state = Player.IDLE_FRAME;
+        player.speed = 50;
     }
 
     @Override
