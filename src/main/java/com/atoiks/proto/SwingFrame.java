@@ -69,7 +69,7 @@ public class SwingFrame
 	    throw new IllegalArgumentException (height + "[height] < 1");
 	}
 	
-	setSize (width + 6, height + 30);
+	setSize (width, height + 22);
 	setResizable (false);
 	setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 
