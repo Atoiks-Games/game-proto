@@ -22,11 +22,25 @@
  * SOFTWARE.
  */
 
-package app.entity;
+package org.atoiks.games.staventure;
 
-public class GameInitError extends Error {
+import org.atoiks.games.framework2d.FrameInfo;
+import org.atoiks.games.framework2d.swing.Frame;
 
-    public GameInitError (String msg) {
-	super (msg);
+public class Main {
+
+    public static final int HEIGHT = 450;
+
+    public static final int WIDTH = 700;
+
+    public static void main(String[] args) {
+        final FrameInfo info = new FrameInfo()
+                .setTitle("Atoiks Games - staventure")
+                .setSize(WIDTH, HEIGHT)
+                .setScenes();
+        try (final Frame frame = new Frame(info)) {
+            frame.init();
+            frame.loop();
+        }
     }
 }

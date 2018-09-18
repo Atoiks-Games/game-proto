@@ -2,16 +2,17 @@ apply plugin: 'java'
 apply plugin: 'jacoco'
 apply plugin: 'application'
 
-sourceCompatibility = 1.7
-targetCompatibility = 1.7
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-mainClassName = 'app.Main'
+mainClassName = 'org.atoiks.games.staventure.Main'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    compile project(':Framework2D')
     testCompile 'junit:junit:4.12'
 }
 
