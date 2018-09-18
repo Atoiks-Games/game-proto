@@ -1,8 +1,8 @@
 language: java
 sude: false
 jdk:
+  - oraclejdk9
   - oraclejdk8
-  - oraclejdk7
 script:
   - ./gradlew check
   - ./gradlew jacocoTestReport
