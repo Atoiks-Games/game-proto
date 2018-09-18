@@ -27,6 +27,8 @@ package org.atoiks.games.staventure;
 import org.atoiks.games.framework2d.FrameInfo;
 import org.atoiks.games.framework2d.swing.Frame;
 
+import org.atoiks.games.staventure.scenes.*;
+
 public class Main {
 
     public static final int HEIGHT = 450;
@@ -36,8 +38,9 @@ public class Main {
     public static void main(String[] args) {
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
+                .setFps(60)
                 .setSize(WIDTH, HEIGHT)
-                .setScenes();
+                .setScenes(new LoadingScene(), new SquashCourtScene());
         try (final Frame frame = new Frame(info)) {
             frame.init();
             frame.loop();
