@@ -123,7 +123,7 @@ public final class CourtHallwayScene extends GameScene {
             }
             if (player.x > 700 - 26) {
                 // If player is headed for right door, its fine
-                if (RIGHT_DOOR_Y1 < player.y && player.y < RIGHT_DOOR_Y2) {
+                if (RIGHT_DOOR_Y1 < player.y && player.y < RIGHT_DOOR_Y2 - 32) {
                     if (player.x > 700) {
                         // When we get there, switch scenes
                         scene.gotoNextScene();
@@ -149,7 +149,7 @@ public final class CourtHallwayScene extends GameScene {
             // Only test Y coordinate stuff
             if (player.y < 0) {
                 // If player is headed for top-left door, its fine
-                if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
+                if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
                     if (player.y < -26) {
                         // This one jumps back to SquashCourtScene
                         scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.TOP);
@@ -162,7 +162,7 @@ public final class CourtHallwayScene extends GameScene {
             }
             if (player.y > 450 - 32) {
                 // If player is headed for top-left door, its fine
-                if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
+                if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
                     if (player.y > 450) {
                         // This one also jumps back to SquashCourtScene
                         scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.BOTTOM);
@@ -173,7 +173,7 @@ public final class CourtHallwayScene extends GameScene {
                     player.y = 450 - 32;
                 }
             }
-            if (player.x < LEFT_X2 - 26 && player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2) {
+            if (player.x < LEFT_X2 - 6 && player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2) {
                 // If oldY > newY, player was moving upwards
                 player.y = oldY > player.y ? LEFT_Y2 : LEFT_Y1 - 32;
             }

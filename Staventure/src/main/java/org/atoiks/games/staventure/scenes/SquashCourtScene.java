@@ -120,7 +120,7 @@ public final class SquashCourtScene extends GameScene {
             // There is a door at the very bottom
             // and if the player is within the door's range,
             // the player is allowed to go beyond the bottom of the screen
-            if (DOOR_X1 < player.x && player.x < DOOR_X2) {
+            if (DOOR_X1 - 6 < player.x && player.x < DOOR_X2 - 26) {
                 if (player.y > Y2) {
                     // When we get here, we switch scenes
                     scene.switchToScene(COURT_HALLWAY_SCENE_IDX);
