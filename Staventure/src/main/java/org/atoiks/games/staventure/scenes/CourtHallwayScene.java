@@ -51,14 +51,23 @@ public final class CourtHallwayScene extends GameScene {
         player = new Player();
         player.direction = Player.Direction.DOWN;
         player.state = Player.IDLE_FRAME;
-        player.speed = 30;
+        player.speed = 80;
     }
 
     @Override
     public void enter(int from) {
         if (from == SQUASH_COURT_SCENE_IDX) {
+            final SquashCourtScene.ID id = (SquashCourtScene.ID) scene.resources().get(SquashCourtScene.KEY_ID);
+
             player.x = (LEFT_DOOR_X1 + LEFT_DOOR_X2) / 2 - 16;
-            player.y = 10;
+            switch (id) {
+                case TOP:
+                    player.y = 10;
+                    break;
+                case BOTTOM:
+                    player.y = 408;
+                    break;
+            }
         }
     }
 
@@ -143,6 +152,7 @@ public final class CourtHallwayScene extends GameScene {
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y < -26) {
                         // This one jumps back to SquashCourtScene
+                        scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.TOP);
                         scene.switchToScene(SQUASH_COURT_SCENE_IDX);
                         return true;
                     }
@@ -154,7 +164,8 @@ public final class CourtHallwayScene extends GameScene {
                 // If player is headed for top-left door, its fine
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y > 450) {
-                        // For now, This one jumps back to SquashCourtScene
+                        // This one also jumps back to SquashCourtScene
+                        scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.BOTTOM);
                         scene.switchToScene(SQUASH_COURT_SCENE_IDX);
                         return true;
                     }

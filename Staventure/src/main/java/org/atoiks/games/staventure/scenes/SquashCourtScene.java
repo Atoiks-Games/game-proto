@@ -13,6 +13,13 @@ import org.atoiks.games.staventure.prefabs.Player;
 
 public final class SquashCourtScene extends GameScene {
 
+    public enum ID {
+        // There are two squash courts
+        TOP, BOTTOM;
+    }
+
+    public static final String KEY_ID = "scene.squash_court.id";
+
     private static final int X1 = 155;
     private static final int Y1 = 4;
     private static final int X2 = 515;
@@ -26,6 +33,8 @@ public final class SquashCourtScene extends GameScene {
 
     private int COURT_HALLWAY_SCENE_IDX;
 
+    private ID id;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/squash_court/squash_court.png");
@@ -38,11 +47,15 @@ public final class SquashCourtScene extends GameScene {
         player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
         player.y = 180;
         player.speed = 50;
+
+        // Define this value
+        scene.resources().put(SquashCourtScene.KEY_ID, (id = ID.TOP));
     }
 
     @Override
     public void enter(int from) {
         if (from == COURT_HALLWAY_SCENE_IDX) {
+            this.id = (ID) scene.resources().get(KEY_ID);
             player.direction = Player.Direction.UP;
             player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
             player.y = 420;
