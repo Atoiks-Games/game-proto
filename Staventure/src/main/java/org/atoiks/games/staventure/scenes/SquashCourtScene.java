@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+import java.util.Map;
+
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
@@ -22,9 +24,13 @@ public final class SquashCourtScene extends GameScene {
     private Image bg;
     private Player player;
 
+    private int COURT_HALLWAY_SCENE_IDX;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/squash_court/squash_court.png");
+
+        COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
@@ -36,12 +42,10 @@ public final class SquashCourtScene extends GameScene {
 
     @Override
     public void enter(int from) {
-        switch (from) {
-            case 1: // CourtHallwayScebe
-                player.direction = Player.Direction.UP;
-                player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
-                player.y = 420;
-                break;
+        if (from == COURT_HALLWAY_SCENE_IDX) {
+            player.direction = Player.Direction.UP;
+            player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
+            player.y = 420;
         }
     }
 
@@ -84,7 +88,7 @@ public final class SquashCourtScene extends GameScene {
             if (DOOR_X1 < player.x && player.x < DOOR_X2) {
                 if (player.y > Y2) {
                     // When we get here, we switch scenes
-                    scene.gotoNextScene();
+                    scene.switchToScene(COURT_HALLWAY_SCENE_IDX);
                     return true;
                 }
             } else {

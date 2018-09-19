@@ -24,7 +24,10 @@
 
 package org.atoiks.games.staventure;
 
+import java.util.HashMap;
+
 import org.atoiks.games.framework2d.FrameInfo;
+import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.swing.Frame;
 
 import org.atoiks.games.staventure.scenes.*;
@@ -36,12 +39,22 @@ public class Main {
     public static final int WIDTH = 700;
 
     public static void main(String[] args) {
+        final HashMap<Class<?>, Integer> sceneMap = new HashMap<>();
+        final GameScene[] scenes = { new SquashCourtScene(), new CourtHallwayScene() };
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)
                 .setSize(WIDTH, HEIGHT)
                 .setLoader(new LoadingScene())
-                .setGameScenes(new SquashCourtScene(), new CourtHallwayScene());
+                .setGameScenes(scenes)
+                .addResource("scene.map", sceneMap);
+
+        // Iterate the game scenes and map them to their class
+        for (int i = 0; i < scenes.length; ++i) {
+            final GameScene s = scenes[i];
+            sceneMap.put(s.getClass(), i);
+        }
+
         try (final Frame frame = new Frame(info)) {
             frame.init();
             frame.loop();

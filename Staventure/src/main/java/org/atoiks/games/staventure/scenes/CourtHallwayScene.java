@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+import java.util.Map;
+
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
@@ -35,12 +37,16 @@ public final class CourtHallwayScene extends GameScene {
     private Image bg;
     private Player player;
 
+    private int SQUASH_COURT_SCENE_IDX;
+
     private float oldX;
     private float oldY;
 
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/court_hallway/court_hallway.png");
+
+        SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
 
         player = new Player();
         player.direction = Player.Direction.DOWN;
@@ -50,11 +56,9 @@ public final class CourtHallwayScene extends GameScene {
 
     @Override
     public void enter(int from) {
-        switch (from) {
-            case 0: // SquashCourtScene
-                player.x = (LEFT_DOOR_X1 + LEFT_DOOR_X2) / 2 - 16;
-                player.y = 10;
-                break;
+        if (from == SQUASH_COURT_SCENE_IDX) {
+            player.x = (LEFT_DOOR_X1 + LEFT_DOOR_X2) / 2 - 16;
+            player.y = 10;
         }
     }
 
@@ -139,7 +143,7 @@ public final class CourtHallwayScene extends GameScene {
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y < -26) {
                         // This one jumps back to SquashCourtScene
-                        scene.switchToScene(0);
+                        scene.switchToScene(SQUASH_COURT_SCENE_IDX);
                         return true;
                     }
                 } else {
@@ -151,7 +155,7 @@ public final class CourtHallwayScene extends GameScene {
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y > 450) {
                         // For now, This one jumps back to SquashCourtScene
-                        scene.switchToScene(0);
+                        scene.switchToScene(SQUASH_COURT_SCENE_IDX);
                         return true;
                     }
                 } else {
