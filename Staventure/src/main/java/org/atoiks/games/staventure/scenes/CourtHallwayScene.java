@@ -44,7 +44,7 @@ public final class CourtHallwayScene extends GameScene {
 
     @Override
     public void init() {
-        bg = (Image) scene.resources().get("/court_hallway/court_hallway.png");
+        bg = (Image) scene.resources().get("/court_hallway/floor.png");
 
         SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
 

@@ -48,7 +48,7 @@ public final class SquashCourtScene extends GameScene {
 
     @Override
     public void init() {
-        bg = (Image) scene.resources().get("/squash_court/squash_court.png");
+        bg = (Image) scene.resources().get("/squash_court/floor.png");
         pyImg = (Image) scene.resources().get("/py/spr_2.png");
         pyIcon = new ImageIcon(pyImg);
 

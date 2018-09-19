@@ -92,10 +92,10 @@ public final class LoadingScene extends Scene {
                     }
 
                     // SquashCourtScene resources
-                    loadImageFromResource("/squash_court/squash_court.png");
+                    loadImageFromResource("/squash_court/floor.png");
 
                     // CourtHallwayScene resources
-                    loadImageFromResource("/court_hallway/court_hallway.png");
+                    loadImageFromResource("/court_hallway/floor.png");
 
                     if (loaded == LoadState.LOADING) {
                         loaded = LoadState.DONE;
