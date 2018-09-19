@@ -116,72 +116,59 @@ public final class CourtHallwayScene extends GameScene {
         // player is 32 * 32, but x axis actually has a 6 px padding
         // on each side
 
-        if (oldX != player.x) {
-            // Only test X coordinate stuff
-            if (player.x < -6) {
-                player.x = -6;
-            }
-            if (player.x > 700 - 26) {
-                // If player is headed for right door, its fine
-                if (RIGHT_DOOR_Y1 < player.y && player.y < RIGHT_DOOR_Y2 - 32) {
-                    if (player.x > 700) {
-                        // When we get there, switch scenes
-                        scene.gotoNextScene();
-                        return true;
-                    }
-                } else {
-                    // Restrict bounds otherwise
-                    player.x = 700 - 26;
+        if (player.x < -6) {
+            player.x = oldX;
+        }
+        if (player.x > 700 - 26) {
+            // If player is headed for right door, its fine
+            if (RIGHT_DOOR_Y1 < player.y && player.y < RIGHT_DOOR_Y2 - 32) {
+                if (player.x > 700) {
+                    // When we get there, switch scenes
+                    scene.gotoNextScene();
+                    return true;
                 }
-            }
-            if (player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2 && player.x < LEFT_X2 - 6) {
-                player.x = LEFT_X2 - 6;
-            }
-            if (player.y < TOP_Y2 && player.x > TOP_X1 - 26) {
-                player.x = TOP_X1 - 26;
-            }
-            if (player.y > BOTTOM_Y1 - 32 && player.x > BOTTOM_X1 - 26) {
-                player.x = BOTTOM_X1 - 26;
+            } else {
+                // Restrict bounds otherwise
+                player.x = oldX;
             }
         }
+        if (player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2 && player.x < LEFT_X2 - 6) {
+            player.x = oldX;
+            player.y = oldY;
+        }
+        if (player.y < TOP_Y2 && player.x > TOP_X1 - 26) {
+            player.x = oldX;
+            player.y = oldY;
+        }
+        if (player.y > BOTTOM_Y1 - 32 && player.x > BOTTOM_X1 - 26) {
+            player.x = oldX;
+            player.y = oldY;
+        }
 
-        if (oldY != player.y) {
-            // Only test Y coordinate stuff
-            if (player.y < 0) {
-                // If player is headed for top-left door, its fine
-                if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
-                    if (player.y < -26) {
-                        // This one jumps back to SquashCourtScene
-                        scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.TOP);
-                        scene.switchToScene(SQUASH_COURT_SCENE_IDX);
-                        return true;
-                    }
-                } else {
-                    player.y = 0;
+        if (player.y < 0) {
+            // If player is headed for top-left door, its fine
+            if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
+                if (player.y < -26) {
+                    // This one jumps back to SquashCourtScene
+                    scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.TOP);
+                    scene.switchToScene(SQUASH_COURT_SCENE_IDX);
+                    return true;
                 }
+            } else {
+                player.y = oldY;
             }
-            if (player.y > 450 - 32) {
-                // If player is headed for top-left door, its fine
-                if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
-                    if (player.y > 450) {
-                        // This one also jumps back to SquashCourtScene
-                        scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.BOTTOM);
-                        scene.switchToScene(SQUASH_COURT_SCENE_IDX);
-                        return true;
-                    }
-                } else {
-                    player.y = 450 - 32;
+        }
+        if (player.y > 450 - 32) {
+            // If player is headed for top-left door, its fine
+            if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
+                if (player.y > 450) {
+                    // This one also jumps back to SquashCourtScene
+                    scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.BOTTOM);
+                    scene.switchToScene(SQUASH_COURT_SCENE_IDX);
+                    return true;
                 }
-            }
-            if (player.x < LEFT_X2 - 6 && player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2) {
-                // If oldY > newY, player was moving upwards
-                player.y = oldY > player.y ? LEFT_Y2 : LEFT_Y1 - 32;
-            }
-            if (player.x > TOP_X1 - 26 && player.y < TOP_Y2) {
-                player.y = TOP_Y2;
-            }
-            if (player.x > BOTTOM_X1 - 26 && player.y > BOTTOM_Y1 - 32) {
-                player.y = BOTTOM_Y1 - 32;
+            } else {
+                player.y = oldY;
             }
         }
         return false;
