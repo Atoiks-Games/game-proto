@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+import java.util.Map;
+
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
@@ -139,7 +141,7 @@ public final class CourtHallwayScene extends GameScene {
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y < -26) {
                         // This one jumps back to SquashCourtScene
-                        scene.switchToScene(0);
+                        scene.switchToScene(((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class));
                         return true;
                     }
                 } else {
@@ -151,7 +153,7 @@ public final class CourtHallwayScene extends GameScene {
                 if (LEFT_DOOR_X1 < player.x && player.x < LEFT_DOOR_X2) {
                     if (player.y > 450) {
                         // For now, This one jumps back to SquashCourtScene
-                        scene.switchToScene(0);
+                        scene.switchToScene(((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class));
                         return true;
                     }
                 } else {
