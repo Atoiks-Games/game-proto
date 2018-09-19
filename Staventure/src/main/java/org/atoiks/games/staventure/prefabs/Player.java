@@ -1,10 +1,13 @@
 package org.atoiks.games.staventure.prefabs;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
+
+import org.atoiks.games.staventure.colliders.RectangleCollider;
 
 public class Player {
 
@@ -20,6 +23,8 @@ public class Player {
     public static final int MOVING_LEFT  = 6;
     public static final int MOVING_UP    = 9;
 
+    public final RectangleCollider collider = new RectangleCollider();
+
     public Direction direction;
     public int state;
 
@@ -28,6 +33,12 @@ public class Player {
     public float speed;
 
     public float elapsed;
+
+    public Player() {
+        // Collider's size does not change
+        collider.w = 32 - 12;
+        collider.h = 32;
+    }
 
     public void render(final IGraphics g) {
         final int offset;
@@ -44,6 +55,12 @@ public class Player {
         } else {
             g.drawImage(SPRITE_SHEET[offset + state], (int) x, (int) y);
         }
+
+        /*
+        // Debug use: Displays the collider
+        g.setColor(Color.black);
+        collider.render(g);
+        */
     }
 
     public void update(final float dt, final SceneManager scene) {
@@ -73,9 +90,19 @@ public class Player {
             elapsed = 0;
             if (++state > 2) state = 0;
         }
+
+        // Update collider location
+        // x coordinates have 6px padding
+        collider.x = this.x + 6;
+        collider.y = this.y;
     }
 
-    public boolean overlapsRect(final float x1, final float y1, final float x2, final float y2) {
-        return x < x2 && x + 32 > x1 && y < y2 && y + 32 > y1;
+    public void move(final float x, final float y) {
+        this.x = x;
+        this.y = y;
+
+        // Padding
+        collider.x = x + 6;
+        collider.y = y;
     }
 }

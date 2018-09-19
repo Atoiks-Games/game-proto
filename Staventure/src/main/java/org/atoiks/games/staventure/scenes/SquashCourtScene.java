@@ -15,6 +15,8 @@ import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
 
+import org.atoiks.games.staventure.colliders.RectangleCollider;
+
 public final class SquashCourtScene extends GameScene {
 
     public enum ID {
@@ -45,6 +47,7 @@ public final class SquashCourtScene extends GameScene {
     private Image pyImg;
     private float pyX;
     private float pyY;
+    private final RectangleCollider pyCollider = new RectangleCollider();
 
     @Override
     public void init() {
@@ -57,9 +60,12 @@ public final class SquashCourtScene extends GameScene {
         player = new Player();
         player.state = Player.IDLE_FRAME;
         player.direction = Player.Direction.DOWN;
-        player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
-        player.y = 180;
+        player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 180);
         player.speed = 50;
+
+        // PY's collider will never change width and height
+        pyCollider.w = 32 - 12;
+        pyCollider.h = 32;
 
         // Define this value
         scene.resources().put(SquashCourtScene.KEY_ID, (id = ID.TOP));
@@ -70,13 +76,14 @@ public final class SquashCourtScene extends GameScene {
         if (from == COURT_HALLWAY_SCENE_IDX) {
             this.id = (ID) scene.resources().get(KEY_ID);
             player.direction = Player.Direction.UP;
-            player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
-            player.y = 420;
+            player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 420);
         }
 
         // Recompute PY's location
         pyX = rnd.nextFloat() * (X2 - X1 - 20) + X1 + 5;
         pyY = rnd.nextFloat() * (Y2 - Y1 - 20) + Y1 + 5;
+        pyCollider.x = pyX + 6; // +6 due to padding
+        pyCollider.y = pyY;
     }
 
     @Override
@@ -133,7 +140,7 @@ public final class SquashCourtScene extends GameScene {
 
         if (id == ID.TOP) {
             // See if we bump into PY
-            if (player.overlapsRect(pyX + 6, pyY, pyX + pyImg.getWidth(null) - 6, pyY + pyImg.getHeight(null))) {
+            if (pyCollider.collidesWith(player.collider)) {
                 JOptionPane.showMessageDialog(null, "Hey you! Watch it!", "PY", JOptionPane.WARNING_MESSAGE, pyIcon);
             }
         }
