@@ -11,22 +11,13 @@ import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
 
+import org.atoiks.games.staventure.colliders.RectangleCollider;
+
 public final class CourtHallwayScene extends GameScene {
 
-    private static final int LEFT_X1 = 0;
-    private static final int LEFT_Y1 = 49;
-    private static final int LEFT_X2 = 106;
-    private static final int LEFT_Y2 = 397;
-
-    private static final int TOP_X1 = 162;
-    private static final int TOP_Y1 = 0;
-    private static final int TOP_X2 = 700;
-    private static final int TOP_Y2 = 154;
-
-    private static final int BOTTOM_X1 = 162;
-    private static final int BOTTOM_Y1 = 316;
-    private static final int BOTTOM_X2 = 700;
-    private static final int BOTTOM_Y2 = 450;
+    private static final RectangleCollider LEFT_COLLIDER = new RectangleCollider(0, 49, 106 - 0, 397 - 49);
+    private static final RectangleCollider TOP_COLLIDER = new RectangleCollider(162, 0, 700 - 162, 155 - 0);
+    private static final RectangleCollider BOTTOM_COLLIDER = new RectangleCollider(162, 316, 700 - 162, 450 - 316);
 
     private static final int LEFT_DOOR_X1 = 25;
     private static final int LEFT_DOOR_X2 = 60;
@@ -81,9 +72,9 @@ public final class CourtHallwayScene extends GameScene {
         /*
         // Just for debugging purposes. These are the *walls*
         g.setColor(Color.red);
-        g.drawRect(LEFT_X1, LEFT_Y1, LEFT_X2, LEFT_Y2);
-        g.drawRect(TOP_X1, TOP_Y1, TOP_X2, TOP_Y2);
-        g.drawRect(BOTTOM_X1, BOTTOM_Y1, BOTTOM_X2, BOTTOM_Y2);
+        LEFT_COLLIDER.render(g);
+        TOP_COLLIDER.render(g);
+        BOTTOM_COLLIDER.render(g);
         */
 
         player.render(g);
@@ -116,6 +107,11 @@ public final class CourtHallwayScene extends GameScene {
         // player is 32 * 32, but x axis actually has a 6 px padding
         // on each side
 
+        if (player.collider.collidesWithAny(LEFT_COLLIDER, TOP_COLLIDER, BOTTOM_COLLIDER)) {
+            player.move(oldX, oldY);
+            return false;
+        }
+
         if (player.x < -6) {
             player.x = oldX;
         }
@@ -131,18 +127,6 @@ public final class CourtHallwayScene extends GameScene {
                 // Restrict bounds otherwise
                 player.x = oldX;
             }
-        }
-        if (player.y > LEFT_Y1 - 32 && player.y < LEFT_Y2 && player.x < LEFT_X2 - 6) {
-            player.x = oldX;
-            player.y = oldY;
-        }
-        if (player.y < TOP_Y2 && player.x > TOP_X1 - 26) {
-            player.x = oldX;
-            player.y = oldY;
-        }
-        if (player.y > BOTTOM_Y1 - 32 && player.x > BOTTOM_X1 - 26) {
-            player.x = oldX;
-            player.y = oldY;
         }
 
         if (player.y < 0) {

@@ -98,11 +98,17 @@ public class Player {
     }
 
     public void move(final float x, final float y) {
-        this.x = x;
-        this.y = y;
+        setX(x);
+        setY(y);
+    }
 
-        // Padding
+    public void setX(final float x) {
+        this.x = x;
         collider.x = x + 6;
+    }
+
+    public void setY(final float y) {
+        this.y = y;
         collider.y = y;
     }
 }
