@@ -12,7 +12,7 @@ public class Player {
         UP, DOWN, LEFT, RIGHT;
     }
 
-    public final static Image[] SPRITE_SHEET = new Image[12];
+    public static final Image[] SPRITE_SHEET = new Image[12];
 
     public static final int IDLE_FRAME   = -1;
     public static final int MOVING_DOWN  = 0;
