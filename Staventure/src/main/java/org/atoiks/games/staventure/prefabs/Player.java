@@ -74,4 +74,8 @@ public class Player {
             if (++state > 2) state = 0;
         }
     }
+
+    public boolean overlapsRect(final float x1, final float y1, final float x2, final float y2) {
+        return x < x2 && x + 32 > x1 && y < y2 && y + 32 > y1;
+    }
 }

@@ -5,6 +5,10 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 import java.util.Map;
+import java.util.Random;
+
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
@@ -28,6 +32,8 @@ public final class SquashCourtScene extends GameScene {
     private static final int DOOR_X1 = 300;
     private static final int DOOR_X2 = 360;
 
+    private final Random rnd = new Random();
+
     private Image bg;
     private Player player;
 
@@ -35,9 +41,16 @@ public final class SquashCourtScene extends GameScene {
 
     private ID id;
 
+    private ImageIcon pyIcon;
+    private Image pyImg;
+    private float pyX;
+    private float pyY;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/squash_court/squash_court.png");
+        pyImg = (Image) scene.resources().get("/py/spr_2.png");
+        pyIcon = new ImageIcon(pyImg);
 
         COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
 
@@ -60,6 +73,10 @@ public final class SquashCourtScene extends GameScene {
             player.x = (DOOR_X1 + DOOR_X2) / 2 - 16;
             player.y = 420;
         }
+
+        // Recompute PY's location
+        pyX = rnd.nextFloat() * (X2 - X1 - 20) + X1 + 5;
+        pyY = rnd.nextFloat() * (Y2 - Y1 - 20) + Y1 + 5;
     }
 
     @Override
@@ -79,6 +96,11 @@ public final class SquashCourtScene extends GameScene {
         */
 
         player.render(g);
+
+        if (id == ID.TOP) {
+            // PY only stays in the top court
+            g.drawImage(pyImg, (int) pyX, (int) pyY);
+        }
 
         g.setColor(Color.lightGray);
         g.fillRect(DOOR_X1, Y2 - 1, DOOR_X2, Y2 + 4);
@@ -106,6 +128,13 @@ public final class SquashCourtScene extends GameScene {
                 }
             } else {
                 player.y = Y2 - 32;
+            }
+        }
+
+        if (id == ID.TOP) {
+            // See if we bump into PY
+            if (player.overlapsRect(pyX + 6, pyY, pyX + pyImg.getWidth(null) - 6, pyY + pyImg.getHeight(null))) {
+                JOptionPane.showMessageDialog(null, "Hey you! Watch it!", "PY", JOptionPane.WARNING_MESSAGE, pyIcon);
             }
         }
 
