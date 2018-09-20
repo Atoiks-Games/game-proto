@@ -97,6 +97,17 @@ public final class LoadingScene extends Scene {
                     // CourtHallwayScene resources
                     loadImageFromResource("/court_hallway/floor.png");
 
+                    // LibraryScene resources
+                    loadImageFromResource("/library/floor.png");
+                    loadImageFromResource("/library/chair.png");
+                    loadImageFromResource("/library/table.png");
+
+                    loadImageFromResource("/library/bookshelf.png");
+
+                    loadImageFromResource("/library/com.png");
+                    loadImageFromResource("/library/com_chair.png");
+                    loadImageFromResource("/library/com_table.png");
+
                     if (loaded == LoadState.LOADING) {
                         loaded = LoadState.DONE;
                     }

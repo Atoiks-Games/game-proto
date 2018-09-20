@@ -40,7 +40,7 @@ public class Main {
 
     public static void main(String[] args) {
         final HashMap<Class<?>, Integer> sceneMap = new HashMap<>();
-        final GameScene[] scenes = { new SquashCourtScene(), new CourtHallwayScene() };
+        final GameScene[] scenes = { new SquashCourtScene(), new CourtHallwayScene(), new LibraryScene() };
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)

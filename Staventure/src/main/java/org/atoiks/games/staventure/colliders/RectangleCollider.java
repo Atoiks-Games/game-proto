@@ -18,6 +18,15 @@ public final class RectangleCollider implements Collider {
         this.y = y;
         this.w = w;
         this.h = h;
+
+        if (w < 0) {
+            this.x += w;
+            this.w *= -1;
+        }
+        if (h < 0) {
+            this.y += h;
+            this.h *= -1;
+        }
     }
 
     @Override
