@@ -24,11 +24,11 @@ public final class LibraryScene extends GameScene {
     };
 
     private static final int[] BOOKSHELF_XS = {
-        90, 260, 430, 600
+        90, 260, 430, 600, 1108
     };
 
     private static final int[] BOOKSHELF_YS = {
-        475, 475, 475, 475
+        495, 495, 495, 495, 455
     };
 
     private static final int COM_TABLE_X = 800;
@@ -136,9 +136,13 @@ public final class LibraryScene extends GameScene {
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
-        player.direction = Player.Direction.DOWN;
-        player.move(10, 15);
         player.speed = 50;
+    }
+
+    @Override
+    public void enter(int from) {
+        player.direction = Player.Direction.LEFT;
+        player.move(1160, 220);
     }
 
     @Override
