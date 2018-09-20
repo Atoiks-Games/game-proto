@@ -32,6 +32,18 @@ public final class RectangleCollider implements Collider {
             return x < rect.x + rect.w && x + w > rect.x
                 && y < rect.y + rect.h && y + h > rect.y;
         }
+        if (other.getClass() == CircleCollider.class) {
+            return other.collidesWith(this);
+        }
         return false;
+    }
+
+    public float[] toPolygon() {
+        return new float[] {
+            x,     y,
+            x + w, y,
+            x + w, y + h,
+            x,     y + h,
+        };
     }
 }
