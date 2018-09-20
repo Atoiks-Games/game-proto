@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+mainClassName = 'org.atoiks.games.staventure.Main'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile project(':Framework2D')
+    testCompile 'junit:junit:4.12'
+}
+
+applicationDistribution.from('CONTRIBUTORS.txt') {
+    into ''
+}
+
+applicationDistribution.from('README.md') {
+    into ''
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+	html.enabled true
+    }
+}
