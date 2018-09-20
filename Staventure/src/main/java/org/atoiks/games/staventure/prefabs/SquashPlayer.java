@@ -2,14 +2,12 @@ package org.atoiks.games.staventure.prefabs;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 import org.atoiks.games.framework2d.IGraphics;
-import org.atoiks.games.framework2d.SceneManager;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
-public class Player {
+public class SquashPlayer{
 
     public static final Image[] SPRITE_SHEET = new Image[12];
 
@@ -30,7 +28,7 @@ public class Player {
 
     public float elapsed;
 
-    public Player() {
+    public SquashPlayer() {
         // Collider's size does not change
         collider.w = 32 - 12;
         collider.h = 32;
@@ -59,24 +57,13 @@ public class Player {
         */
     }
 
-    public void update(final float dt, final SceneManager scene) {
+    public void update(final float dt, final Direction nextMove) {
         elapsed += dt;
         boolean updateState = true;
-        final float dsp = speed * dt;
-        if (scene.keyboard().isKeyDown(KeyEvent.VK_W)) {
-            this.y -= dsp;
-            direction = Direction.UP;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_S)) {
-            this.y += dsp;
-            direction = Direction.DOWN;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_A)) {
-            this.x -= dsp;
-            direction = Direction.LEFT;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_D)) {
-            this.x += dsp;
-            direction = Direction.RIGHT;
-        } else {
+        if (nextMove == null) {
             updateState = false;
+        } else {
+            direction = nextMove;
         }
 
         if (!updateState) {
@@ -96,6 +83,11 @@ public class Player {
     public void move(final float x, final float y) {
         setX(x);
         setY(y);
+    }
+
+    public void translate(final float dx, final float dy) {
+        setX(x + dx);
+        setY(y + dy);
     }
 
     public void setX(final float x) {

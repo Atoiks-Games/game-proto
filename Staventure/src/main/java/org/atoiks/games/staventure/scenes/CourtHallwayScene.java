@@ -10,6 +10,7 @@ import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
+import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
@@ -40,7 +41,7 @@ public final class CourtHallwayScene extends GameScene {
         SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
 
         player = new Player();
-        player.direction = Player.Direction.DOWN;
+        player.direction = Direction.DOWN;
         player.state = Player.IDLE_FRAME;
         player.speed = 80;
     }

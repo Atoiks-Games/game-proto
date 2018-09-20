@@ -89,10 +89,14 @@ public final class LoadingScene extends Scene {
                     for (int i = 1; i <= 12; ++i) {
                         final String name = "/py/spr_" + i + ".png";
                         loadImageFromResource(name);
+                        SquashPlayer.SPRITE_SHEET[i - 1] = (Image) scene.resources().get(name);
                     }
 
                     // SquashCourtScene resources
                     loadImageFromResource("/squash_court/floor.png");
+
+                    // SquashGameScene resources
+                    loadImageFromResource("/squash_game/floor.png");
 
                     // CourtHallwayScene resources
                     loadImageFromResource("/court_hallway/floor.png");

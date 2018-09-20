@@ -14,6 +14,7 @@ import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
+import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
@@ -25,6 +26,7 @@ public final class SquashCourtScene extends GameScene {
     }
 
     public static final String KEY_ID = "scene.squash_court.id";
+    public static final String KEY_WIN = "scene.squash_court.win";
 
     private static final int X1 = 155;
     private static final int Y1 = 4;
@@ -40,6 +42,7 @@ public final class SquashCourtScene extends GameScene {
     private Player player;
 
     private int COURT_HALLWAY_SCENE_IDX;
+    private int SQUASH_GAME_SCENE_IDX;
 
     private ID id;
 
@@ -49,6 +52,8 @@ public final class SquashCourtScene extends GameScene {
     private float pyY;
     private final RectangleCollider pyCollider = new RectangleCollider();
 
+    private boolean winAgainstPY;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/squash_court/floor.png");
@@ -56,10 +61,11 @@ public final class SquashCourtScene extends GameScene {
         pyIcon = new ImageIcon(pyImg);
 
         COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
+        SQUASH_GAME_SCENE_IDX   = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashGameScene.class);
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
-        player.direction = Player.Direction.DOWN;
+        player.direction = Direction.DOWN;
         player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 180);
         player.speed = 50;
 
@@ -69,13 +75,16 @@ public final class SquashCourtScene extends GameScene {
 
         // Define this value
         scene.resources().put(SquashCourtScene.KEY_ID, (id = ID.TOP));
+        scene.resources().put(SquashCourtScene.KEY_WIN, (winAgainstPY = false));
     }
 
     @Override
     public void enter(int from) {
-        if (from == COURT_HALLWAY_SCENE_IDX) {
+        if (from == SQUASH_GAME_SCENE_IDX) {
+            winAgainstPY = (boolean) scene.resources().get(SquashCourtScene.KEY_WIN);
+        } else if (from == COURT_HALLWAY_SCENE_IDX) {
             this.id = (ID) scene.resources().get(KEY_ID);
-            player.direction = Player.Direction.UP;
+            player.direction = Direction.UP;
             player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 420);
         }
 
@@ -104,7 +113,7 @@ public final class SquashCourtScene extends GameScene {
 
         player.render(g);
 
-        if (id == ID.TOP) {
+        if (id == ID.TOP && !winAgainstPY) {
             // PY only stays in the top court
             g.drawImage(pyImg, (int) pyX, (int) pyY);
         }
@@ -138,10 +147,11 @@ public final class SquashCourtScene extends GameScene {
             }
         }
 
-        if (id == ID.TOP) {
+        if (id == ID.TOP && !winAgainstPY) {
             // See if we bump into PY
             if (pyCollider.collidesWith(player.collider)) {
-                JOptionPane.showMessageDialog(null, "Hey you! Watch it!", "PY", JOptionPane.WARNING_MESSAGE, pyIcon);
+                scene.switchToScene(SQUASH_GAME_SCENE_IDX);
+                return true;
             }
         }
 

@@ -7,6 +7,7 @@ import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
+import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.CircleCollider;
 import org.atoiks.games.staventure.colliders.RectangleCollider;
@@ -141,7 +142,7 @@ public final class LibraryScene extends GameScene {
 
     @Override
     public void enter(int from) {
-        player.direction = Player.Direction.LEFT;
+        player.direction = Direction.LEFT;
         player.move(1160, 220);
     }
 

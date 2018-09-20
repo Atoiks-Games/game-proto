@@ -48,26 +48,28 @@ public final class CircleCollider implements Collider {
         return false;
     }
 
-    private static boolean intersectSegmentCircle(float startX, float startY, float endX, float endY,
-                                                  float centerX, float centerY, float r) {
-        // Based on https://www.gamedevelopment.blog/collision-detection-circles-rectangles-and-polygons/
-        final float t0X = endX - startX;
-        final float t0Y = endX - startY;
-        final float t1X = centerX - startX;
-        final float t1Y = centerY - startY;
+    private static boolean intersectSegmentCircle(float x1, float y1, float x2, float y2,
+                                                  float cx, float cy, float cr) {
+        // Taken from https://stackoverflow.com/a/10392860
+        final float acx = cx - x1;
+        final float acy = cy - y1;
 
-        final float l = (float) Math.hypot(t0X, t0Y);
-        final float u = t1X * t0X / l + t1Y * t0Y / l;
+        final float abx = x2 - x1;
+        final float aby = y2 - y1;
 
-        final float t2X, t2Y;
-        if (u <= 0) {
-            t2X = startX; t2Y = startY;
-        } else {
-            t2X = endX; t2Y = endY;
+        final float ab2 = abx * abx + aby * aby;
+        final float acab = acx * abx + acy * aby;
+        float t = acab / ab2;
+
+        if (t < 0) {
+            t = 0;
+        } else if (t > 1) {
+            t = 1;
         }
 
-        final float x = centerX - t2X;
-        final float y = centerY - t2Y;
-        return x * x + y * y <= r * r;
+        final float hx = (abx * t) + x1 - cx;
+        final float hy = (aby * t) + y1 - cy;
+
+        return hx * hx + hy * hy <= cr * cr;
     }
 }
