@@ -2,6 +2,8 @@ package org.atoiks.games.staventure.scenes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.io.BufferedInputStream;
 
 import java.awt.Color;
@@ -20,6 +22,8 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+
+import org.atoiks.games.staventure.GameData;
 
 import org.atoiks.games.staventure.prefabs.*;
 
@@ -111,6 +115,16 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/library/com.png");
                     loadImageFromResource("/library/com_chair.png");
                     loadImageFromResource("/library/com_table.png");
+
+                    // Try to load local game save
+                    GameData gameData = null;
+                    try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./save.dat"))) {
+                        gameData = (GameData) ois.readObject();
+                    } catch (IOException | ClassNotFoundException ex) {
+                        // Well, that just means either player does not have game save,
+                        // or we cannot read it, or the format is out of date
+                    }
+                    scene.resources().put("save.dat", gameData == null ? new GameData() : gameData);
 
                     if (loaded == LoadState.LOADING) {
                         loaded = LoadState.DONE;
