@@ -49,7 +49,7 @@ public final class ColbyHallwayScene extends GameScene {
     private int BUSINESS_OFFICE_SCENE_IDX;
 
     public void init() {
-        bgImg = (Image) scene.resources().get("/colby_hallway/floor.png");
+        bgImg = (Image) scene.resources().get("/colby/colby_hallway/floor.png");
 
         LIBRARY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(LibraryScene.class);
         BUSINESS_OFFICE_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(BusinessOfficeScene.class);

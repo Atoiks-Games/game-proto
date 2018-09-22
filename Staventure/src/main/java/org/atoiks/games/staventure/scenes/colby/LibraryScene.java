@@ -117,13 +117,13 @@ public final class LibraryScene extends GameScene {
 
     @Override
     public void init() {
-        bg = (Image) scene.resources().get("/library/floor.png");
+        bg = (Image) scene.resources().get("/colby/library/floor.png");
         bgWidth = bg.getWidth(null);
         bgHeight = bg.getHeight(null);
 
         COLBY_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(ColbyHallwayScene.class);
 
-        tableImg = (Image) scene.resources().get("/library/table.png");
+        tableImg = (Image) scene.resources().get("/colby/library/table.png");
         tableWidth = tableImg.getWidth(null);
         tableHeight = tableImg.getHeight(null);
 
@@ -135,7 +135,7 @@ public final class LibraryScene extends GameScene {
                     tableHeight);
         }
 
-        chairImg = (Image) scene.resources().get("/library/chair.png");
+        chairImg = (Image) scene.resources().get("/colby/library/chair.png");
         chairWidth = chairImg.getWidth(null);
         chairHeight = chairImg.getHeight(null);
 
@@ -152,19 +152,19 @@ public final class LibraryScene extends GameScene {
             }
         }
 
-        bookshelfImg = (Image) scene.resources().get("/library/bookshelf.png");
+        bookshelfImg = (Image) scene.resources().get("/colby/library/bookshelf.png");
         final int bookshelfWidth = bookshelfImg.getWidth(null);
         final int bookshelfHeight = bookshelfImg.getHeight(null);
         for (int i = 0; i < bookshelfColliders.length; ++i) {
             bookshelfColliders[i] = new RectangleCollider(BOOKSHELF_XS[i], BOOKSHELF_YS[i], bookshelfWidth, bookshelfHeight);
         }
 
-        comImg = (Image) scene.resources().get("/library/com.png");
-        comTableImg = (Image) scene.resources().get("/library/com_table.png");
+        comImg = (Image) scene.resources().get("/colby/library/com.png");
+        comTableImg = (Image) scene.resources().get("/colby/library/com_table.png");
         final float comTableR = comTableImg.getHeight(null) / 2;
         comTableCollider = new CircleCollider(COM_TABLE_X + comTableR, COM_TABLE_Y + comTableR, comTableR);
 
-        comChairImg = (Image) scene.resources().get("/library/com_chair.png");
+        comChairImg = (Image) scene.resources().get("/colby/library/com_chair.png");
         final int comChairWidth = comChairImg.getWidth(null);
         final int comChairHeight = comChairImg.getHeight(null);
         for (int i = 0; i < comChairColliders.length; ++i) {
@@ -177,13 +177,13 @@ public final class LibraryScene extends GameScene {
                     (float) (comChairWidth * SGN_ARRAY[2 * i + 1] + comChairHeight * SGN_ARRAY[2 * i]));
         }
 
-        officeImg = (Image) scene.resources().get("/library/office.png");
+        officeImg = (Image) scene.resources().get("/colby/library/office.png");
         officeCollider.x = 1313;
         officeCollider.y = 365;
         officeCollider.w = officeImg.getWidth(null);
         officeCollider.h = officeImg.getHeight(null);
 
-        fountainImg = (Image) scene.resources().get("/library/fountain.png");
+        fountainImg = (Image) scene.resources().get("/colby/library/fountain.png");
         fountainCollider.x = 1141;
         fountainCollider.y = 165;
         fountainCollider.w = fountainImg.getWidth(null);
@@ -194,13 +194,13 @@ public final class LibraryScene extends GameScene {
         fountainBumpCollider.w = 300;
         fountainBumpCollider.h = 2 + fountainCollider.y + fountainCollider.h;
 
-        sofaTableImg = (Image) scene.resources().get("/library/sofa_table.png");
+        sofaTableImg = (Image) scene.resources().get("/colby/library/sofa_table.png");
         sofaTableCollider.x = 975;
         sofaTableCollider.y = 95;
         sofaTableCollider.w = sofaTableImg.getWidth(null);
         sofaTableCollider.h = sofaTableImg.getHeight(null);
 
-        sofaBigImg = (Image) scene.resources().get("/library/sofa_big.png");
+        sofaBigImg = (Image) scene.resources().get("/colby/library/sofa_big.png");
         sofaBigCollider.x = 975;
         sofaBigCollider.y = 30;
         sofaBigCollider.w = sofaBigImg.getWidth(null);

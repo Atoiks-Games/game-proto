@@ -61,33 +61,33 @@ public final class BusinessOfficeScene extends GameScene {
 
     @Override
     public void init() {
-        bgImg = (Image) scene.resources().get("/business_office/floor.png");
+        bgImg = (Image) scene.resources().get("/colby/business_office/floor.png");
 
-        tableImg = (Image) scene.resources().get("/business_office/table.png");
+        tableImg = (Image) scene.resources().get("/colby/business_office/table.png");
         tableCollider.x = 206 + 125;
         tableCollider.y = 54;
         tableCollider.w = tableImg.getWidth(null);
         tableCollider.h = tableImg.getHeight(null);
 
-        chairInImg = (Image) scene.resources().get("/business_office/chair_in.png");
+        chairInImg = (Image) scene.resources().get("/colby/business_office/chair_in.png");
         chairInCollider.x = 319 + 125;
         chairInCollider.y = 167;
         chairInCollider.w = chairInImg.getWidth(null);
         chairInCollider.h = chairInImg.getHeight(null);
 
-        chairOutImg = (Image) scene.resources().get("/business_office/chair_out.png");
+        chairOutImg = (Image) scene.resources().get("/colby/business_office/chair_out.png");
         chairOutCollider.x = 119 + 125;
         chairOutCollider.y = 185;
         chairOutCollider.w = chairOutImg.getWidth(null);
         chairOutCollider.h = chairOutImg.getHeight(null);
 
-        shelfImg = (Image) scene.resources().get("/business_office/shelf.png");
+        shelfImg = (Image) scene.resources().get("/colby/business_office/shelf.png");
         shelfCollider.x = 15 + 125;
         shelfCollider.y = 15;
         shelfCollider.w = shelfImg.getWidth(null);
         shelfCollider.h = shelfImg.getHeight(null);
 
-        printerImg = (Image) scene.resources().get("/business_office/printer.png");
+        printerImg = (Image) scene.resources().get("/colby/business_office/printer.png");
         printerCollider.x = 327 + 125;
         printerCollider.y = 9;
         printerCollider.w = printerImg.getWidth(null);
