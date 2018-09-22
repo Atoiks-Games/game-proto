@@ -25,6 +25,8 @@ import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.swing.Frame;
 
 import org.atoiks.games.staventure.scenes.*;
+import org.atoiks.games.staventure.scenes.gym.*;
+import org.atoiks.games.staventure.scenes.colby.*;
 
 public class Main {
 
