@@ -20,13 +20,11 @@ package org.atoiks.games.staventure.scenes;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
