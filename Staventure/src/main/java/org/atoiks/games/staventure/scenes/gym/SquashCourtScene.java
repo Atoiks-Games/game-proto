@@ -24,8 +24,6 @@ import java.awt.Image;
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
@@ -62,7 +60,6 @@ public final class SquashCourtScene extends GameScene {
 
     private ID id;
 
-    private ImageIcon pyIcon;
     private Image pyImg;
     private float pyX;
     private float pyY;
@@ -74,7 +71,6 @@ public final class SquashCourtScene extends GameScene {
     public void init() {
         bg = (Image) scene.resources().get("/gym/squash_court/floor.png");
         pyImg = (Image) scene.resources().get("/py/spr_2.png");
-        pyIcon = new ImageIcon(pyImg);
 
         COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
         SQUASH_GAME_SCENE_IDX   = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashGameScene.class);

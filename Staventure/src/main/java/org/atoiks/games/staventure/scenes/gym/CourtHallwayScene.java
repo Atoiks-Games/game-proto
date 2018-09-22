@@ -20,7 +20,6 @@ package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 import java.util.Map;
 

@@ -18,7 +18,6 @@
 
 package org.atoiks.games.staventure.prefabs;
 
-import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
