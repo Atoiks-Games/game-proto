@@ -134,6 +134,11 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/library/com_chair.png");
                     loadImageFromResource("/library/com_table.png");
 
+                    loadImageFromResource("/library/office.png");
+                    loadImageFromResource("/library/fountain.png");
+
+                    loadImageFromResource("/library/sofa_table.png");
+
                     // Try to load local game save
                     GameData gameData = null;
                     try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./save.dat"))) {

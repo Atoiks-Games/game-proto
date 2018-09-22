@@ -32,6 +32,9 @@ import org.atoiks.games.staventure.colliders.RectangleCollider;
 
 public final class LibraryScene extends GameScene {
 
+    private static final int DOOR_Y1 = 253;
+    private static final int DOOR_Y2 = 365;
+
     private static final int TABLE_Y1 = 50;
     private static final int TABLE_Y2 = 330;
 
@@ -75,28 +78,33 @@ public final class LibraryScene extends GameScene {
     private Image tableImg;
     private int tableWidth;
     private int tableHeight;
-
     private final RectangleCollider[] tableColliders = new RectangleCollider[2 * TABLE_XS.length];
 
     private Image chairImg;
     private int chairWidth;
     private int chairHeight;
-
     // Each table has two rows of chairs
     private final RectangleCollider[] chairColliders = new RectangleCollider[tableColliders.length * CHAIR_YS.length * 2];
 
     private Image bookshelfImg;
-
     private final RectangleCollider[] bookshelfColliders = new RectangleCollider[BOOKSHELF_XS.length];
 
     private Image comImg;
     private Image comTableImg;
-
     private CircleCollider comTableCollider;
 
     private Image comChairImg;
-
     private final RectangleCollider[] comChairColliders = new RectangleCollider[4];
+
+    private Image officeImg;
+    private final RectangleCollider officeCollider = new RectangleCollider();
+
+    private Image fountainImg;
+    private final RectangleCollider fountainCollider = new RectangleCollider();
+    private final RectangleCollider fountainBumpCollider = new RectangleCollider();
+
+    private Image sofaTableImg;
+    private final RectangleCollider sofaTableCollider = new RectangleCollider();
 
     private Player player;
 
@@ -160,6 +168,29 @@ public final class LibraryScene extends GameScene {
                     (float) (comChairWidth * SGN_ARRAY[2 * i + 1] + comChairHeight * SGN_ARRAY[2 * i]));
         }
 
+        officeImg = (Image) scene.resources().get("/library/office.png");
+        officeCollider.x = 1313;
+        officeCollider.y = 365;
+        officeCollider.w = officeImg.getWidth(null);
+        officeCollider.h = officeImg.getHeight(null);
+
+        fountainImg = (Image) scene.resources().get("/library/fountain.png");
+        fountainCollider.x = 1141;
+        fountainCollider.y = 165;
+        fountainCollider.w = fountainImg.getWidth(null);
+        fountainCollider.h = fountainImg.getHeight(null);
+
+        fountainBumpCollider.x = 1227;
+        fountainBumpCollider.y = -2;
+        fountainBumpCollider.w = 300;
+        fountainBumpCollider.h = 2 + fountainCollider.y + fountainCollider.h;
+
+        sofaTableImg = (Image) scene.resources().get("/library/sofa_table.png");
+        sofaTableCollider.x = 975;
+        sofaTableCollider.y = 95;
+        sofaTableCollider.w = sofaTableImg.getWidth(null);
+        sofaTableCollider.h = sofaTableImg.getHeight(null);
+
         player = new Player();
         player.state = Player.IDLE_FRAME;
         player.speed = 100;
@@ -168,7 +199,7 @@ public final class LibraryScene extends GameScene {
     @Override
     public void enter(int from) {
         player.direction = Direction.LEFT;
-        player.move(1160, 220);
+        player.move(1465, 280);
     }
 
     @Override
@@ -176,14 +207,15 @@ public final class LibraryScene extends GameScene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
-        g.scale(0.5f, 0.5f);
-
         // Ask Jeff or someone good at math to model
         // a floor-function that translate every so
         // often as opposed to 24/7?
         g.translate(350 - player.x, 175 - player.y);
 
         g.drawImage(bg, 0, 0);
+
+        g.setColor(Color.black);
+        g.fillPolygon(fountainBumpCollider.toPolygon());
 
         for (final RectangleCollider tc : tableColliders) {
             for (final int ry : CHAIR_YS) {
@@ -212,26 +244,16 @@ public final class LibraryScene extends GameScene {
         g.drawImage(comTableImg, COM_TABLE_X, COM_TABLE_Y);
         g.drawImage(comImg, COM_TABLE_X + 18, COM_TABLE_Y + 18);
 
+        g.drawImage(officeImg, officeCollider.x, officeCollider.y);
+        g.drawImage(fountainImg, fountainCollider.x, fountainCollider.y);
+        g.drawImage(sofaTableImg, sofaTableCollider.x, sofaTableCollider.y);
+
         player.render(g);
 
-        /*
-        // Debug use: renders the colliders for tables and chairs
+        g.setColor(Color.red);
+        g.fillRect(1495, DOOR_Y1, 1500, DOOR_Y2);
         g.setColor(Color.black);
-        player.collider.render(g);
-        for (int i = 0; i < tableColliders.length; ++i) {
-            tableColliders[i].render(g);
-        }
-        for (int i = 0; i < chairColliders.length; ++i) {
-            chairColliders[i].render(g);
-        }
-        for (int i = 0; i < bookshelfColliders.length; ++i) {
-            bookshelfColliders[i].render(g);
-        }
-        comTableCollider.render(g);
-        for (int i = 0; i < comChairColliders.length; ++i) {
-            comChairColliders[i].render(g);
-        }
-        */
+        g.fillRect(1500, DOOR_Y1, 1550, DOOR_Y2);
     }
 
     @Override
@@ -243,32 +265,53 @@ public final class LibraryScene extends GameScene {
         if (oldX != player.x || oldY != player.y) {
             // Dealing with the edges of the map
             if (player.x < -6) player.x = -6;
-            if (player.x > bgWidth - 26) player.x = bgWidth - 26;
+            if (player.x > bgWidth - 26) {
+                if (DOOR_Y1 < player.y && player.y < DOOR_Y2 - 32) {
+                    if (player.x > bgWidth) {
+                        // scene.switchToScene();
+                        scene.gotoNextScene();
+                        return true;
+                    }
+                } else {
+                    player.x = bgWidth - 26;
+                }
+            }
             if (player.y < 0) player.y = 0;
             if (player.y > bgHeight - 32) player.y = bgHeight - 32;
 
-            // Dealing with tables
             if (player.collider.collidesWithAny(tableColliders)) {
                 player.move(oldX, oldY);
             }
 
-            // Dealing with chairs
             if (player.collider.collidesWithAny(chairColliders)) {
                 player.move(oldX, oldY);
             }
 
-            // Dealing with bookshelf
             if (player.collider.collidesWithAny(bookshelfColliders)) {
                 player.move(oldX, oldY);
             }
 
-            // Dealing with computer table
             if (player.collider.collidesWith(comTableCollider)) {
                 player.move(oldX, oldY);
             }
 
-            // Dealing with computer chairs
             if (player.collider.collidesWithAny(comChairColliders)) {
+                player.move(oldX, oldY);
+            }
+
+            if (player.collider.collidesWith(officeCollider)) {
+                player.move(oldX, oldY);
+            }
+
+            if (player.collider.collidesWith(fountainCollider)) {
+                player.move(oldX, oldY);
+            }
+
+            if (player.collider.collidesWith(fountainBumpCollider)) {
+                player.move(oldX, oldY);
+            }
+
+            if (player.collider.collidesWith(sofaTableCollider)) {
                 player.move(oldX, oldY);
             }
         }
