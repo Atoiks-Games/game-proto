@@ -1,5 +1,4 @@
 apply plugin: 'java'
-apply plugin: 'jacoco'
 apply plugin: 'application'
 
 sourceCompatibility = 1.8
@@ -13,7 +12,6 @@ repositories {
 
 dependencies {
     compile project(':Framework2D')
-    testCompile 'junit:junit:4.12'
 }
 
 task copyLicense {
@@ -43,11 +41,4 @@ task copyLicense {
 
 applicationDistribution.from(copyLicense) {
     into ""
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-        html.enabled true
-    }
 }
