@@ -103,7 +103,7 @@ public final class BusinessOfficeScene extends GameScene {
     @Override
     public void enter(int from) {
         player.direction = Direction.RIGHT;
-        player.move(145, 200);
+        player.move(145, 210);
     }
 
     @Override
@@ -137,7 +137,7 @@ public final class BusinessOfficeScene extends GameScene {
         if (player.y > 450 - 32 - 5) player.y = 450 - 32 - 5;
         if (player.x < 129 - 6) {
             if (DOOR_Y1 < player.y && player.y < DOOR_Y2 - 26) {
-                if (player.x < 129 - 38) {
+                if (player.x < 129 - 28) {
                     scene.switchToScene(COLBY_HALLWAY_SCENE_IDX);
                     return true;
                 }
