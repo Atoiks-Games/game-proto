@@ -17,18 +17,15 @@ import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicBoolean; // No new line here because its still from java.util
 ```
 
-Indent pattern is 4 spaces, tabs, and then tab with 4 spaces, and then 2 tabs, and so on...
+Indent pattern is 4 spaces
 
 ```
 public class A {
 
-// Four spaces here
+    // Four spaces here
     public static void main (String[] args) {
-	// Tab here
-	if (true) {
-	    // Tab with four spaces
-	    System.out.println ("From A");
-	}
+        // Four more spaces here
+        System.out.println ("From A");
     }
 }
 ```
@@ -48,17 +45,17 @@ for (int i = 0; i < 10; ++i) {
 
 Wrap long function calls to the parenthesis. Padding is done with spaces.
 
-An extra level of indenting for anonymous classes.
+Same level of indenting for anonymous classes.
 
 ```
 redBox = new Sprite(ImageIO.read(Main.class.getResourceAsStream("red_box.bmp")),
                     new Point(50, 75))
-    {
-	@Override
-	public void onCollision (Sprite other) {
-	    // ... do stuff ...
-	}
-    };
+{
+    @Override
+    public void onCollision (Sprite other) {
+        // ... do stuff ...
+    }
+};
 ```
 
 Avoid using lambdas and member references introduced in java 8
@@ -67,6 +64,11 @@ Avoid using lambdas and member references introduced in java 8
 // Prefer this
 for (Item item : items) {
     // ... do stuff ...
+}
+
+// Or this
+for (int i = 0; i < items.size(); ++i) {
+	// ... do stuff ....
 }
 
 // Avoid this
