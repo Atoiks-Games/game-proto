@@ -32,33 +32,36 @@ import org.atoiks.games.staventure.colliders.RectangleCollider;
 
 public final class LibraryScene extends GameScene {
 
-    private static final int TABLE_Y = 90;
+    private static final int TABLE_Y1 = 50;
+    private static final int TABLE_Y2 = 330;
 
     private static final int[] TABLE_XS = {
-        90, 240, 390, 540, 690
+        240, 390, 540, 690
     };
 
     private static final int[] CHAIR_YS = {
-        105, 173, 231, 299
+        90, 138, 186, 234
     };
 
     private static final int[] BOOKSHELF_XS = {
-        90, 260, 430, 600, 1108
+        90, 260, 430, 600, 770, 1439,
+        90, 260, 430, 600, 770, 1439,
     };
 
     private static final int[] BOOKSHELF_YS = {
-        495, 495, 495, 495, 455
+        600, 600, 600, 600, 600, 590,
+        890, 890, 890, 890, 890, 860,
     };
 
-    private static final int COM_TABLE_X = 800;
-    private static final int COM_TABLE_Y = 520;
+    private static final int COM_TABLE_X = 1000;
+    private static final int COM_TABLE_Y = 640;
 
     private static final int[] COM_CHAIR_XS = {
-        644 + 250, 520 + 250, 700 + 250, 810 + 250
+        644 + 450, 520 + 450, 700 + 450, 810 + 450
     };
 
     private static final int[] COM_CHAIR_YS = {
-        512 - 17, 678 - 17, 804 - 17, 632 - 17
+        512 - 17 + 120, 678 - 17 + 120, 804 - 17 + 120, 632 - 17 + 120
     };
 
     private static final float SGN_ARRAY[] = {
@@ -73,14 +76,14 @@ public final class LibraryScene extends GameScene {
     private int tableWidth;
     private int tableHeight;
 
-    private final RectangleCollider[] tableColliders = new RectangleCollider[TABLE_XS.length];
+    private final RectangleCollider[] tableColliders = new RectangleCollider[2 * TABLE_XS.length];
 
     private Image chairImg;
     private int chairWidth;
     private int chairHeight;
 
     // Each table has two rows of chairs
-    private final RectangleCollider[] chairColliders = new RectangleCollider[TABLE_XS.length * CHAIR_YS.length * 2];
+    private final RectangleCollider[] chairColliders = new RectangleCollider[tableColliders.length * CHAIR_YS.length * 2];
 
     private Image bookshelfImg;
 
@@ -108,7 +111,11 @@ public final class LibraryScene extends GameScene {
         tableHeight = tableImg.getHeight(null);
 
         for (int i = 0; i < tableColliders.length; ++i) {
-            tableColliders[i] = new RectangleCollider(TABLE_XS[i], TABLE_Y, tableWidth, tableHeight);
+            tableColliders[i] = new RectangleCollider(
+                    TABLE_XS[i % TABLE_XS.length],
+                    i < TABLE_XS.length ? TABLE_Y1 : TABLE_Y2,
+                    tableWidth,
+                    tableHeight);
         }
 
         chairImg = (Image) scene.resources().get("/library/chair.png");
@@ -117,11 +124,11 @@ public final class LibraryScene extends GameScene {
 
         {
             int i = -1;
-            for (final int tx : TABLE_XS) {
-                // Paint chairs first!
-                for (final int cy : CHAIR_YS) {
+            for (final RectangleCollider tc : tableColliders) {
+                for (final int ry : CHAIR_YS) {
                     // One chair on each side of table
-                    final int cx = tx - chairWidth / 2;
+                    final float cx = tc.x - chairWidth / 2;
+                    final float cy = tc.y - TABLE_Y1 + ry;
                     chairColliders[++i] = new RectangleCollider(cx, cy, chairWidth, chairHeight);
                     chairColliders[++i] = new RectangleCollider(cx + tableWidth, cy, chairWidth, chairHeight);
                 }
@@ -155,7 +162,7 @@ public final class LibraryScene extends GameScene {
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
-        player.speed = 50;
+        player.speed = 100;
     }
 
     @Override
@@ -169,6 +176,8 @@ public final class LibraryScene extends GameScene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
+        g.scale(0.5f, 0.5f);
+
         // Ask Jeff or someone good at math to model
         // a floor-function that translate every so
         // often as opposed to 24/7?
@@ -176,15 +185,15 @@ public final class LibraryScene extends GameScene {
 
         g.drawImage(bg, 0, 0);
 
-        for (final int tx : TABLE_XS) {
-            // Paint chairs first!
-            for (final int cy : CHAIR_YS) {
+        for (final RectangleCollider tc : tableColliders) {
+            for (final int ry : CHAIR_YS) {
                 // One chair on each side of table
-                final int cx = tx - chairWidth / 2;
+                final float cx = tc.x - chairWidth / 2;
+                final float cy = tc.y - TABLE_Y1 + ry;
                 g.drawImage(chairImg, cx + chairWidth, cy + chairHeight, cx, cy);
                 g.drawImage(chairImg, cx + tableWidth, cy);
             }
-            g.drawImage(tableImg, tx, TABLE_Y);
+            g.drawImage(tableImg, tc.x, tc.y);
         }
 
         for (int i = 0; i < BOOKSHELF_XS.length; ++i) {
