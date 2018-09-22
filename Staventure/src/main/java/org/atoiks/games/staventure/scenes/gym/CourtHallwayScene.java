@@ -16,7 +16,7 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.atoiks.games.staventure.scenes;
+package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -54,7 +54,7 @@ public final class CourtHallwayScene extends GameScene {
 
     @Override
     public void init() {
-        bg = (Image) scene.resources().get("/court_hallway/floor.png");
+        bg = (Image) scene.resources().get("/gym/court_hallway/floor.png");
 
         SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
 

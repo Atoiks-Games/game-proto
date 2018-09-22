@@ -16,17 +16,15 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package org.atoiks.games.staventure.scenes;
+package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.event.KeyEvent;
 
 import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
@@ -74,7 +72,7 @@ public final class SquashCourtScene extends GameScene {
 
     @Override
     public void init() {
-        bg = (Image) scene.resources().get("/squash_court/floor.png");
+        bg = (Image) scene.resources().get("/gym/squash_court/floor.png");
         pyImg = (Image) scene.resources().get("/py/spr_2.png");
         pyIcon = new ImageIcon(pyImg);
 
