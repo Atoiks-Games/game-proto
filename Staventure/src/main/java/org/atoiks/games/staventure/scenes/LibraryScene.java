@@ -106,6 +106,9 @@ public final class LibraryScene extends GameScene {
     private Image sofaTableImg;
     private final RectangleCollider sofaTableCollider = new RectangleCollider();
 
+    private Image sofaBigImg;
+    private final RectangleCollider sofaBigCollider = new RectangleCollider();
+
     private Player player;
 
     @Override
@@ -191,6 +194,12 @@ public final class LibraryScene extends GameScene {
         sofaTableCollider.w = sofaTableImg.getWidth(null);
         sofaTableCollider.h = sofaTableImg.getHeight(null);
 
+        sofaBigImg = (Image) scene.resources().get("/library/sofa_big.png");
+        sofaBigCollider.x = 975;
+        sofaBigCollider.y = 30;
+        sofaBigCollider.w = sofaBigImg.getWidth(null);
+        sofaBigCollider.h = sofaBigImg.getHeight(null);
+
         player = new Player();
         player.state = Player.IDLE_FRAME;
         player.speed = 100;
@@ -247,6 +256,7 @@ public final class LibraryScene extends GameScene {
         g.drawImage(officeImg, officeCollider.x, officeCollider.y);
         g.drawImage(fountainImg, fountainCollider.x, fountainCollider.y);
         g.drawImage(sofaTableImg, sofaTableCollider.x, sofaTableCollider.y);
+        g.drawImage(sofaBigImg, sofaBigCollider.x, sofaBigCollider.y);
 
         player.render(g);
 
@@ -312,6 +322,10 @@ public final class LibraryScene extends GameScene {
             }
 
             if (player.collider.collidesWith(sofaTableCollider)) {
+                player.move(oldX, oldY);
+            }
+
+            if (player.collider.collidesWith(sofaBigCollider)) {
                 player.move(oldX, oldY);
             }
         }

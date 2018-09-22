@@ -137,6 +137,7 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/library/office.png");
                     loadImageFromResource("/library/fountain.png");
 
+                    loadImageFromResource("/library/sofa_big.png");
                     loadImageFromResource("/library/sofa_table.png");
 
                     // Try to load local game save
