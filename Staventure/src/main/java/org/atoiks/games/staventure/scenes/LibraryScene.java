@@ -21,6 +21,8 @@ package org.atoiks.games.staventure.scenes;
 import java.awt.Color;
 import java.awt.Image;
 
+import java.util.Map;
+
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
@@ -111,11 +113,15 @@ public final class LibraryScene extends GameScene {
 
     private Player player;
 
+    private int COLBY_HALLWAY_SCENE_IDX;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/library/floor.png");
         bgWidth = bg.getWidth(null);
         bgHeight = bg.getHeight(null);
+
+        COLBY_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(ColbyHallwayScene.class);
 
         tableImg = (Image) scene.resources().get("/library/table.png");
         tableWidth = tableImg.getWidth(null);
@@ -278,8 +284,7 @@ public final class LibraryScene extends GameScene {
             if (player.x > bgWidth - 26) {
                 if (DOOR_Y1 < player.y && player.y < DOOR_Y2 - 32) {
                     if (player.x > bgWidth) {
-                        // scene.switchToScene();
-                        scene.gotoNextScene();
+                        scene.switchToScene(COLBY_HALLWAY_SCENE_IDX);
                         return true;
                     }
                 } else {

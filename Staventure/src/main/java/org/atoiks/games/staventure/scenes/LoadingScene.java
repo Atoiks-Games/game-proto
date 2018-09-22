@@ -140,6 +140,9 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/library/sofa_big.png");
                     loadImageFromResource("/library/sofa_table.png");
 
+                    // ColbyHallwayScene
+                    loadImageFromResource("/colby_hallway/floor.png");
+
                     // Try to load local game save
                     GameData gameData = null;
                     try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./save.dat"))) {
