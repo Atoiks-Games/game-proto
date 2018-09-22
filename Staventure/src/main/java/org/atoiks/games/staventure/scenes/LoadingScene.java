@@ -140,8 +140,16 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/library/sofa_big.png");
                     loadImageFromResource("/library/sofa_table.png");
 
-                    // ColbyHallwayScene
+                    // ColbyHallwayScene resources
                     loadImageFromResource("/colby_hallway/floor.png");
+
+                    // BusinessOfficeScene resources
+                    loadImageFromResource("/business_office/floor.png");
+                    loadImageFromResource("/business_office/table.png");
+                    loadImageFromResource("/business_office/chair_in.png");
+                    loadImageFromResource("/business_office/chair_out.png");
+                    loadImageFromResource("/business_office/shelf.png");
+                    loadImageFromResource("/business_office/printer.png");
 
                     // Try to load local game save
                     GameData gameData = null;
