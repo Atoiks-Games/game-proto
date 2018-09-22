@@ -26,4 +26,4 @@ open the terminal and run `gradlew assemble` to build or `gradlew run` to run th
 
 To contribute, be sure to read `CONTRIBUTING.md` before you begin.
 
-Released under the MIT license!
+Released under the GPL 3 license!

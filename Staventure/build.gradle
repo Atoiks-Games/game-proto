@@ -16,17 +16,38 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-applicationDistribution.from('CONTRIBUTORS.txt') {
-    into ''
+task copyLicense {
+    outputs.file new File("$buildDir/LICENSE")
+    outputs.file new File("$buildDir/COPYING")
+    outputs.file new File("$buildDir/README.md")
+    outputs.file new File("$buildDir/CONTRIBUTORS.txt")
+    doLast {
+        copy {
+            from "../LICENSE"
+            into "$buildDir"
+        }
+        copy {
+            from "../COPYING"
+            into "$buildDir"
+        }
+        copy {
+            from "../README.md"
+            into "$buildDir"
+        }
+        copy {
+            from "../CONTRIBUTORS.txt"
+            into "$buildDir"
+        }
+    }
 }
 
-applicationDistribution.from('README.md') {
-    into ''
+applicationDistribution.from(copyLicense) {
+    into ""
 }
 
 jacocoTestReport {
     reports {
         xml.enabled true
-	html.enabled true
+        html.enabled true
     }
 }
