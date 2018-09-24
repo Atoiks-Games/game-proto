@@ -36,10 +36,10 @@ public final class ColbyHallwayScene extends GameScene {
     private static final int DOOR_LIB_X2 = 72;
     private static final int DOOR_LIB_Y2 = 329;
 
-    private static final int DOOR_BO_X1 = 50;
-    private static final int DOOR_BO_Y1 = 121;
-    private static final int DOOR_BO_X2 = 102;
-    private static final int DOOR_BO_Y2 = 125;
+    private static final int DOOR_BO_X1 = 80;
+    private static final int DOOR_BO_Y1 = 325;
+    private static final int DOOR_BO_X2 = 132;
+    private static final int DOOR_BO_Y2 = 329;
 
     private Image bgImg;
 
@@ -65,8 +65,8 @@ public final class ColbyHallwayScene extends GameScene {
             player.direction = Direction.UP;
             player.move(25, 272);
         } else if (from == BUSINESS_OFFICE_SCENE_IDX) {
-            player.direction = Direction.DOWN;
-            player.move(68, 130);
+            player.direction = Direction.UP;
+            player.move(98, 130);
         } else {
             player.direction = Direction.RIGHT;
             player.move(25, 218);
@@ -93,7 +93,7 @@ public final class ColbyHallwayScene extends GameScene {
         g.setColor(Color.red);
         g.fillRect(DOOR_BO_X1, DOOR_BO_Y1, DOOR_BO_X2, DOOR_BO_Y2);
         g.setColor(Color.black);
-        g.fillRect(DOOR_BO_X1, DOOR_BO_Y1 - 40, DOOR_BO_X2, DOOR_BO_Y1);
+        g.fillRect(DOOR_BO_X1, DOOR_BO_Y2, DOOR_BO_X2, DOOR_BO_Y2 + 40);
     }
 
     @Override
@@ -113,17 +113,15 @@ public final class ColbyHallwayScene extends GameScene {
             player.x = 700 - 26;
         }
         if (player.y < 125) {
+            player.y = 125;
+        }
+        if (player.y > 325 - 32) {
             if (DOOR_BO_X1 - 1 < player.x && player.x < DOOR_BO_X2 - 26) {
-                if (player.y < 125 - 32) {
+                if (player.y > 325) {
                     scene.switchToScene(BUSINESS_OFFICE_SCENE_IDX);
                     return true;
                 }
-            } else {
-                player.y = 125;
-            }
-        }
-        if (player.y > 325 - 32) {
-            if (DOOR_LIB_X1 - 6 < player.x && player.x < DOOR_LIB_X2 - 26) {
+            } else if (DOOR_LIB_X1 - 6 < player.x && player.x < DOOR_LIB_X2 - 26) {
                 if (player.y > 325) {
                     scene.switchToScene(LIBRARY_SCENE_IDX);
                     return true;
