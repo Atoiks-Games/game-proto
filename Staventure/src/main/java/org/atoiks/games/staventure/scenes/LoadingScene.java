@@ -197,7 +197,7 @@ public final class LoadingScene extends Scene {
 
         // AIS requires the use of BufferedInputStream since res-streams are not buffered
         try (final AudioInputStream in = AudioSystem.getAudioInputStream(new BufferedInputStream(is))) {
-            final Clip clip = AudioSystem.getClip();
+            final Clip clip = AudioSystem.getClip(null);
             clip.open(in);
             clip.stop();
             scene.resources().put(path, clip);
