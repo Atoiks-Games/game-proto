@@ -45,7 +45,10 @@ public final class CircleCollider implements Collider {
     public boolean collidesWith(Collider other) {
         if (other.getClass() == CircleCollider.class) {
             final CircleCollider circ = (CircleCollider) other;
-            return Math.hypot(x - circ.x, y - circ.y) < r + circ.r;
+            final float dx = x - circ.x;
+            final float dy = y - circ.y;
+            final float dr = r + circ.r;
+            return dx * dx + dy * dy < dr * dr;
         }
         if (other.getClass() == RectangleCollider.class) {
             return collidesWithPolygon(((RectangleCollider) other).toPolygon());
