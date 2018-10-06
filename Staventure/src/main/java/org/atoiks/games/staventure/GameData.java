@@ -24,7 +24,7 @@ public final class GameData implements Serializable {
 
     private static final long serialVersionUID = 12834648540L;
 
-    public final StringBuilder portalBuffer = new StringBuilder("Press h for help");
+    public final StringBuilder portalBuffer = new StringBuilder("Press Enter to unlock then h for help");
 
     public boolean winAgainstPY = false;
 

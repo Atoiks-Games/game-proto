@@ -28,6 +28,8 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.FontFormatException;
 
+import java.awt.event.KeyEvent;
+
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.GameScene;
 
@@ -67,6 +69,8 @@ public final class SavePointScene extends GameScene {
 
     private GameData gameData;
 
+    private boolean locked;
+
     @Override
     public void init() {
         gameData = (GameData) scene.resources().get("save.dat");
@@ -77,6 +81,8 @@ public final class SavePointScene extends GameScene {
     public void enter(final int from) {
         comefrom = from;
         scene.keyboard().captureTypedChars(true);
+
+        locked = true;
     }
 
     @Override
@@ -109,6 +115,17 @@ public final class SavePointScene extends GameScene {
     @Override
     public boolean update(final float dt) {
         final char[] arr = scene.keyboard().getTypedChars().toCharArray();
+
+        if (locked) {
+            if (scene.keyboard().isKeyPressed(KeyEvent.VK_ENTER)) {
+                locked = false;
+                textBuffer
+                        .append("\nWelcome back! Logging in from ID: ").append(comefrom)
+                        .append('\n');
+            }
+            return true;
+        }
+
         switch (mode) {
             case INSERT:    return processInsertMode(arr);
             case COMMAND:   return processCommandMode(arr);
@@ -145,6 +162,9 @@ public final class SavePointScene extends GameScene {
                             .append("\nYou are currently in COMMAND mode (see bottom). By hitting Tab, you can")
                             .append("\nswitch to INSERT mode. Within insert mode, this works like a wimpy text")
                             .append("\neditor. To come back to COMMAND mode, hit Tab again!")
+                            .append("\n")
+                            .append("\nRemember when you log on to any portal, you need to hit Enter to unlock")
+                            .append("\nit. Do not worry. You will not need enter any passcodes!")
                             .append("\n")
                             .append("\nApart from Tab in COMMAND mode, there is also:")
                             .append("\n h - Help, which is this message all again")
