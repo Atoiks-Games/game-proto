@@ -18,10 +18,6 @@
 
 package org.atoiks.games.staventure;
 
-import java.io.IOException;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
-
 import java.util.HashMap;
 
 import org.atoiks.games.framework2d.FrameInfo;
@@ -40,7 +36,7 @@ public class Main {
 
     public static void main(String[] args) {
         final HashMap<Class<?>, Integer> sceneMap = new HashMap<>();
-        final GameScene[] scenes = { new SquashCourtScene(), new SquashGameScene(), new CourtHallwayScene(), new LibraryScene(), new ColbyHallwayScene(), new BusinessOfficeScene() };
+        final GameScene[] scenes = { new SquashCourtScene(), new SquashGameScene(), new CourtHallwayScene(), new LibraryScene(), new ColbyHallwayScene(), new BusinessOfficeScene(), new SavePointScene() };
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)
@@ -55,21 +51,9 @@ public class Main {
             sceneMap.put(s.getClass(), i);
         }
 
-        final Frame frame = new Frame(info);
-        try {
+        try (final Frame frame = new Frame(info)) {
             frame.init();
             frame.loop();
-        } finally {
-            // Access game data before game disposes
-            final GameData data = (GameData) frame.getSceneManager().resources().get("save.dat");
-            frame.close();
-
-            // Save the game data
-            try (final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./save.dat"))) {
-                oos.writeObject(data);
-            } catch (IOException ex) {
-                // Well, the game could not be saved, no big deal lol
-            }
         }
     }
 }

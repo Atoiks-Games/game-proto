@@ -20,8 +20,6 @@ package org.atoiks.games.staventure.scenes;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.io.BufferedInputStream;
 
 import java.awt.Color;
@@ -151,15 +149,8 @@ public final class LoadingScene extends Scene {
                     loadImageFromResource("/colby/business_office/shelf.png");
                     loadImageFromResource("/colby/business_office/printer.png");
 
-                    // Try to load local game save
-                    GameData gameData = null;
-                    try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./save.dat"))) {
-                        gameData = (GameData) ois.readObject();
-                    } catch (IOException | ClassNotFoundException ex) {
-                        // Well, that just means either player does not have game save,
-                        // or we cannot read it, or the format is out of date
-                    }
-                    scene.resources().put("save.dat", gameData == null ? new GameData() : gameData);
+                    // Put a blank game session, see Portals for game state stuff
+                    scene.resources().put("save.dat", new GameData());
 
                     if (loaded == LoadState.LOADING) {
                         loaded = LoadState.DONE;

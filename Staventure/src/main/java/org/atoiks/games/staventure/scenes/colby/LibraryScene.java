@@ -23,12 +23,15 @@ import java.awt.Image;
 
 import java.util.Map;
 
+import javax.swing.JOptionPane;
+
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
+import org.atoiks.games.staventure.scenes.SavePointScene;
 import org.atoiks.games.staventure.colliders.CircleCollider;
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
@@ -114,6 +117,7 @@ public final class LibraryScene extends GameScene {
     private Player player;
 
     private int COLBY_HALLWAY_SCENE_IDX;
+    private int SAVE_POINT_SCENE_IDX;
 
     @Override
     public void init() {
@@ -122,6 +126,7 @@ public final class LibraryScene extends GameScene {
         bgHeight = bg.getHeight(null);
 
         COLBY_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(ColbyHallwayScene.class);
+        SAVE_POINT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SavePointScene.class);
 
         tableImg = (Image) scene.resources().get("/colby/library/table.png");
         tableWidth = tableImg.getWidth(null);
@@ -196,13 +201,13 @@ public final class LibraryScene extends GameScene {
 
         sofaTableImg = (Image) scene.resources().get("/colby/library/sofa_table.png");
         sofaTableCollider.x = 975;
-        sofaTableCollider.y = 95;
+        sofaTableCollider.y = 98;
         sofaTableCollider.w = sofaTableImg.getWidth(null);
         sofaTableCollider.h = sofaTableImg.getHeight(null);
 
         sofaBigImg = (Image) scene.resources().get("/colby/library/sofa_big.png");
         sofaBigCollider.x = 975;
-        sofaBigCollider.y = 30;
+        sofaBigCollider.y = 33;
         sofaBigCollider.w = sofaBigImg.getWidth(null);
         sofaBigCollider.h = sofaBigImg.getHeight(null);
 
@@ -213,8 +218,10 @@ public final class LibraryScene extends GameScene {
 
     @Override
     public void enter(int from) {
-        player.direction = Direction.LEFT;
-        player.move(1465, 280);
+        if (from != SAVE_POINT_SCENE_IDX) {
+            player.direction = Direction.LEFT;
+            player.move(1465, 280);
+        }
     }
 
     @Override
@@ -306,12 +313,10 @@ public final class LibraryScene extends GameScene {
                 player.move(oldX, oldY);
             }
 
-            if (player.collider.collidesWith(comTableCollider)) {
+            if (player.collider.collidesWith(comTableCollider) || player.collider.collidesWithAny(comChairColliders)) {
                 player.move(oldX, oldY);
-            }
-
-            if (player.collider.collidesWithAny(comChairColliders)) {
-                player.move(oldX, oldY);
+                scene.switchToScene(SAVE_POINT_SCENE_IDX);
+                return true;
             }
 
             if (player.collider.collidesWith(officeCollider)) {
@@ -331,7 +336,9 @@ public final class LibraryScene extends GameScene {
             }
 
             if (player.collider.collidesWith(sofaBigCollider)) {
-                player.move(oldX, oldY);
+                player.direction = Direction.DOWN;
+                player.move(sofaBigCollider.x + 40, sofaBigCollider.y + 25);
+                JOptionPane.showMessageDialog(null, "GET CONSUMED BY BIG COMFY SOFA BOIII!");
             }
         }
         return true;
