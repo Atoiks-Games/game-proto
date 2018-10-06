@@ -24,7 +24,14 @@ public final class GameData implements Serializable {
 
     private static final long serialVersionUID = 12834648540L;
 
-    public void updateState(GameData newData) {
-        //
+    public final StringBuilder portalBuffer = new StringBuilder("Press h for help");
+
+    public boolean winAgainstPY = false;
+
+    public void updateState(final GameData newData) {
+        portalBuffer.setLength(0);
+        portalBuffer.append(newData.portalBuffer);
+
+        winAgainstPY = newData.winAgainstPY;
     }
 }

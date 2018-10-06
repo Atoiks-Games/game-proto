@@ -29,6 +29,8 @@ import javax.swing.JOptionPane;
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
+import org.atoiks.games.staventure.GameData;
+
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 import org.atoiks.games.staventure.prefabs.SquashPlayer;
@@ -61,11 +63,15 @@ public final class SquashGameScene extends GameScene {
 
     private int SQUASH_COURT_SCENE_IDX;
 
+    private GameData gameData;
+
     @Override
     public void init() {
         bg = (Image) scene.resources().get("/gym/squash_game/floor.png");
 
         SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
+
+        gameData = (GameData) scene.resources().get("save.dat");
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
@@ -181,7 +187,7 @@ public final class SquashGameScene extends GameScene {
         }
 
         if (scorePlayer == WINNING_SCORE) {
-            scene.resources().put(SquashCourtScene.KEY_WIN, true);
+            gameData.winAgainstPY = true;
             scene.switchToScene(SQUASH_COURT_SCENE_IDX);
             return true;
         }

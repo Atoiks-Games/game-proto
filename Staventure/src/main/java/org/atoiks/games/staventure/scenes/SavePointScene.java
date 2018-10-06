@@ -59,7 +59,7 @@ public final class SavePointScene extends GameScene {
         VT_FONT = local.deriveFont(12.0f);
     }
 
-    private final StringBuilder textBuffer = new StringBuilder("Press h for help");
+    private StringBuilder textBuffer;
 
     private Mode mode = Mode.COMMAND;
 
@@ -70,6 +70,7 @@ public final class SavePointScene extends GameScene {
     @Override
     public void init() {
         gameData = (GameData) scene.resources().get("save.dat");
+        textBuffer = gameData.portalBuffer;
     }
 
     @Override

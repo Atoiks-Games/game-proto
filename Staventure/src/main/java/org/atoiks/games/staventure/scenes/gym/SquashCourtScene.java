@@ -27,6 +27,8 @@ import java.util.Random;
 import org.atoiks.games.framework2d.GameScene;
 import org.atoiks.games.framework2d.IGraphics;
 
+import org.atoiks.games.staventure.GameData;
+
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
@@ -40,7 +42,6 @@ public final class SquashCourtScene extends GameScene {
     }
 
     public static final String KEY_ID = "scene.squash_court.id";
-    public static final String KEY_WIN = "scene.squash_court.win";
 
     private static final int X1 = 155;
     private static final int Y1 = 4;
@@ -65,7 +66,7 @@ public final class SquashCourtScene extends GameScene {
     private float pyY;
     private final RectangleCollider pyCollider = new RectangleCollider();
 
-    private boolean winAgainstPY;
+    private GameData gameData;
 
     @Override
     public void init() {
@@ -74,6 +75,8 @@ public final class SquashCourtScene extends GameScene {
 
         COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
         SQUASH_GAME_SCENE_IDX   = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashGameScene.class);
+
+        gameData = (GameData) scene.resources().get("save.dat");
 
         player = new Player();
         player.state = Player.IDLE_FRAME;
@@ -87,14 +90,11 @@ public final class SquashCourtScene extends GameScene {
 
         // Define this value
         scene.resources().put(SquashCourtScene.KEY_ID, (id = ID.TOP));
-        scene.resources().put(SquashCourtScene.KEY_WIN, (winAgainstPY = false));
     }
 
     @Override
     public void enter(int from) {
-        if (from == SQUASH_GAME_SCENE_IDX) {
-            winAgainstPY = (boolean) scene.resources().get(SquashCourtScene.KEY_WIN);
-        } else if (from == COURT_HALLWAY_SCENE_IDX) {
+        if (from == COURT_HALLWAY_SCENE_IDX) {
             this.id = (ID) scene.resources().get(KEY_ID);
             player.direction = Direction.UP;
             player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 420);
@@ -125,7 +125,7 @@ public final class SquashCourtScene extends GameScene {
 
         player.render(g);
 
-        if (id == ID.TOP && !winAgainstPY) {
+        if (id == ID.TOP && !gameData.winAgainstPY) {
             // PY only stays in the top court
             g.drawImage(pyImg, (int) pyX, (int) pyY);
         }
@@ -159,7 +159,7 @@ public final class SquashCourtScene extends GameScene {
             }
         }
 
-        if (id == ID.TOP && !winAgainstPY) {
+        if (id == ID.TOP && !gameData.winAgainstPY) {
             // See if we bump into PY
             if (pyCollider.collidesWith(player.collider)) {
                 scene.switchToScene(SQUASH_GAME_SCENE_IDX);
