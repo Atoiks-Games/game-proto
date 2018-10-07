@@ -118,10 +118,7 @@ public final class SavePointScene extends GameScene {
 
         if (locked) {
             if (scene.keyboard().isKeyPressed(KeyEvent.VK_ENTER)) {
-                locked = false;
-                textBuffer
-                        .append("\nWelcome back! Logging in from ID: ").append(comefrom)
-                        .append('\n');
+                unlockPortal();
             }
             return true;
         }
@@ -131,6 +128,13 @@ public final class SavePointScene extends GameScene {
             case COMMAND:   return processCommandMode(arr);
         }
         return true;
+    }
+
+    private void unlockPortal() {
+        locked = false;
+        textBuffer
+                .append("\nWelcome back! Logging in from ID: ").append(comefrom)
+                .append('\n');
     }
 
     private boolean processInsertMode(char[] arr) {
@@ -172,6 +176,7 @@ public final class SavePointScene extends GameScene {
                             .append("\n d - Deletes the last line")
                             .append("\n s - Save the game")
                             .append("\n r - Load a game save")
+                            .append("\n p - Reset game")
                             .append("\n q - Close the portal, go back to where you were")
                             .append("\n ! - Close the game")
                             .append("\n")
@@ -204,6 +209,10 @@ public final class SavePointScene extends GameScene {
                     } catch (IOException | ClassNotFoundException ex) {
                         textBuffer.append("\nFailed to load save: " + ex.getMessage());
                     }
+                    break;
+                case 'p':
+                    gameData.updateState(new GameData());
+                    unlockPortal();
                     break;
                 case 'q':
                     scene.switchToScene(comefrom);
