@@ -174,8 +174,8 @@ public final class SavePointScene extends GameScene {
                             .append("\n h - Help, which is this message all again")
                             .append("\n l - Clears screen")
                             .append("\n d - Deletes the last line")
-                            .append("\n s - Save the game")
-                            .append("\n r - Load a game save")
+                            .append("\n w - Save the game")
+                            .append("\n o - Load a game save")
                             .append("\n p - Reset game")
                             .append("\n q - Close the portal, go back to where you were")
                             .append("\n ! - Close the game")
@@ -192,7 +192,7 @@ public final class SavePointScene extends GameScene {
                     }
                     break;
                 }
-                case 's':
+                case 'w':
                     // Save the game data
                     try (final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("./save.dat"))) {
                         oos.writeObject(gameData);
@@ -201,7 +201,7 @@ public final class SavePointScene extends GameScene {
                         textBuffer.append("\nFailed to save game: " + ex.getMessage());
                     }
                     break;
-                case 'r':
+                case 'o':
                     // Load a local game save
                     try (final ObjectInputStream ois = new ObjectInputStream(new FileInputStream("./save.dat"))) {
                         gameData.updateState((GameData) ois.readObject());
