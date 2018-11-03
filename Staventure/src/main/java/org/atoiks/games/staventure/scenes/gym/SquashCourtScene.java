@@ -136,7 +136,7 @@ public final class SquashCourtScene extends GameScene {
 
     @Override
     public boolean update(final float dt) {
-        player.update(dt, scene);
+        player.update(dt);
 
         // Restrict player in boundary
         // player is 32 * 32, but x axis actually has a 6 px padding

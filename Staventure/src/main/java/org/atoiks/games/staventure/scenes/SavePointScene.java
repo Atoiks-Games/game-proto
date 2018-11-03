@@ -30,6 +30,7 @@ import java.awt.FontFormatException;
 
 import java.awt.event.KeyEvent;
 
+import org.atoiks.games.framework2d.Input;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.GameScene;
 
@@ -80,14 +81,14 @@ public final class SavePointScene extends GameScene {
     @Override
     public void enter(final int from) {
         comefrom = from;
-        scene.keyboard().captureTypedChars(true);
+        Input.captureTypedChars(true);
 
         locked = true;
     }
 
     @Override
     public void leave() {
-        scene.keyboard().captureTypedChars(false);
+        Input.captureTypedChars(false);
     }
 
     @Override
@@ -114,10 +115,10 @@ public final class SavePointScene extends GameScene {
 
     @Override
     public boolean update(final float dt) {
-        final char[] arr = scene.keyboard().getTypedChars().toCharArray();
+        final char[] arr = Input.getTypedChars().toCharArray();
 
         if (locked) {
-            if (scene.keyboard().isKeyPressed(KeyEvent.VK_ENTER)) {
+            if (Input.isKeyPressed(KeyEvent.VK_ENTER)) {
                 unlockPortal();
             }
             return true;

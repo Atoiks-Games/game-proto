@@ -109,7 +109,7 @@ public final class CourtHallwayScene extends GameScene {
         oldX = player.x;
         oldY = player.y;
 
-        player.update(dt, scene);
+        player.update(dt);
 
         if (boundCheck()) {
             // If boundCheck returns true, that means

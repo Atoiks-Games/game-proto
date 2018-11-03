@@ -136,7 +136,7 @@ public final class SquashGameScene extends GameScene {
     @Override
     public boolean update(final float dt) {
         // Update player's position
-        player.update(dt, scene);
+        player.update(dt);
         if (player.x < -6) player.setX(-6);
         if (player.x > 700 - 26) player.setX(700 - 26);
         if (player.y < 0) player.setY(0);

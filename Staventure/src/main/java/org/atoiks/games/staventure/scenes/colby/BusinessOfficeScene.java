@@ -131,7 +131,7 @@ public final class BusinessOfficeScene extends GameScene {
     public boolean update(float dt) {
         final float oldX = player.x;
         final float oldY = player.y;
-        player.update(dt, scene);
+        player.update(dt);
 
         if (player.y < 5) player.y = 5;
         if (player.y > 450 - 32 - 5) player.y = 450 - 32 - 5;

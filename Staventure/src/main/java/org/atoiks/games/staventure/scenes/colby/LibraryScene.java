@@ -283,7 +283,7 @@ public final class LibraryScene extends GameScene {
     public boolean update(final float dt) {
         final float oldX = player.x;
         final float oldY = player.y;
-        player.update(dt, scene);
+        player.update(dt);
 
         if (oldX != player.x || oldY != player.y) {
             // Dealing with the edges of the map

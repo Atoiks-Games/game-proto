@@ -21,8 +21,8 @@ package org.atoiks.games.staventure.prefabs;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 
+import org.atoiks.games.framework2d.Input;
 import org.atoiks.games.framework2d.IGraphics;
-import org.atoiks.games.framework2d.SceneManager;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
@@ -76,20 +76,20 @@ public class Player {
         */
     }
 
-    public void update(final float dt, final SceneManager scene) {
+    public void update(final float dt) {
         elapsed += dt;
         boolean updateState = true;
         final float dsp = speed * dt;
-        if (scene.keyboard().isKeyDown(KeyEvent.VK_W)) {
+        if (Input.isKeyDown(KeyEvent.VK_W)) {
             this.y -= dsp;
             direction = Direction.UP;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_S)) {
+        } else if (Input.isKeyDown(KeyEvent.VK_S)) {
             this.y += dsp;
             direction = Direction.DOWN;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_A)) {
+        } else if (Input.isKeyDown(KeyEvent.VK_A)) {
             this.x -= dsp;
             direction = Direction.LEFT;
-        } else if (scene.keyboard().isKeyDown(KeyEvent.VK_D)) {
+        } else if (Input.isKeyDown(KeyEvent.VK_D)) {
             this.x += dsp;
             direction = Direction.RIGHT;
         } else {

@@ -110,7 +110,7 @@ public final class ColbyHallwayScene extends GameScene {
     public boolean update(float dt) {
         final float oldX = player.x;
         final float oldY = player.y;
-        player.update(dt, scene);
+        player.update(dt);
 
         if (player.x < -6) {
             // TODO: This is the Pierce Hall side of the hallway
