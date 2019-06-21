@@ -19,33 +19,36 @@
 package org.atoiks.games.staventure.scenes;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.BufferedInputStream;
 
+import java.awt.Font;
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.FontFormatException;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
-import javax.imageio.ImageIO;
-
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
-
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.decoder.ImageDecoder;
+import org.atoiks.games.framework2d.decoder.AudioDecoder;
+import org.atoiks.games.framework2d.decoder.DecodeException;
+import org.atoiks.games.framework2d.decoder.SerializableDecoder;
+
+import org.atoiks.games.framework2d.resolver.ExternalResourceResolver;
 
 import org.atoiks.games.staventure.GameData;
+
+import org.atoiks.games.staventure.scenes.gym.SquashCourtScene;
 
 import org.atoiks.games.staventure.prefabs.*;
 
 import static org.atoiks.games.staventure.Main.WIDTH;
 
-public final class LoadingScene extends Scene {
+public final class LoadingScene implements Scene {
 
     private enum LoadState {
         WAITING, LOADING, DONE, NO_RES;
@@ -92,68 +95,77 @@ public final class LoadingScene extends Scene {
                 break;
             case DONE:
                 loader.shutdown();
-                scene.gotoNextScene();
+                SceneManager.swapScene(new SquashCourtScene(SquashCourtScene.ID.TOP));
                 break;
             case WAITING:
                 loaded = LoadState.LOADING;
                 loader.submit(() -> {
+                    try {
+                        // Player resources
+                        for (int i = 1; i <= 12; ++i) {
+                            Player.SPRITE_SHEET[i - 1] = loadImageFromResource("/main_char/spr_" + i + ".png");
+                        }
 
-                    // Player resources
-                    for (int i = 1; i <= 12; ++i) {
-                        final String name = "/main_char/spr_" + i + ".png";
-                        loadImageFromResource(name);
-                        Player.SPRITE_SHEET[i - 1] = (Image) scene.resources().get(name);
-                    }
+                        // PY resources
+                        for (int i = 1; i <= 12; ++i) {
+                            SquashPlayer.SPRITE_SHEET[i - 1] = loadImageFromResource("/py/spr_" + i + ".png");
+                        }
 
-                    // PY resources
-                    for (int i = 1; i <= 12; ++i) {
-                        final String name = "/py/spr_" + i + ".png";
-                        loadImageFromResource(name);
-                        SquashPlayer.SPRITE_SHEET[i - 1] = (Image) scene.resources().get(name);
-                    }
+                        // SquashCourtScene resources
+                        loadImageFromResource("/gym/squash_court/floor.png");
 
-                    // SquashCourtScene resources
-                    loadImageFromResource("/gym/squash_court/floor.png");
+                        // SquashScene resources
+                        loadImageFromResource("/gym/squash_game/floor.png");
 
-                    // SquashGameScene resources
-                    loadImageFromResource("/gym/squash_game/floor.png");
+                        // CourtHallwayScene resources
+                        loadImageFromResource("/gym/court_hallway/floor.png");
 
-                    // CourtHallwayScene resources
-                    loadImageFromResource("/gym/court_hallway/floor.png");
+                        // LibraryScene resources
+                        loadImageFromResource("/colby/library/floor.png");
+                        loadImageFromResource("/colby/library/chair.png");
+                        loadImageFromResource("/colby/library/table.png");
 
-                    // LibraryScene resources
-                    loadImageFromResource("/colby/library/floor.png");
-                    loadImageFromResource("/colby/library/chair.png");
-                    loadImageFromResource("/colby/library/table.png");
+                        loadImageFromResource("/colby/library/bookshelf.png");
 
-                    loadImageFromResource("/colby/library/bookshelf.png");
+                        loadImageFromResource("/colby/library/com.png");
+                        loadImageFromResource("/colby/library/com_chair.png");
+                        loadImageFromResource("/colby/library/com_table.png");
 
-                    loadImageFromResource("/colby/library/com.png");
-                    loadImageFromResource("/colby/library/com_chair.png");
-                    loadImageFromResource("/colby/library/com_table.png");
+                        loadImageFromResource("/colby/library/office.png");
+                        loadImageFromResource("/colby/library/fountain.png");
 
-                    loadImageFromResource("/colby/library/office.png");
-                    loadImageFromResource("/colby/library/fountain.png");
+                        loadImageFromResource("/colby/library/sofa_big.png");
+                        loadImageFromResource("/colby/library/sofa_table.png");
 
-                    loadImageFromResource("/colby/library/sofa_big.png");
-                    loadImageFromResource("/colby/library/sofa_table.png");
+                        // ColbyHallwayScene resources
+                        loadImageFromResource("/colby/colby_hallway/floor.png");
 
-                    // ColbyHallwayScene resources
-                    loadImageFromResource("/colby/colby_hallway/floor.png");
+                        // BusinessOfficeScene resources
+                        loadImageFromResource("/colby/business_office/floor.png");
+                        loadImageFromResource("/colby/business_office/table.png");
+                        loadImageFromResource("/colby/business_office/chair_in.png");
+                        loadImageFromResource("/colby/business_office/chair_out.png");
+                        loadImageFromResource("/colby/business_office/shelf.png");
+                        loadImageFromResource("/colby/business_office/printer.png");
 
-                    // BusinessOfficeScene resources
-                    loadImageFromResource("/colby/business_office/floor.png");
-                    loadImageFromResource("/colby/business_office/table.png");
-                    loadImageFromResource("/colby/business_office/chair_in.png");
-                    loadImageFromResource("/colby/business_office/chair_out.png");
-                    loadImageFromResource("/colby/business_office/shelf.png");
-                    loadImageFromResource("/colby/business_office/printer.png");
+                        // Load our very sick looking fonts!
+                        ResourceManager.load("/VT323-Regular.ttf", src -> {
+                            try {
+                                return Font.createFont(Font.TRUETYPE_FONT, src);
+                            } catch (IOException | FontFormatException ex) {
+                                throw new DecodeException(ex);
+                            }
+                        });
 
-                    // Put a blank game session, see Portals for game state stuff
-                    scene.resources().put("save.dat", new GameData());
+                        // Load game session, see Portals for game state stuff
+                        ResourceManager.loadOrDefault("./save.dat", ExternalResourceResolver.INSTANCE,
+                                SerializableDecoder.forType(GameData.class), GameData::new);
 
-                    if (loaded == LoadState.LOADING) {
                         loaded = LoadState.DONE;
+                    } catch (DecodeException ex) {
+                        ex.printStackTrace();
+                        loaded = LoadState.NO_RES;
+                        return;
                     }
                 });
                 break;
@@ -162,38 +174,11 @@ public final class LoadingScene extends Scene {
         return true;
     }
 
-    private void loadImageFromResource(final String path) {
-        if (loaded != LoadState.LOADING) return;
-
-        final InputStream is = this.getClass().getResourceAsStream(path);
-        if (is == null) {
-            loaded = LoadState.NO_RES;
-            return;
-        }
-        try {
-            scene.resources().put(path, ImageIO.read(is));
-        } catch (IOException ex) {
-            loaded = LoadState.NO_RES;
-        }
+    private Image loadImageFromResource(final String path) {
+        return ResourceManager.load(path, ImageDecoder.INSTANCE);
     }
 
     private void loadMusicFromResource(final String path) {
-        if (loaded != LoadState.LOADING) return;
-
-        final InputStream is = this.getClass().getResourceAsStream(path);
-        if (is == null) {
-            loaded = LoadState.NO_RES;
-            return;
-        }
-
-        // AIS requires the use of BufferedInputStream since res-streams are not buffered
-        try (final AudioInputStream in = AudioSystem.getAudioInputStream(new BufferedInputStream(is))) {
-            final Clip clip = AudioSystem.getClip(null);
-            clip.open(in);
-            clip.stop();
-            scene.resources().put(path, clip);
-        } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-            loaded = LoadState.NO_RES;
-        }
+        ResourceManager.load(path, AudioDecoder.INSTANCE);
     }
 }

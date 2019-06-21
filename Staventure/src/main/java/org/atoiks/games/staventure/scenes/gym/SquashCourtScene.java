@@ -24,8 +24,10 @@ import java.awt.Image;
 import java.util.Map;
 import java.util.Random;
 
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -34,7 +36,7 @@ import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
-public final class SquashCourtScene extends GameScene {
+public final class SquashCourtScene implements Scene {
 
     public enum ID {
         // There are two squash courts
@@ -53,49 +55,40 @@ public final class SquashCourtScene extends GameScene {
 
     private final Random rnd = new Random();
 
-    private Image bg;
-    private Player player;
+    private final Image bg;
+    private final Player player;
 
-    private int COURT_HALLWAY_SCENE_IDX;
-    private int SQUASH_GAME_SCENE_IDX;
+    public final ID id;
 
-    private ID id;
-
-    private Image pyImg;
+    private final Image pyImg;
     private float pyX;
     private float pyY;
     private final RectangleCollider pyCollider = new RectangleCollider();
 
-    private GameData gameData;
+    private final GameData gameData;
 
-    @Override
-    public void init() {
-        bg = (Image) scene.resources().get("/gym/squash_court/floor.png");
-        pyImg = (Image) scene.resources().get("/py/spr_2.png");
+    public SquashCourtScene(ID id) {
+        this.bg = ResourceManager.get("/gym/squash_court/floor.png");
+        this.pyImg = ResourceManager.get("/py/spr_2.png");
 
-        COURT_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(CourtHallwayScene.class);
-        SQUASH_GAME_SCENE_IDX   = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashGameScene.class);
+        this.gameData = ResourceManager.get("./save.dat");
 
-        gameData = (GameData) scene.resources().get("save.dat");
-
-        player = new Player();
-        player.state = Player.IDLE_FRAME;
-        player.direction = Direction.DOWN;
-        player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 180);
-        player.speed = 50;
+        this.player = new Player();
+        this.player.state = Player.IDLE_FRAME;
+        this.player.direction = Direction.DOWN;
+        this.player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 180);
+        this.player.speed = 50;
 
         // PY's collider will never change width and height
         pyCollider.w = 32 - 12;
         pyCollider.h = 32;
 
-        // Define this value
-        scene.resources().put(SquashCourtScene.KEY_ID, (id = ID.TOP));
+        this.id = id;
     }
 
     @Override
-    public void enter(int from) {
-        if (from == COURT_HALLWAY_SCENE_IDX) {
-            this.id = (ID) scene.resources().get(KEY_ID);
+    public void enter(Scene from) {
+        if (from instanceof CourtHallwayScene) {
             player.direction = Direction.UP;
             player.move((DOOR_X1 + DOOR_X2) / 2 - 16, 420);
         }
@@ -151,7 +144,7 @@ public final class SquashCourtScene extends GameScene {
             if (DOOR_X1 - 6 < player.x && player.x < DOOR_X2 - 26) {
                 if (player.y > Y2) {
                     // When we get here, we switch scenes
-                    scene.switchToScene(COURT_HALLWAY_SCENE_IDX);
+                    SceneManager.swapScene(new CourtHallwayScene());
                     return true;
                 }
             } else {
@@ -162,7 +155,7 @@ public final class SquashCourtScene extends GameScene {
         if (id == ID.TOP && !gameData.winAgainstPY) {
             // See if we bump into PY
             if (pyCollider.collidesWith(player.collider)) {
-                scene.switchToScene(SQUASH_GAME_SCENE_IDX);
+                SceneManager.pushScene(new SquashGameScene());
                 return true;
             }
         }

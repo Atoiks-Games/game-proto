@@ -23,85 +23,84 @@ import java.awt.Image;
 
 import java.util.Map;
 
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
-public final class BusinessOfficeScene extends GameScene {
+public final class BusinessOfficeScene implements Scene {
 
     private static final int DOOR_X1 = 126;
     private static final int DOOR_Y1 = 205;
     private static final int DOOR_X2 = 131;
     private static final int DOOR_Y2 = 245;
 
-    private Image bgImg;
+    private final Image bgImg;
 
-    private Image tableImg;
+    private final Image tableImg;
     private final RectangleCollider tableCollider = new RectangleCollider();
 
-    private Image chairInImg;
+    private final Image chairInImg;
     private final RectangleCollider chairInCollider = new RectangleCollider();
 
-    private Image chairOutImg;
+    private final Image chairOutImg;
     private final RectangleCollider chairOutCollider = new RectangleCollider();
 
-    private Image shelfImg;
+    private final Image shelfImg;
     private final RectangleCollider shelfCollider = new RectangleCollider();
 
-    private Image printerImg;
+    private final Image printerImg;
     private final RectangleCollider printerCollider = new RectangleCollider();
 
     private Player player;
 
     private int COLBY_HALLWAY_SCENE_IDX;
 
-    @Override
-    public void init() {
-        bgImg = (Image) scene.resources().get("/colby/business_office/floor.png");
+    public BusinessOfficeScene() {
+        this.bgImg = ResourceManager.get("/colby/business_office/floor.png");
 
-        tableImg = (Image) scene.resources().get("/colby/business_office/table.png");
+        this.tableImg = ResourceManager.get("/colby/business_office/table.png");
         tableCollider.x = 206 + 125;
         tableCollider.y = 54;
-        tableCollider.w = tableImg.getWidth(null);
-        tableCollider.h = tableImg.getHeight(null);
+        tableCollider.w = this.tableImg.getWidth(null);
+        tableCollider.h = this.tableImg.getHeight(null);
 
-        chairInImg = (Image) scene.resources().get("/colby/business_office/chair_in.png");
+        this.chairInImg = ResourceManager.get("/colby/business_office/chair_in.png");
         chairInCollider.x = 319 + 125;
         chairInCollider.y = 167;
-        chairInCollider.w = chairInImg.getWidth(null);
-        chairInCollider.h = chairInImg.getHeight(null);
+        chairInCollider.w = this.chairInImg.getWidth(null);
+        chairInCollider.h = this.chairInImg.getHeight(null);
 
-        chairOutImg = (Image) scene.resources().get("/colby/business_office/chair_out.png");
+        this.chairOutImg = ResourceManager.get("/colby/business_office/chair_out.png");
         chairOutCollider.x = 119 + 125;
         chairOutCollider.y = 185;
-        chairOutCollider.w = chairOutImg.getWidth(null);
-        chairOutCollider.h = chairOutImg.getHeight(null);
+        chairOutCollider.w = this.chairOutImg.getWidth(null);
+        chairOutCollider.h = this.chairOutImg.getHeight(null);
 
-        shelfImg = (Image) scene.resources().get("/colby/business_office/shelf.png");
+        this.shelfImg = ResourceManager.get("/colby/business_office/shelf.png");
         shelfCollider.x = 15 + 125;
         shelfCollider.y = 15;
-        shelfCollider.w = shelfImg.getWidth(null);
-        shelfCollider.h = shelfImg.getHeight(null);
+        shelfCollider.w = this.shelfImg.getWidth(null);
+        shelfCollider.h = this.shelfImg.getHeight(null);
 
-        printerImg = (Image) scene.resources().get("/colby/business_office/printer.png");
+        this.printerImg = ResourceManager.get("/colby/business_office/printer.png");
         printerCollider.x = 327 + 125;
         printerCollider.y = 9;
-        printerCollider.w = printerImg.getWidth(null);
-        printerCollider.h = printerImg.getHeight(null);
+        printerCollider.w = this.printerImg.getWidth(null);
+        printerCollider.h = this.printerImg.getHeight(null);
 
-        COLBY_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(ColbyHallwayScene.class);
-
-        player = new Player();
-        player.state = Player.IDLE_FRAME;
-        player.speed = 50;
+        this.player = new Player();
+        this.player.state = Player.IDLE_FRAME;
+        this.player.speed = 50;
     }
 
     @Override
-    public void enter(int from) {
+    public void enter(Scene from) {
         player.direction = Direction.RIGHT;
         player.move(145, 210);
     }
@@ -138,7 +137,7 @@ public final class BusinessOfficeScene extends GameScene {
         if (player.x < 129 - 6) {
             if (DOOR_Y1 < player.y && player.y < DOOR_Y2 - 26) {
                 if (player.x < 129 - 28) {
-                    scene.switchToScene(COLBY_HALLWAY_SCENE_IDX);
+                    SceneManager.swapScene(new ColbyHallwayScene());
                     return true;
                 }
             } else {
