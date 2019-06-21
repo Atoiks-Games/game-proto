@@ -26,8 +26,10 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -38,7 +40,7 @@ import org.atoiks.games.staventure.prefabs.SquashPlayer;
 import org.atoiks.games.staventure.colliders.Collider;
 import org.atoiks.games.staventure.colliders.CircleCollider;
 
-public final class SquashGameScene extends GameScene {
+public final class SquashGameScene implements Scene {
 
     private static final int WINNING_SCORE = 11;
 
@@ -48,10 +50,10 @@ public final class SquashGameScene extends GameScene {
 
     private final Random rnd = new Random();
 
-    private Image bg;
+    private final Image bg;
 
-    private Player player;
-    private SquashPlayer py;
+    private final Player player;
+    private final SquashPlayer py;
 
     private float speed;    // >= 0
     private float angle;    // radians
@@ -61,32 +63,27 @@ public final class SquashGameScene extends GameScene {
     private int scorePY;
     private int scorePlayer;
 
-    private int SQUASH_COURT_SCENE_IDX;
+    private final GameData gameData;
 
-    private GameData gameData;
+    public SquashGameScene() {
+        this.bg = ResourceManager.get("/gym/squash_game/floor.png");
 
-    @Override
-    public void init() {
-        bg = (Image) scene.resources().get("/gym/squash_game/floor.png");
+        this.gameData = ResourceManager.get("./save.dat");
 
-        SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
+        this.player = new Player();
+        this.player.state = Player.IDLE_FRAME;
+        this.player.speed = 70;
 
-        gameData = (GameData) scene.resources().get("save.dat");
-
-        player = new Player();
-        player.state = Player.IDLE_FRAME;
-        player.speed = 70;
-
-        py = new SquashPlayer();
-        py.state = SquashPlayer.IDLE_FRAME;
-        py.speed = 70;
+        this.py = new SquashPlayer();
+        this.py.state = SquashPlayer.IDLE_FRAME;
+        this.py.speed = 70;
 
         // ball's r is always 6
         ball.r = 6;
     }
 
     @Override
-    public void enter(int from) {
+    public void enter(Scene from) {
         resetRound();
         scorePlayer = 0;
         scorePY = 0;
@@ -188,7 +185,7 @@ public final class SquashGameScene extends GameScene {
 
         if (scorePlayer == WINNING_SCORE) {
             gameData.winAgainstPY = true;
-            scene.switchToScene(SQUASH_COURT_SCENE_IDX);
+            SceneManager.popScene();
             return true;
         }
 

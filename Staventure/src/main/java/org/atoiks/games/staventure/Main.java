@@ -18,15 +18,12 @@
 
 package org.atoiks.games.staventure;
 
-import java.util.HashMap;
-
 import org.atoiks.games.framework2d.FrameInfo;
-import org.atoiks.games.framework2d.GameScene;
-import org.atoiks.games.framework2d.swing.Frame;
+import org.atoiks.games.framework2d.SceneManager;
 
-import org.atoiks.games.staventure.scenes.*;
-import org.atoiks.games.staventure.scenes.gym.*;
-import org.atoiks.games.staventure.scenes.colby.*;
+import org.atoiks.games.framework2d.java2d.Frame;
+
+import org.atoiks.games.staventure.scenes.LoadingScene;
 
 public class Main {
 
@@ -35,24 +32,14 @@ public class Main {
     public static final int WIDTH = 700;
 
     public static void main(String[] args) {
-        final HashMap<Class<?>, Integer> sceneMap = new HashMap<>();
-        final GameScene[] scenes = { new SquashCourtScene(), new SquashGameScene(), new CourtHallwayScene(), new LibraryScene(), new ColbyHallwayScene(), new BusinessOfficeScene(), new SavePointScene() };
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)
-                .setSize(WIDTH, HEIGHT)
-                .setLoader(new LoadingScene())
-                .setGameScenes(scenes)
-                .addResource("scene.map", sceneMap);
-
-        // Iterate the game scenes and map them to their class
-        for (int i = 0; i < scenes.length; ++i) {
-            final GameScene s = scenes[i];
-            sceneMap.put(s.getClass(), i);
-        }
+                .setSize(WIDTH, HEIGHT);
 
         try (final Frame frame = new Frame(info)) {
             frame.init();
+            SceneManager.pushScene(new LoadingScene());
             frame.loop();
         }
     }

@@ -31,15 +31,17 @@ import java.awt.FontFormatException;
 import java.awt.event.KeyEvent;
 
 import org.atoiks.games.framework2d.Input;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.GameData;
 
 import static org.atoiks.games.staventure.Main.WIDTH;
 import static org.atoiks.games.staventure.Main.HEIGHT;
 
-public final class SavePointScene extends GameScene {
+public final class SavePointScene implements Scene {
 
     private enum Mode {
         INSERT, COMMAND;
@@ -49,40 +51,25 @@ public final class SavePointScene extends GameScene {
 
     public static final int MAX_DISPLAY_LINES = 36;
 
-    public static final Font VT_FONT;
+    public final Font VT_FONT;
 
-    static {
-        Font local = null;
-        try {
-            local = Font.createFont(Font.TRUETYPE_FONT,
-                    SavePointScene.class.getResourceAsStream("/VT323-Regular.ttf"));
-        } catch (FontFormatException | IOException ex) {
-            local = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-        }
-        VT_FONT = local.deriveFont(12.0f);
-    }
+    private final GameData gameData;
 
-    private StringBuilder textBuffer;
+    private final StringBuilder textBuffer;
 
     private Mode mode = Mode.COMMAND;
 
-    private int comefrom;
-
-    private GameData gameData;
-
     private boolean locked;
 
-    @Override
-    public void init() {
-        gameData = (GameData) scene.resources().get("save.dat");
-        textBuffer = gameData.portalBuffer;
+    public SavePointScene() {
+        this.VT_FONT = ResourceManager.<Font>get("/VT323-Regular.ttf").deriveFont(12.0f);
+        this.gameData = ResourceManager.get("./save.dat");
+        this.textBuffer = this.gameData.portalBuffer;
     }
 
     @Override
-    public void enter(final int from) {
-        comefrom = from;
+    public void enter(final Scene from) {
         Input.captureTypedChars(true);
-
         locked = true;
     }
 
@@ -133,9 +120,7 @@ public final class SavePointScene extends GameScene {
 
     private void unlockPortal() {
         locked = false;
-        textBuffer
-                .append("\nWelcome back! Logging in from ID: ").append(comefrom)
-                .append('\n');
+        textBuffer.append("\nWelcome back!\n");
     }
 
     private boolean processInsertMode(char[] arr) {
@@ -216,7 +201,7 @@ public final class SavePointScene extends GameScene {
                     unlockPortal();
                     break;
                 case 'q':
-                    scene.switchToScene(comefrom);
+                    SceneManager.popScene();
                     return true;
                 case '!':
                     return false;
@@ -226,10 +211,5 @@ public final class SavePointScene extends GameScene {
             }
         }
         return true;
-    }
-
-    @Override
-    public void resize(int w, int h) {
-        //
     }
 }

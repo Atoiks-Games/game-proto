@@ -21,15 +21,15 @@ package org.atoiks.games.staventure.scenes.colby;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
-
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
-public final class ColbyHallwayScene extends GameScene {
+public final class ColbyHallwayScene implements Scene {
 
     private static final int DOOR_LIB_X1 = 10;
     private static final int DOOR_LIB_Y1 = 325;
@@ -46,30 +46,24 @@ public final class ColbyHallwayScene extends GameScene {
     private static final int DOOR_SA_X2 = 132;
     private static final int DOOR_SA_Y2 = 329;
 
-    private Image bgImg;
+    private final Image bgImg;
 
-    private Player player;
+    private final Player player;
 
-    private int LIBRARY_SCENE_IDX;
-    private int BUSINESS_OFFICE_SCENE_IDX;
+    public ColbyHallwayScene() {
+        this.bgImg = ResourceManager.get("/colby/colby_hallway/floor.png");
 
-    public void init() {
-        bgImg = (Image) scene.resources().get("/colby/colby_hallway/floor.png");
-
-        LIBRARY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(LibraryScene.class);
-        BUSINESS_OFFICE_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(BusinessOfficeScene.class);
-
-        player = new Player();
-        player.state = Player.IDLE_FRAME;
-        player.speed = 80;
+        this.player = new Player();
+        this.player.state = Player.IDLE_FRAME;
+        this.player.speed = 80;
     }
 
     @Override
-    public void enter(int from) {
-        if (from == LIBRARY_SCENE_IDX) {
+    public void enter(Scene from) {
+        if (from instanceof LibraryScene) {
             player.direction = Direction.UP;
             player.move(25, 272);
-        } else if (from == BUSINESS_OFFICE_SCENE_IDX) {
+        } else if (from instanceof BusinessOfficeScene) {
             player.direction = Direction.DOWN;
             player.move(68, 130);
         } else {
@@ -125,7 +119,7 @@ public final class ColbyHallwayScene extends GameScene {
         if (player.y < 125) {
             if (DOOR_BO_X1 - 1 < player.x && player.x < DOOR_BO_X2 - 26) {
                 if (player.y < 125 - 32) {
-                    scene.switchToScene(BUSINESS_OFFICE_SCENE_IDX);
+                    SceneManager.swapScene(new BusinessOfficeScene());
                     return true;
                 }
             } else {
@@ -141,7 +135,7 @@ public final class ColbyHallwayScene extends GameScene {
                 }
             } else if (DOOR_LIB_X1 - 6 < player.x && player.x < DOOR_LIB_X2 - 26) {
                 if (player.y > 325) {
-                    scene.switchToScene(LIBRARY_SCENE_IDX);
+                    SceneManager.swapScene(new LibraryScene());
                     return true;
                 }
             } else {

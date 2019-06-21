@@ -21,17 +21,19 @@ package org.atoiks.games.staventure.scenes.gym;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
-
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
-public final class CourtHallwayScene extends GameScene {
+import org.atoiks.games.staventure.scenes.colby.LibraryScene;
+
+public final class CourtHallwayScene implements Scene {
 
     private static final RectangleCollider LEFT_COLLIDER = new RectangleCollider(0, 49, 106 - 0, 397 - 49);
     private static final RectangleCollider TOP_COLLIDER = new RectangleCollider(162, 0, 700 - 162, 155 - 0);
@@ -43,30 +45,25 @@ public final class CourtHallwayScene extends GameScene {
     private static final int RIGHT_DOOR_Y1 = 200;
     private static final int RIGHT_DOOR_Y2 = 250;
 
-    private Image bg;
-    private Player player;
-
-    private int SQUASH_COURT_SCENE_IDX;
+    private final Image bg;
+    private final Player player;
 
     private float oldX;
     private float oldY;
 
-    @Override
-    public void init() {
-        bg = (Image) scene.resources().get("/gym/court_hallway/floor.png");
+    public CourtHallwayScene() {
+        this.bg = ResourceManager.get("/gym/court_hallway/floor.png");
 
-        SQUASH_COURT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SquashCourtScene.class);
-
-        player = new Player();
-        player.direction = Direction.DOWN;
-        player.state = Player.IDLE_FRAME;
-        player.speed = 80;
+        this.player = new Player();
+        this.player.direction = Direction.DOWN;
+        this.player.state = Player.IDLE_FRAME;
+        this.player.speed = 80;
     }
 
     @Override
-    public void enter(int from) {
-        if (from == SQUASH_COURT_SCENE_IDX) {
-            final SquashCourtScene.ID id = (SquashCourtScene.ID) scene.resources().get(SquashCourtScene.KEY_ID);
+    public void enter(Scene from) {
+        if (from instanceof SquashCourtScene) {
+            final SquashCourtScene.ID id = ((SquashCourtScene) from).id;
 
             player.x = (LEFT_DOOR_X1 + LEFT_DOOR_X2) / 2 - 16;
             switch (id) {
@@ -138,7 +135,7 @@ public final class CourtHallwayScene extends GameScene {
             if (RIGHT_DOOR_Y1 < player.y && player.y < RIGHT_DOOR_Y2 - 32) {
                 if (player.x > 700) {
                     // When we get there, switch scenes
-                    scene.gotoNextScene();
+                    SceneManager.swapScene(new LibraryScene());
                     return true;
                 }
             } else {
@@ -152,8 +149,7 @@ public final class CourtHallwayScene extends GameScene {
             if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
                 if (player.y < -26) {
                     // This one jumps back to SquashCourtScene
-                    scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.TOP);
-                    scene.switchToScene(SQUASH_COURT_SCENE_IDX);
+                    SceneManager.swapScene(new SquashCourtScene(SquashCourtScene.ID.TOP));
                     return true;
                 }
             } else {
@@ -165,8 +161,7 @@ public final class CourtHallwayScene extends GameScene {
             if (LEFT_DOOR_X1 - 6 < player.x && player.x < LEFT_DOOR_X2 - 26) {
                 if (player.y > 450) {
                     // This one also jumps back to SquashCourtScene
-                    scene.resources().put(SquashCourtScene.KEY_ID, SquashCourtScene.ID.BOTTOM);
-                    scene.switchToScene(SQUASH_COURT_SCENE_IDX);
+                    SceneManager.swapScene(new SquashCourtScene(SquashCourtScene.ID.BOTTOM));
                     return true;
                 }
             } else {

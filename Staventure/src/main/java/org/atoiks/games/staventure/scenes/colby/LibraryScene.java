@@ -25,17 +25,20 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
-import org.atoiks.games.framework2d.GameScene;
+import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
+import org.atoiks.games.framework2d.SceneManager;
+import org.atoiks.games.framework2d.ResourceManager;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
 
 import org.atoiks.games.staventure.scenes.SavePointScene;
+
 import org.atoiks.games.staventure.colliders.CircleCollider;
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
-public final class LibraryScene extends GameScene {
+public final class LibraryScene implements Scene {
 
     private static final int DOOR_Y1 = 253;
     private static final int DOOR_Y2 = 365;
@@ -76,59 +79,52 @@ public final class LibraryScene extends GameScene {
         1, 0, 0, -1, -1, 0, 0, 1
     };
 
-    private Image bg;
+    private final Image bg;
     private int bgWidth;
     private int bgHeight;
 
-    private Image tableImg;
+    private final Image tableImg;
     private int tableWidth;
     private int tableHeight;
     private final RectangleCollider[] tableColliders = new RectangleCollider[2 * TABLE_XS.length];
 
-    private Image chairImg;
+    private final Image chairImg;
     private int chairWidth;
     private int chairHeight;
     // Each table has two rows of chairs
     private final RectangleCollider[] chairColliders = new RectangleCollider[tableColliders.length * CHAIR_YS.length * 2];
 
-    private Image bookshelfImg;
+    private final Image bookshelfImg;
     private final RectangleCollider[] bookshelfColliders = new RectangleCollider[BOOKSHELF_XS.length];
 
-    private Image comImg;
-    private Image comTableImg;
+    private final Image comImg;
+    private final Image comTableImg;
     private CircleCollider comTableCollider;
 
-    private Image comChairImg;
+    private final Image comChairImg;
     private final RectangleCollider[] comChairColliders = new RectangleCollider[4];
 
-    private Image officeImg;
+    private final Image officeImg;
     private final RectangleCollider officeCollider = new RectangleCollider();
 
-    private Image fountainImg;
+    private final Image fountainImg;
     private final RectangleCollider fountainCollider = new RectangleCollider();
     private final RectangleCollider fountainBumpCollider = new RectangleCollider();
 
-    private Image sofaTableImg;
+    private final Image sofaTableImg;
     private final RectangleCollider sofaTableCollider = new RectangleCollider();
 
-    private Image sofaBigImg;
+    private final Image sofaBigImg;
     private final RectangleCollider sofaBigCollider = new RectangleCollider();
 
-    private Player player;
+    private final Player player;
 
-    private int COLBY_HALLWAY_SCENE_IDX;
-    private int SAVE_POINT_SCENE_IDX;
-
-    @Override
-    public void init() {
-        bg = (Image) scene.resources().get("/colby/library/floor.png");
+    public LibraryScene() {
+        this.bg = ResourceManager.get("/colby/library/floor.png");
         bgWidth = bg.getWidth(null);
         bgHeight = bg.getHeight(null);
 
-        COLBY_HALLWAY_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(ColbyHallwayScene.class);
-        SAVE_POINT_SCENE_IDX = ((Map<?, Integer>) scene.resources().get("scene.map")).get(SavePointScene.class);
-
-        tableImg = (Image) scene.resources().get("/colby/library/table.png");
+        this.tableImg = ResourceManager.get("/colby/library/table.png");
         tableWidth = tableImg.getWidth(null);
         tableHeight = tableImg.getHeight(null);
 
@@ -140,7 +136,7 @@ public final class LibraryScene extends GameScene {
                     tableHeight);
         }
 
-        chairImg = (Image) scene.resources().get("/colby/library/chair.png");
+        this.chairImg = ResourceManager.get("/colby/library/chair.png");
         chairWidth = chairImg.getWidth(null);
         chairHeight = chairImg.getHeight(null);
 
@@ -157,19 +153,19 @@ public final class LibraryScene extends GameScene {
             }
         }
 
-        bookshelfImg = (Image) scene.resources().get("/colby/library/bookshelf.png");
+        this.bookshelfImg = ResourceManager.get("/colby/library/bookshelf.png");
         final int bookshelfWidth = bookshelfImg.getWidth(null);
         final int bookshelfHeight = bookshelfImg.getHeight(null);
         for (int i = 0; i < bookshelfColliders.length; ++i) {
             bookshelfColliders[i] = new RectangleCollider(BOOKSHELF_XS[i], BOOKSHELF_YS[i], bookshelfWidth, bookshelfHeight);
         }
 
-        comImg = (Image) scene.resources().get("/colby/library/com.png");
-        comTableImg = (Image) scene.resources().get("/colby/library/com_table.png");
+        this.comImg = ResourceManager.get("/colby/library/com.png");
+        this.comTableImg = ResourceManager.get("/colby/library/com_table.png");
         final float comTableR = comTableImg.getHeight(null) / 2;
         comTableCollider = new CircleCollider(COM_TABLE_X + comTableR, COM_TABLE_Y + comTableR, comTableR);
 
-        comChairImg = (Image) scene.resources().get("/colby/library/com_chair.png");
+        this.comChairImg = ResourceManager.get("/colby/library/com_chair.png");
         final int comChairWidth = comChairImg.getWidth(null);
         final int comChairHeight = comChairImg.getHeight(null);
         for (int i = 0; i < comChairColliders.length; ++i) {
@@ -182,13 +178,13 @@ public final class LibraryScene extends GameScene {
                     (float) (comChairWidth * SGN_ARRAY[2 * i + 1] + comChairHeight * SGN_ARRAY[2 * i]));
         }
 
-        officeImg = (Image) scene.resources().get("/colby/library/office.png");
+        this.officeImg = ResourceManager.get("/colby/library/office.png");
         officeCollider.x = 1313;
         officeCollider.y = 365;
         officeCollider.w = officeImg.getWidth(null);
         officeCollider.h = officeImg.getHeight(null);
 
-        fountainImg = (Image) scene.resources().get("/colby/library/fountain.png");
+        this.fountainImg = ResourceManager.get("/colby/library/fountain.png");
         fountainCollider.x = 1141;
         fountainCollider.y = 165;
         fountainCollider.w = fountainImg.getWidth(null);
@@ -199,29 +195,27 @@ public final class LibraryScene extends GameScene {
         fountainBumpCollider.w = 300;
         fountainBumpCollider.h = 2 + fountainCollider.y + fountainCollider.h;
 
-        sofaTableImg = (Image) scene.resources().get("/colby/library/sofa_table.png");
+        this.sofaTableImg = ResourceManager.get("/colby/library/sofa_table.png");
         sofaTableCollider.x = 975;
         sofaTableCollider.y = 98;
         sofaTableCollider.w = sofaTableImg.getWidth(null);
         sofaTableCollider.h = sofaTableImg.getHeight(null);
 
-        sofaBigImg = (Image) scene.resources().get("/colby/library/sofa_big.png");
+        this.sofaBigImg = ResourceManager.get("/colby/library/sofa_big.png");
         sofaBigCollider.x = 975;
         sofaBigCollider.y = 33;
         sofaBigCollider.w = sofaBigImg.getWidth(null);
         sofaBigCollider.h = sofaBigImg.getHeight(null);
 
-        player = new Player();
-        player.state = Player.IDLE_FRAME;
-        player.speed = 100;
+        this.player = new Player();
+        this.player.state = Player.IDLE_FRAME;
+        this.player.speed = 100;
     }
 
     @Override
-    public void enter(int from) {
-        if (from != SAVE_POINT_SCENE_IDX) {
-            player.direction = Direction.LEFT;
-            player.move(1465, 280);
-        }
+    public void enter(Scene from) {
+        player.direction = Direction.LEFT;
+        player.move(1465, 280);
     }
 
     @Override
@@ -291,7 +285,7 @@ public final class LibraryScene extends GameScene {
             if (player.x > bgWidth - 26) {
                 if (DOOR_Y1 < player.y && player.y < DOOR_Y2 - 32) {
                     if (player.x > bgWidth) {
-                        scene.switchToScene(COLBY_HALLWAY_SCENE_IDX);
+                        SceneManager.swapScene(new ColbyHallwayScene());
                         return true;
                     }
                 } else {
@@ -315,7 +309,7 @@ public final class LibraryScene extends GameScene {
 
             if (player.collider.collidesWith(comTableCollider) || player.collider.collidesWithAny(comChairColliders)) {
                 player.move(oldX, oldY);
-                scene.switchToScene(SAVE_POINT_SCENE_IDX);
+                SceneManager.pushScene(new SavePointScene());
                 return true;
             }
 
