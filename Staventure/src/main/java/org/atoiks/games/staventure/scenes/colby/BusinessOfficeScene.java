@@ -57,8 +57,6 @@ public final class BusinessOfficeScene implements Scene {
 
     private final Player player;
 
-    private int COLBY_HALLWAY_SCENE_IDX;
-
     public BusinessOfficeScene() {
         this.bgImg = ResourceManager.get("/colby/business_office/floor.png");
 
