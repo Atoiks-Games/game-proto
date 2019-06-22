@@ -26,7 +26,6 @@ import java.io.ObjectOutputStream;
 
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.FontFormatException;
 
 import java.awt.event.KeyEvent;
 

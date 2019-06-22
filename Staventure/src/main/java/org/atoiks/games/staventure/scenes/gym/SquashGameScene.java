@@ -21,7 +21,6 @@ package org.atoiks.games.staventure.scenes.gym;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JOptionPane;

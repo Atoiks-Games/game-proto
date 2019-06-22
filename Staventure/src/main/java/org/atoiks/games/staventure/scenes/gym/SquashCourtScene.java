@@ -21,7 +21,6 @@ package org.atoiks.games.staventure.scenes.gym;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
 import java.util.Random;
 
 import org.atoiks.games.framework2d.Scene;
@@ -42,8 +41,6 @@ public final class SquashCourtScene implements Scene {
         // There are two squash courts
         TOP, BOTTOM;
     }
-
-    public static final String KEY_ID = "scene.squash_court.id";
 
     private static final int X1 = 155;
     private static final int Y1 = 4;
