@@ -21,8 +21,6 @@ package org.atoiks.games.staventure.scenes.colby;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
-
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
@@ -57,7 +55,7 @@ public final class BusinessOfficeScene implements Scene {
     private final Image printerImg;
     private final RectangleCollider printerCollider = new RectangleCollider();
 
-    private Player player;
+    private final Player player;
 
     private int COLBY_HALLWAY_SCENE_IDX;
 

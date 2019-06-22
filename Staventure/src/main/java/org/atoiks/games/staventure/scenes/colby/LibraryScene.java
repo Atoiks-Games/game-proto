@@ -21,8 +21,6 @@ package org.atoiks.games.staventure.scenes.colby;
 import java.awt.Color;
 import java.awt.Image;
 
-import java.util.Map;
-
 import javax.swing.JOptionPane;
 
 import org.atoiks.games.framework2d.Scene;
