@@ -78,17 +78,17 @@ public final class LibraryScene implements Scene {
     };
 
     private final Image bg;
-    private int bgWidth;
-    private int bgHeight;
+    private final int bgWidth;
+    private final int bgHeight;
 
     private final Image tableImg;
-    private int tableWidth;
-    private int tableHeight;
+    private final int tableWidth;
+    private final int tableHeight;
     private final RectangleCollider[] tableColliders = new RectangleCollider[2 * TABLE_XS.length];
 
     private final Image chairImg;
-    private int chairWidth;
-    private int chairHeight;
+    private final int chairWidth;
+    private final int chairHeight;
     // Each table has two rows of chairs
     private final RectangleCollider[] chairColliders = new RectangleCollider[tableColliders.length * CHAIR_YS.length * 2];
 
@@ -97,7 +97,7 @@ public final class LibraryScene implements Scene {
 
     private final Image comImg;
     private final Image comTableImg;
-    private CircleCollider comTableCollider;
+    private final CircleCollider comTableCollider;
 
     private final Image comChairImg;
     private final RectangleCollider[] comChairColliders = new RectangleCollider[4];
@@ -119,15 +119,15 @@ public final class LibraryScene implements Scene {
 
     public LibraryScene() {
         this.bg = ResourceManager.get("/colby/library/floor.png");
-        bgWidth = bg.getWidth(null);
-        bgHeight = bg.getHeight(null);
+        this.bgWidth = bg.getWidth(null);
+        this.bgHeight = bg.getHeight(null);
 
         this.tableImg = ResourceManager.get("/colby/library/table.png");
-        tableWidth = tableImg.getWidth(null);
-        tableHeight = tableImg.getHeight(null);
+        this.tableWidth = tableImg.getWidth(null);
+        this.tableHeight = tableImg.getHeight(null);
 
         for (int i = 0; i < tableColliders.length; ++i) {
-            tableColliders[i] = new RectangleCollider(
+            this.tableColliders[i] = new RectangleCollider(
                     TABLE_XS[i % TABLE_XS.length],
                     i < TABLE_XS.length ? TABLE_Y1 : TABLE_Y2,
                     tableWidth,
@@ -135,18 +135,18 @@ public final class LibraryScene implements Scene {
         }
 
         this.chairImg = ResourceManager.get("/colby/library/chair.png");
-        chairWidth = chairImg.getWidth(null);
-        chairHeight = chairImg.getHeight(null);
+        this.chairWidth = chairImg.getWidth(null);
+        this.chairHeight = chairImg.getHeight(null);
 
         {
             int i = -1;
             for (final RectangleCollider tc : tableColliders) {
                 for (final int ry : CHAIR_YS) {
                     // One chair on each side of table
-                    final float cx = tc.x - chairWidth / 2;
+                    final float cx = tc.x - this.chairWidth / 2;
                     final float cy = tc.y - TABLE_Y1 + ry;
-                    chairColliders[++i] = new RectangleCollider(cx, cy, chairWidth, chairHeight);
-                    chairColliders[++i] = new RectangleCollider(cx + tableWidth, cy, chairWidth, chairHeight);
+                    this.chairColliders[++i] = new RectangleCollider(cx, cy, chairWidth, chairHeight);
+                    this.chairColliders[++i] = new RectangleCollider(cx + tableWidth, cy, chairWidth, chairHeight);
                 }
             }
         }
