@@ -20,9 +20,7 @@ package org.atoiks.games.staventure.scenes;
 
 import java.io.IOException;
 
-import java.awt.Font;
 import java.awt.Color;
-import java.awt.FontFormatException;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -37,8 +35,6 @@ import org.atoiks.games.framework2d.decoder.DecodeException;
 import org.atoiks.games.framework2d.decoder.SerializableDecoder;
 
 import org.atoiks.games.framework2d.resolver.ExternalResourceResolver;
-
-import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -166,13 +162,8 @@ public final class LoadingScene implements Scene {
                         loadImageFromResource("/colby/business_office/printer.png");
 
                         // Load our very sick looking fonts!
-                        ResourceManager.load("/VT323-Regular.ttf", src -> {
-                            try {
-                                return Font.createFont(Font.TRUETYPE_FONT, src);
-                            } catch (IOException | FontFormatException ex) {
-                                throw new DecodeException(ex);
-                            }
-                        });
+                        ResourceManager.loadDelay("/VT323-Regular.ttf",
+                                SceneManager.frame().getRuntime().getFontDecoder());
 
                         // Load game session, see Portals for game state stuff
                         ResourceManager.loadOrDefault("./save.dat", ExternalResourceResolver.INSTANCE,
