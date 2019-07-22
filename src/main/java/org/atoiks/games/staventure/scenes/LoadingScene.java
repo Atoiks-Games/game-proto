@@ -51,7 +51,7 @@ import static org.atoiks.games.staventure.Main.WIDTH;
 public final class LoadingScene implements Scene {
 
     private enum LoadState {
-        WAITING, LOADING, DONE, NO_RES;
+        WAITING, LOADING, AWAIT_FUTURE, DONE, NO_RES;
     }
 
     private static final Color[] COLORS = {
@@ -93,6 +93,23 @@ public final class LoadingScene implements Scene {
                 return false;
             case LOADING:
                 break;
+            case AWAIT_FUTURE:
+                if (!ResourceManager.hasTasksRemaining()) {
+                    // At this point, all images would have been completely loaded
+
+                    // Player resources
+                    for (int i = 1; i <= 12; ++i) {
+                        Player.SPRITE_SHEET[i - 1] = ResourceManager.get("/main_char/spr_" + i + ".png");
+                    }
+
+                    // PY resources
+                    for (int i = 1; i <= 12; ++i) {
+                        SquashPlayer.SPRITE_SHEET[i - 1] = ResourceManager.get("/py/spr_" + i + ".png");
+                    }
+
+                    loaded = LoadState.DONE;
+                }
+                break;
             case DONE:
                 loader.shutdown();
                 SceneManager.swapScene(new SquashCourtScene(SquashCourtScene.ID.TOP));
@@ -103,12 +120,12 @@ public final class LoadingScene implements Scene {
                     try {
                         // Player resources
                         for (int i = 1; i <= 12; ++i) {
-                            Player.SPRITE_SHEET[i - 1] = loadImageFromResource("/main_char/spr_" + i + ".png");
+                            loadImageFromResource("/main_char/spr_" + i + ".png");
                         }
 
                         // PY resources
                         for (int i = 1; i <= 12; ++i) {
-                            SquashPlayer.SPRITE_SHEET[i - 1] = loadImageFromResource("/py/spr_" + i + ".png");
+                            loadImageFromResource("/py/spr_" + i + ".png");
                         }
 
                         // SquashCourtScene resources
@@ -161,7 +178,7 @@ public final class LoadingScene implements Scene {
                         ResourceManager.loadOrDefault("./save.dat", ExternalResourceResolver.INSTANCE,
                                 SerializableDecoder.forType(GameData.class), GameData::new);
 
-                        loaded = LoadState.DONE;
+                        loaded = LoadState.AWAIT_FUTURE;
                     } catch (DecodeException ex) {
                         ex.printStackTrace();
                         loaded = LoadState.NO_RES;
@@ -174,8 +191,8 @@ public final class LoadingScene implements Scene {
         return true;
     }
 
-    private Texture loadImageFromResource(final String path) {
-        return ResourceManager.load(path, SceneManager.frame().getRuntime().getTextureDecoder());
+    private void loadImageFromResource(final String path) {
+        ResourceManager.loadDelay(path, SceneManager.frame().getRuntime().getTextureDecoder());
     }
 
     private void loadMusicFromResource(final String path) {
