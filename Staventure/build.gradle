@@ -8,10 +8,12 @@ mainClassName = 'org.atoiks.games.staventure.Main'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile project(':Framework2D')
+    implementation 'com.github.Atoiks-Games.Framework2D:core:2.0'
+    runtimeOnly 'com.github.Atoiks-Games.Framework2D:java2d:2.0'
 }
 
 task copyLicense {

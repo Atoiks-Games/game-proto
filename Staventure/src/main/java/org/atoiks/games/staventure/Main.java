@@ -18,10 +18,13 @@
 
 package org.atoiks.games.staventure;
 
+import java.util.Iterator;
+import java.util.ServiceLoader;
+
+import org.atoiks.games.framework2d.IFrame;
+import org.atoiks.games.framework2d.IRuntime;
 import org.atoiks.games.framework2d.FrameInfo;
 import org.atoiks.games.framework2d.SceneManager;
-
-import org.atoiks.games.framework2d.java2d.Frame;
 
 import org.atoiks.games.staventure.scenes.LoadingScene;
 
@@ -31,13 +34,25 @@ public class Main {
 
     public static final int WIDTH = 700;
 
+    public static final IRuntime HOST;
+
+    static {
+        final ServiceLoader<IRuntime> loader = ServiceLoader.load(IRuntime.class);
+        final Iterator<IRuntime> hosts = loader.iterator();
+        if (!hosts.hasNext()) {
+            throw new Error("No hosts are loaded!");
+        }
+
+        HOST = hosts.next();
+    }
+
     public static void main(String[] args) {
         final FrameInfo info = new FrameInfo()
                 .setTitle("Atoiks Games - staventure")
                 .setFps(60)
                 .setSize(WIDTH, HEIGHT);
 
-        try (final Frame frame = new Frame(info)) {
+        try (final IFrame frame = HOST.createFrame(info)) {
             frame.init();
             SceneManager.pushScene(new LoadingScene());
             frame.loop();
