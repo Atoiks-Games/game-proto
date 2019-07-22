@@ -24,16 +24,16 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import java.awt.Font;
 import java.awt.Color;
-
-import java.awt.event.KeyEvent;
 
 import org.atoiks.games.framework2d.Input;
 import org.atoiks.games.framework2d.Scene;
+import org.atoiks.games.framework2d.KeyCode;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Font;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -61,7 +61,7 @@ public final class SavePointScene implements Scene {
     private boolean locked;
 
     public SavePointScene() {
-        this.VT_FONT = ResourceManager.<Font>get("/VT323-Regular.ttf").deriveFont(12.0f);
+        this.VT_FONT = ResourceManager.<Font>get("/VT323-Regular.ttf").deriveSize(12.0f);
         this.gameData = ResourceManager.get("./save.dat");
         this.textBuffer = this.gameData.portalBuffer;
     }
@@ -82,21 +82,20 @@ public final class SavePointScene implements Scene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
-        g.setFont(VT_FONT);
         g.setColor(Color.white);
 
         final String[] arr = textBuffer.toString().split("\n", -1);
         final int lines = Math.min(arr.length, MAX_DISPLAY_LINES);
         final int offset = Math.max(0, arr.length - MAX_DISPLAY_LINES);
         for (int i = 0; i < lines; ++i) {
-            g.drawString(arr[i + offset], 12, (i + 1) * 12);
+            VT_FONT.renderText(g, arr[i + offset], 12, (i + 1) * 12);
         }
 
         g.setColor(Color.darkGray);
         g.fillRect(0, (MAX_DISPLAY_LINES) * 12 + 6, WIDTH, HEIGHT);
 
         g.setColor(Color.white);
-        g.drawString(mode.toString(), 12, (MAX_DISPLAY_LINES + 1) * 12 + 3);
+        VT_FONT.renderText(g, mode.toString(), 12, (MAX_DISPLAY_LINES + 1) * 12 + 3);
     }
 
     @Override
@@ -104,7 +103,7 @@ public final class SavePointScene implements Scene {
         final char[] arr = Input.getTypedChars().toCharArray();
 
         if (locked) {
-            if (Input.isKeyPressed(KeyEvent.VK_ENTER)) {
+            if (Input.isKeyPressed(KeyCode.KEY_ENTER)) {
                 unlockPortal();
             }
             return true;

@@ -19,7 +19,6 @@
 package org.atoiks.games.staventure.scenes.colby;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import javax.swing.JOptionPane;
 
@@ -27,6 +26,8 @@ import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
@@ -77,54 +78,54 @@ public final class LibraryScene implements Scene {
         1, 0, 0, -1, -1, 0, 0, 1
     };
 
-    private final Image bg;
+    private final Texture bg;
     private final int bgWidth;
     private final int bgHeight;
 
-    private final Image tableImg;
+    private final Texture tableImg;
     private final int tableWidth;
     private final int tableHeight;
     private final RectangleCollider[] tableColliders = new RectangleCollider[2 * TABLE_XS.length];
 
-    private final Image chairImg;
+    private final Texture chairImg;
     private final int chairWidth;
     private final int chairHeight;
     // Each table has two rows of chairs
     private final RectangleCollider[] chairColliders = new RectangleCollider[tableColliders.length * CHAIR_YS.length * 2];
 
-    private final Image bookshelfImg;
+    private final Texture bookshelfImg;
     private final RectangleCollider[] bookshelfColliders = new RectangleCollider[BOOKSHELF_XS.length];
 
-    private final Image comImg;
-    private final Image comTableImg;
+    private final Texture comImg;
+    private final Texture comTableImg;
     private final CircleCollider comTableCollider;
 
-    private final Image comChairImg;
+    private final Texture comChairImg;
     private final RectangleCollider[] comChairColliders = new RectangleCollider[4];
 
-    private final Image officeImg;
+    private final Texture officeImg;
     private final RectangleCollider officeCollider = new RectangleCollider();
 
-    private final Image fountainImg;
+    private final Texture fountainImg;
     private final RectangleCollider fountainCollider = new RectangleCollider();
     private final RectangleCollider fountainBumpCollider = new RectangleCollider();
 
-    private final Image sofaTableImg;
+    private final Texture sofaTableImg;
     private final RectangleCollider sofaTableCollider = new RectangleCollider();
 
-    private final Image sofaBigImg;
+    private final Texture sofaBigImg;
     private final RectangleCollider sofaBigCollider = new RectangleCollider();
 
     private final Player player;
 
     public LibraryScene() {
         this.bg = ResourceManager.get("/colby/library/floor.png");
-        this.bgWidth = bg.getWidth(null);
-        this.bgHeight = bg.getHeight(null);
+        this.bgWidth = bg.getWidth();
+        this.bgHeight = bg.getHeight();
 
         this.tableImg = ResourceManager.get("/colby/library/table.png");
-        this.tableWidth = tableImg.getWidth(null);
-        this.tableHeight = tableImg.getHeight(null);
+        this.tableWidth = tableImg.getWidth();
+        this.tableHeight = tableImg.getHeight();
 
         for (int i = 0; i < tableColliders.length; ++i) {
             this.tableColliders[i] = new RectangleCollider(
@@ -135,8 +136,8 @@ public final class LibraryScene implements Scene {
         }
 
         this.chairImg = ResourceManager.get("/colby/library/chair.png");
-        this.chairWidth = chairImg.getWidth(null);
-        this.chairHeight = chairImg.getHeight(null);
+        this.chairWidth = chairImg.getWidth();
+        this.chairHeight = chairImg.getHeight();
 
         {
             int i = -1;
@@ -152,20 +153,20 @@ public final class LibraryScene implements Scene {
         }
 
         this.bookshelfImg = ResourceManager.get("/colby/library/bookshelf.png");
-        final int bookshelfWidth = bookshelfImg.getWidth(null);
-        final int bookshelfHeight = bookshelfImg.getHeight(null);
+        final int bookshelfWidth = bookshelfImg.getWidth();
+        final int bookshelfHeight = bookshelfImg.getHeight();
         for (int i = 0; i < bookshelfColliders.length; ++i) {
             bookshelfColliders[i] = new RectangleCollider(BOOKSHELF_XS[i], BOOKSHELF_YS[i], bookshelfWidth, bookshelfHeight);
         }
 
         this.comImg = ResourceManager.get("/colby/library/com.png");
         this.comTableImg = ResourceManager.get("/colby/library/com_table.png");
-        final float comTableR = comTableImg.getHeight(null) / 2;
+        final float comTableR = comTableImg.getHeight() / 2;
         comTableCollider = new CircleCollider(COM_TABLE_X + comTableR, COM_TABLE_Y + comTableR, comTableR);
 
         this.comChairImg = ResourceManager.get("/colby/library/com_chair.png");
-        final int comChairWidth = comChairImg.getWidth(null);
-        final int comChairHeight = comChairImg.getHeight(null);
+        final int comChairWidth = comChairImg.getWidth();
+        final int comChairHeight = comChairImg.getHeight();
         for (int i = 0; i < comChairColliders.length; ++i) {
             // This loop and SGN_ARRAY is done through trial and error
             // There should be a trig function to do this directly though...
@@ -179,14 +180,14 @@ public final class LibraryScene implements Scene {
         this.officeImg = ResourceManager.get("/colby/library/office.png");
         officeCollider.x = 1313;
         officeCollider.y = 365;
-        officeCollider.w = officeImg.getWidth(null);
-        officeCollider.h = officeImg.getHeight(null);
+        officeCollider.w = officeImg.getWidth();
+        officeCollider.h = officeImg.getHeight();
 
         this.fountainImg = ResourceManager.get("/colby/library/fountain.png");
         fountainCollider.x = 1141;
         fountainCollider.y = 165;
-        fountainCollider.w = fountainImg.getWidth(null);
-        fountainCollider.h = fountainImg.getHeight(null);
+        fountainCollider.w = fountainImg.getWidth();
+        fountainCollider.h = fountainImg.getHeight();
 
         fountainBumpCollider.x = 1227;
         fountainBumpCollider.y = -2;
@@ -196,14 +197,14 @@ public final class LibraryScene implements Scene {
         this.sofaTableImg = ResourceManager.get("/colby/library/sofa_table.png");
         sofaTableCollider.x = 975;
         sofaTableCollider.y = 98;
-        sofaTableCollider.w = sofaTableImg.getWidth(null);
-        sofaTableCollider.h = sofaTableImg.getHeight(null);
+        sofaTableCollider.w = sofaTableImg.getWidth();
+        sofaTableCollider.h = sofaTableImg.getHeight();
 
         this.sofaBigImg = ResourceManager.get("/colby/library/sofa_big.png");
         sofaBigCollider.x = 975;
         sofaBigCollider.y = 33;
-        sofaBigCollider.w = sofaBigImg.getWidth(null);
-        sofaBigCollider.h = sofaBigImg.getHeight(null);
+        sofaBigCollider.w = sofaBigImg.getWidth();
+        sofaBigCollider.h = sofaBigImg.getHeight();
 
         this.player = new Player();
         this.player.state = Player.IDLE_FRAME;
@@ -226,7 +227,7 @@ public final class LibraryScene implements Scene {
         // often as opposed to 24/7?
         g.translate(350 - player.x, 175 - player.y);
 
-        g.drawImage(bg, 0, 0);
+        g.drawTexture(bg, 0, 0);
 
         g.setColor(Color.black);
         g.fillPolygon(fountainBumpCollider.toPolygon());
@@ -236,14 +237,14 @@ public final class LibraryScene implements Scene {
                 // One chair on each side of table
                 final float cx = tc.x - chairWidth / 2;
                 final float cy = tc.y - TABLE_Y1 + ry;
-                g.drawImage(chairImg, cx + chairWidth, cy + chairHeight, cx, cy);
-                g.drawImage(chairImg, cx + tableWidth, cy);
+                g.drawTexture(chairImg, cx + chairWidth, cy + chairHeight, cx, cy);
+                g.drawTexture(chairImg, cx + tableWidth, cy);
             }
-            g.drawImage(tableImg, tc.x, tc.y);
+            g.drawTexture(tableImg, tc.x, tc.y);
         }
 
         for (int i = 0; i < BOOKSHELF_XS.length; ++i) {
-            g.drawImage(bookshelfImg, BOOKSHELF_XS[i], BOOKSHELF_YS[i]);
+            g.drawTexture(bookshelfImg, BOOKSHELF_XS[i], BOOKSHELF_YS[i]);
         }
 
         // Holy cow rotate is a bizarre operation...
@@ -251,17 +252,17 @@ public final class LibraryScene implements Scene {
             final float cx = COM_CHAIR_XS[i];
             final float cy = COM_CHAIR_YS[i];
             g.rotate(-i * (float) Math.PI / 2, cx, cy);
-            g.drawImage(comChairImg, cx, cy);
+            g.drawTexture(comChairImg, cx, cy);
             g.rotate(+i * (float) Math.PI / 2, cx, cy);
         }
 
-        g.drawImage(comTableImg, COM_TABLE_X, COM_TABLE_Y);
-        g.drawImage(comImg, COM_TABLE_X + 18, COM_TABLE_Y + 18);
+        g.drawTexture(comTableImg, COM_TABLE_X, COM_TABLE_Y);
+        g.drawTexture(comImg, COM_TABLE_X + 18, COM_TABLE_Y + 18);
 
-        g.drawImage(officeImg, officeCollider.x, officeCollider.y);
-        g.drawImage(fountainImg, fountainCollider.x, fountainCollider.y);
-        g.drawImage(sofaTableImg, sofaTableCollider.x, sofaTableCollider.y);
-        g.drawImage(sofaBigImg, sofaBigCollider.x, sofaBigCollider.y);
+        g.drawTexture(officeImg, officeCollider.x, officeCollider.y);
+        g.drawTexture(fountainImg, fountainCollider.x, fountainCollider.y);
+        g.drawTexture(sofaTableImg, sofaTableCollider.x, sofaTableCollider.y);
+        g.drawTexture(sofaBigImg, sofaBigCollider.x, sofaBigCollider.y);
 
         player.render(g);
 

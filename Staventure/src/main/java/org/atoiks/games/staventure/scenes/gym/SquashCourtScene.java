@@ -19,7 +19,6 @@
 package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import java.util.Random;
 
@@ -27,6 +26,8 @@ import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -52,12 +53,12 @@ public final class SquashCourtScene implements Scene {
 
     private final Random rnd = new Random();
 
-    private final Image bg;
+    private final Texture bg;
     private final Player player;
 
     public final ID id;
 
-    private final Image pyImg;
+    private final Texture pyImg;
     private float pyX;
     private float pyY;
     private final RectangleCollider pyCollider = new RectangleCollider();
@@ -102,7 +103,7 @@ public final class SquashCourtScene implements Scene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
-        g.drawImage(bg, 0, 0);
+        g.drawTexture(bg, 0, 0);
 
         /*
         // Just for debugging purposes. These are the *walls*
@@ -117,7 +118,7 @@ public final class SquashCourtScene implements Scene {
 
         if (id == ID.TOP && !gameData.winAgainstPY) {
             // PY only stays in the top court
-            g.drawImage(pyImg, (int) pyX, (int) pyY);
+            g.drawTexture(pyImg, pyX, pyY);
         }
 
         g.setColor(Color.lightGray);

@@ -22,7 +22,6 @@ import java.io.IOException;
 
 import java.awt.Font;
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.FontFormatException;
 
 import java.util.concurrent.Executors;
@@ -33,12 +32,13 @@ import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
 
-import org.atoiks.games.framework2d.decoder.ImageDecoder;
 import org.atoiks.games.framework2d.decoder.AudioDecoder;
 import org.atoiks.games.framework2d.decoder.DecodeException;
 import org.atoiks.games.framework2d.decoder.SerializableDecoder;
 
 import org.atoiks.games.framework2d.resolver.ExternalResourceResolver;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -174,8 +174,8 @@ public final class LoadingScene implements Scene {
         return true;
     }
 
-    private Image loadImageFromResource(final String path) {
-        return ResourceManager.load(path, ImageDecoder.INSTANCE);
+    private Texture loadImageFromResource(final String path) {
+        return ResourceManager.load(path, SceneManager.frame().getRuntime().getTextureDecoder());
     }
 
     private void loadMusicFromResource(final String path) {

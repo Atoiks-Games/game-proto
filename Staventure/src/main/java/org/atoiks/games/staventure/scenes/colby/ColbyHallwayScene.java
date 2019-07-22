@@ -19,12 +19,13 @@
 package org.atoiks.games.staventure.scenes.colby;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
@@ -46,7 +47,7 @@ public final class ColbyHallwayScene implements Scene {
     private static final int DOOR_SA_X2 = 132;
     private static final int DOOR_SA_Y2 = 329;
 
-    private final Image bgImg;
+    private final Texture bgImg;
 
     private final Player player;
 
@@ -79,7 +80,7 @@ public final class ColbyHallwayScene implements Scene {
 
         // Draw floor
         g.rotate((float) -Math.PI / 2, 0, 325);
-        g.drawImage(bgImg, 0, 325);
+        g.drawTexture(bgImg, 0, 325);
         g.rotate((float) +Math.PI / 2, 0, 325);
 
         player.render(g);

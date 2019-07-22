@@ -19,12 +19,13 @@
 package org.atoiks.games.staventure.scenes.colby;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
@@ -38,21 +39,21 @@ public final class BusinessOfficeScene implements Scene {
     private static final int DOOR_X2 = 131;
     private static final int DOOR_Y2 = 245;
 
-    private final Image bgImg;
+    private final Texture bgImg;
 
-    private final Image tableImg;
+    private final Texture tableImg;
     private final RectangleCollider tableCollider = new RectangleCollider();
 
-    private final Image chairInImg;
+    private final Texture chairInImg;
     private final RectangleCollider chairInCollider = new RectangleCollider();
 
-    private final Image chairOutImg;
+    private final Texture chairOutImg;
     private final RectangleCollider chairOutCollider = new RectangleCollider();
 
-    private final Image shelfImg;
+    private final Texture shelfImg;
     private final RectangleCollider shelfCollider = new RectangleCollider();
 
-    private final Image printerImg;
+    private final Texture printerImg;
     private final RectangleCollider printerCollider = new RectangleCollider();
 
     private final Player player;
@@ -63,32 +64,32 @@ public final class BusinessOfficeScene implements Scene {
         this.tableImg = ResourceManager.get("/colby/business_office/table.png");
         tableCollider.x = 206 + 125;
         tableCollider.y = 54;
-        tableCollider.w = this.tableImg.getWidth(null);
-        tableCollider.h = this.tableImg.getHeight(null);
+        tableCollider.w = this.tableImg.getWidth();
+        tableCollider.h = this.tableImg.getHeight();
 
         this.chairInImg = ResourceManager.get("/colby/business_office/chair_in.png");
         chairInCollider.x = 319 + 125;
         chairInCollider.y = 167;
-        chairInCollider.w = this.chairInImg.getWidth(null);
-        chairInCollider.h = this.chairInImg.getHeight(null);
+        chairInCollider.w = this.chairInImg.getWidth();
+        chairInCollider.h = this.chairInImg.getHeight();
 
         this.chairOutImg = ResourceManager.get("/colby/business_office/chair_out.png");
         chairOutCollider.x = 119 + 125;
         chairOutCollider.y = 185;
-        chairOutCollider.w = this.chairOutImg.getWidth(null);
-        chairOutCollider.h = this.chairOutImg.getHeight(null);
+        chairOutCollider.w = this.chairOutImg.getWidth();
+        chairOutCollider.h = this.chairOutImg.getHeight();
 
         this.shelfImg = ResourceManager.get("/colby/business_office/shelf.png");
         shelfCollider.x = 15 + 125;
         shelfCollider.y = 15;
-        shelfCollider.w = this.shelfImg.getWidth(null);
-        shelfCollider.h = this.shelfImg.getHeight(null);
+        shelfCollider.w = this.shelfImg.getWidth();
+        shelfCollider.h = this.shelfImg.getHeight();
 
         this.printerImg = ResourceManager.get("/colby/business_office/printer.png");
         printerCollider.x = 327 + 125;
         printerCollider.y = 9;
-        printerCollider.w = this.printerImg.getWidth(null);
-        printerCollider.h = this.printerImg.getHeight(null);
+        printerCollider.w = this.printerImg.getWidth();
+        printerCollider.h = this.printerImg.getHeight();
 
         this.player = new Player();
         this.player.state = Player.IDLE_FRAME;
@@ -106,13 +107,13 @@ public final class BusinessOfficeScene implements Scene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
-        g.drawImage(bgImg, 125, 0);
+        g.drawTexture(bgImg, 125, 0);
 
-        g.drawImage(tableImg, tableCollider.x, tableCollider.y);
-        g.drawImage(chairInImg, chairInCollider.x, chairInCollider.y);
-        g.drawImage(chairOutImg, chairOutCollider.x, chairOutCollider.y);
-        g.drawImage(shelfImg, shelfCollider.x, shelfCollider.y);
-        g.drawImage(printerImg, printerCollider.x, printerCollider.y);
+        g.drawTexture(tableImg, tableCollider.x, tableCollider.y);
+        g.drawTexture(chairInImg, chairInCollider.x, chairInCollider.y);
+        g.drawTexture(chairOutImg, chairOutCollider.x, chairOutCollider.y);
+        g.drawTexture(shelfImg, shelfCollider.x, shelfCollider.y);
+        g.drawTexture(printerImg, printerCollider.x, printerCollider.y);
 
         player.render(g);
 
