@@ -18,17 +18,17 @@
 
 package org.atoiks.games.staventure.prefabs;
 
-import java.awt.Image;
-import java.awt.event.KeyEvent;
-
 import org.atoiks.games.framework2d.Input;
+import org.atoiks.games.framework2d.KeyCode;
 import org.atoiks.games.framework2d.IGraphics;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
 public class Player {
 
-    public static final Image[] SPRITE_SHEET = new Image[12];
+    public static final Texture[] SPRITE_SHEET = new Texture[12];
 
     public static final int IDLE_FRAME   = -1;
     public static final int MOVING_DOWN  = 0;
@@ -64,9 +64,9 @@ public class Player {
         }
 
         if (state == IDLE_FRAME) {
-            g.drawImage(SPRITE_SHEET[offset + 1], (int) x, (int) y);
+            g.drawTexture(SPRITE_SHEET[offset + 1], x, y);
         } else {
-            g.drawImage(SPRITE_SHEET[offset + state], (int) x, (int) y);
+            g.drawTexture(SPRITE_SHEET[offset + state], x, y);
         }
 
         /*
@@ -80,16 +80,16 @@ public class Player {
         elapsed += dt;
         boolean updateState = true;
         final float dsp = speed * dt;
-        if (Input.isKeyDown(KeyEvent.VK_W)) {
+        if (Input.isKeyDown(KeyCode.KEY_W)) {
             this.y -= dsp;
             direction = Direction.UP;
-        } else if (Input.isKeyDown(KeyEvent.VK_S)) {
+        } else if (Input.isKeyDown(KeyCode.KEY_S)) {
             this.y += dsp;
             direction = Direction.DOWN;
-        } else if (Input.isKeyDown(KeyEvent.VK_A)) {
+        } else if (Input.isKeyDown(KeyCode.KEY_A)) {
             this.x -= dsp;
             direction = Direction.LEFT;
-        } else if (Input.isKeyDown(KeyEvent.VK_D)) {
+        } else if (Input.isKeyDown(KeyCode.KEY_D)) {
             this.x += dsp;
             direction = Direction.RIGHT;
         } else {

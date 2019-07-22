@@ -18,15 +18,15 @@
 
 package org.atoiks.games.staventure.prefabs;
 
-import java.awt.Image;
-
 import org.atoiks.games.framework2d.IGraphics;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.colliders.RectangleCollider;
 
 public class SquashPlayer{
 
-    public static final Image[] SPRITE_SHEET = new Image[12];
+    public static final Texture[] SPRITE_SHEET = new Texture[12];
 
     public static final int IDLE_FRAME   = -1;
     public static final int MOVING_DOWN  = 0;
@@ -62,9 +62,9 @@ public class SquashPlayer{
         }
 
         if (state == IDLE_FRAME) {
-            g.drawImage(SPRITE_SHEET[offset + 1], (int) x, (int) y);
+            g.drawTexture(SPRITE_SHEET[offset + 1], x, y);
         } else {
-            g.drawImage(SPRITE_SHEET[offset + state], (int) x, (int) y);
+            g.drawTexture(SPRITE_SHEET[offset + state], x, y);
         }
 
         /*

@@ -19,12 +19,13 @@
 package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.prefabs.Player;
 import org.atoiks.games.staventure.prefabs.Direction;
@@ -45,7 +46,7 @@ public final class CourtHallwayScene implements Scene {
     private static final int RIGHT_DOOR_Y1 = 200;
     private static final int RIGHT_DOOR_Y2 = 250;
 
-    private final Image bg;
+    private final Texture bg;
     private final Player player;
 
     private float oldX;
@@ -82,7 +83,7 @@ public final class CourtHallwayScene implements Scene {
         g.setClearColor(Color.black);
         g.clearGraphics();
 
-        g.drawImage(bg, 0, 0);
+        g.drawTexture(bg, 0, 0);
 
         /*
         // Just for debugging purposes. These are the *walls*

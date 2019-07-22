@@ -19,7 +19,6 @@
 package org.atoiks.games.staventure.scenes.gym;
 
 import java.awt.Color;
-import java.awt.Image;
 
 import java.util.Random;
 
@@ -29,6 +28,8 @@ import org.atoiks.games.framework2d.Scene;
 import org.atoiks.games.framework2d.IGraphics;
 import org.atoiks.games.framework2d.SceneManager;
 import org.atoiks.games.framework2d.ResourceManager;
+
+import org.atoiks.games.framework2d.resource.Texture;
 
 import org.atoiks.games.staventure.GameData;
 
@@ -49,7 +50,7 @@ public final class SquashGameScene implements Scene {
 
     private final Random rnd = new Random();
 
-    private final Image bg;
+    private final Texture bg;
 
     private final Player player;
     private final SquashPlayer py;
@@ -112,7 +113,7 @@ public final class SquashGameScene implements Scene {
 
     @Override
     public void render(IGraphics g) {
-        g.drawImage(bg, 0, 0);
+        g.drawTexture(bg, 0, 0);
 
         g.setColor(lastCollision == null ? Color.black : (lastCollision == py.collider ? Color.blue : Color.green));
         g.fillCircle((int) ball.x, (int) ball.y, (int) ball.r);
