@@ -38,7 +38,7 @@ public final class CircleCollider implements Collider {
 
     @Override
     public void render(IGraphics g) {
-        g.drawCircle((int) x, (int) y, (int) r);
+        g.drawCircle(x, y, r);
     }
 
     @Override

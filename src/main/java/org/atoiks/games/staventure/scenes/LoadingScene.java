@@ -73,7 +73,7 @@ public final class LoadingScene implements Scene {
         for (int i = 0; i < COLORS.length; ++i) {
             g.setColor(COLORS[i]);
             final double k = elapsed - 2 * Math.PI * i;
-            g.fillCircle((int) (k * 100), (int) (Math.cos(k * 5) * 100) + 300, 30);
+            g.fillCircle((float) (k * 100), (float) (Math.cos(k * 5) * 100) + 300, 30);
         }
     }
 

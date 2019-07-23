@@ -116,7 +116,7 @@ public final class SquashGameScene implements Scene {
         g.drawTexture(bg, 0, 0);
 
         g.setColor(lastCollision == null ? Color.black : (lastCollision == py.collider ? Color.blue : Color.green));
-        g.fillCircle((int) ball.x, (int) ball.y, (int) ball.r);
+        g.fillCircle(ball.x, ball.y, ball.r);
 
         player.render(g);
         py.render(g);
