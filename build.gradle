@@ -1,22 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'application'
 
-import org.gradle.internal.os.OperatingSystem
-
-project.ext.lwjglVersion = "3.2.2"
-
-switch (OperatingSystem.current()) {
-    case OperatingSystem.LINUX:
-        project.ext.lwjglNatives = "natives-linux"
-        break
-    case OperatingSystem.MAC_OS:
-        project.ext.lwjglNatives = "natives-macos"
-        break
-    case OperatingSystem.WINDOWS:
-        project.ext.lwjglNatives = "natives-windows"
-        break
-}
-
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -28,17 +12,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.github.Atoiks-Games.Framework2D:core:2.2'
-
-    runtimeOnly 'com.github.Atoiks-Games.Framework2D:lwjgl3:2.2'
-
-    runtimeOnly "org.lwjgl:lwjgl:$lwjglVersion:$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-glfw:$lwjglVersion:$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-opengl:$lwjglVersion:$lwjglNatives"
-    runtimeOnly "org.lwjgl:lwjgl-stb:$lwjglVersion:$lwjglNatives"
+    implementation 'com.github.Atoiks-Games.Framework2D:core:2.0'
+    runtimeOnly 'com.github.Atoiks-Games.Framework2D:java2d:2.0'
 }
-
-applicationDefaultJvmArgs = ["-XstartOnFirstThread"]
 
 task copyLicense {
     outputs.file new File("$buildDir/LICENSE")
