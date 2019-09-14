@@ -23,19 +23,19 @@ task copyLicense {
     outputs.file new File("$buildDir/CONTRIBUTORS.txt")
     doLast {
         copy {
-            from "../LICENSE"
+            from "LICENSE"
             into "$buildDir"
         }
         copy {
-            from "../COPYING"
+            from "COPYING"
             into "$buildDir"
         }
         copy {
-            from "../README.md"
+            from "README.md"
             into "$buildDir"
         }
         copy {
-            from "../CONTRIBUTORS.txt"
+            from "CONTRIBUTORS.txt"
             into "$buildDir"
         }
     }
